@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const spotData = await Spot.findAll();
   const reviewData = await Review.findAll();
-
+  const spotImages = await SpotImage.findAll();
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
@@ -29,8 +29,14 @@ router.get("/", async (req, res) => {
         sum = [];
       }
     }
-  }
 
+    for (let k = 0; k < spotImages.length; k++) {
+      let currImage = spotImages[k].dataValues;
+      if (currSpot.id === currImage.spotId && currImage.preview === true) {
+        currSpot.previewImage = currImage.url;
+      }
+    }
+  }
 
   //NEED TO SEED SPOT IMAGES AND ADD A 'previewImage' ATTRIBUTE TO RESPONSE
   return res.json(spotData);
@@ -38,12 +44,13 @@ router.get("/", async (req, res) => {
 
 router.get("/current", requireAuth, async (req, res) => {
   const currentUserId = req.user.dataValues.id;
+  const spotImages = await SpotImage.findAll();
+  const reviewData = await Review.findAll();
   const spotData = await Spot.findAll({
     where: {
       ownerId: currentUserId,
     },
   });
-  const reviewData = await Review.findAll();
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
@@ -56,6 +63,12 @@ router.get("/current", requireAuth, async (req, res) => {
         currSpot.avgRating =
           sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
         sum = [];
+      }
+    }
+    for (let k = 0; k < spotImages.length; k++) {
+      let currImage = spotImages[k].dataValues;
+      if (currSpot.id === currImage.spotId && currImage.preview === true) {
+        currSpot.previewImage = currImage.url;
       }
     }
   }
@@ -65,13 +78,16 @@ router.get("/current", requireAuth, async (req, res) => {
 
 router.get("/:spotId", async (req, res) => {
   const { spotId } = req.params;
-  const spotData = await Spot.findAll({
+  const spotImages = await SpotImage.findAll();
+  const reviewData = await Review.findAll();
+  const spotData = await Spot.findOne({
     where: {
       id: spotId,
     },
     include: [
       {
         model: SpotImage,
+        attributes: ["id", "url", "preview"],
       },
       {
         model: User,
@@ -80,13 +96,28 @@ router.get("/:spotId", async (req, res) => {
       },
     ],
   });
-  if (!spotData.length) {
+  if (!spotData) {
     return res.status(404).json({
       message: "Spot couldn't be found",
     });
-  } else {
-    return res.json(spotData);
   }
+  spotData.dataValues.numReviews = 0;
+  let sum = [];
+  for (let j = 0; j < reviewData.length; j++) {
+    let currReview = reviewData[j].dataValues;
+
+    if (spotData.dataValues.id === currReview.spotId) {
+      spotData.dataValues.numReviews++;
+      sum.push(currReview.stars);
+    }
+    if (reviewData[j + 1] === undefined) {
+      spotData.dataValues.avgRating =
+        sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+      sum = [];
+    }
+  }
+
+  return res.json(spotData);
 });
 
 module.exports = router;

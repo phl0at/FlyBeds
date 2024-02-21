@@ -11,34 +11,42 @@ module.exports = {
         {
           spotId: 1,
           url: "imgur.com/interior",
+          preview: false
         },
         {
           spotId: 1,
           url: "imgur.com/exterior",
+          preview: true
         },
         {
           spotId: 2,
           url: "imgur.com/interior",
+          preview: false
         },
         {
           spotId: 2,
           url: "imgur.com/exterior",
+          preview: true
         },
         {
           spotId: 3,
           url: "imgur.com/interior",
+          preview: false
         },
         {
           spotId: 3,
           url: "imgur.com/exterior",
+          preview: true
         },
         {
           spotId: 4,
           url: "imgur.com/interior",
+          preview: false
         },
         {
           spotId: 4,
           url: "imgur.com/exterior",
+          preview: true
         },
       ],
       { validate: true }
