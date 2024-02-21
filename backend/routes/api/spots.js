@@ -2,7 +2,10 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const sequelize = require("sequelize");
 const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
+const {
+  handleValidationErrors,
+  handleBodyValidations,
+} = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
@@ -38,7 +41,6 @@ router.get("/", async (req, res) => {
     }
   }
 
-  //NEED TO SEED SPOT IMAGES AND ADD A 'previewImage' ATTRIBUTE TO RESPONSE
   return res.json(spotData);
 });
 
@@ -118,6 +120,70 @@ router.get("/:spotId", async (req, res) => {
   }
 
   return res.json(spotData);
+});
+
+const validateSpot = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Street address is required"),
+  check("city")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("City is required"),
+  check("state")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Country is required"),
+  check("lat")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Latitude must be within -90 and 90"),
+  check("lng")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Longitude must be within -180 and 180"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isLength({ max: 50 })
+    .withMessage("Name must be less than 50 characters"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Description is required"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 0 })
+    .withMessage("Price per day must be a positive number"),
+  handleBodyValidations,
+];
+
+router.post("/", requireAuth, validateSpot, async (req, res) => {
+  const currUserId = req.user.dataValues.id;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+  const newSpot = await Spot.create({
+    ownerId: currUserId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  });
+
+  return res.json(newSpot);
 });
 
 module.exports = router;
