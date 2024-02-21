@@ -15,7 +15,23 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const spotData = await Spot.findAll();
   const reviewData = await Review.findAll();
-  console.log(reviewData)
+  let sum = [];
+  for (let i = 0; i < spotData.length; i++) {
+    let currSpot = spotData[i].dataValues;
+
+    for (let j = 0; j < reviewData.length; j++) {
+      let currReview = reviewData[j].dataValues;
+
+      if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
+      if (reviewData[j + 1] === undefined) {
+        currSpot.avgRating =
+          sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+        sum = [];
+      }
+    }
+    console.log(currSpot);
+  }
+  // console.log(avg);
 
   //FEB 20TH STILL NEED TO ADD "avgRating" AND "previewImage" ATTRIBUTES
   return res.json(spotData);
