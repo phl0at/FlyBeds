@@ -14,7 +14,7 @@ module.exports = {
         },
         {
           reviewId: 2,
-          ur: "imgur.com/LovelyPatio",
+          url: "imgur.com/LovelyPatio",
         },
         {
           reviewId: 3,
@@ -30,7 +30,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Reviews";
+    options.tableName = "ReviewImages";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,

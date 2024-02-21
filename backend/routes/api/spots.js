@@ -1,16 +1,22 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const sequelize = require("sequelize");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
+const { Review } = require("../../db/models");
+const { ReviewImage } = require("../../db/models");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   const spotData = await Spot.findAll();
+  const reviewData = await Review.findAll();
+  console.log(reviewData)
+
   //FEB 20TH STILL NEED TO ADD "avgRating" AND "previewImage" ATTRIBUTES
   return res.json(spotData);
 });
@@ -39,8 +45,8 @@ router.get("/:spotId", async (req, res) => {
       {
         model: User,
         as: "Owner",
-        attributes: ["id", "firstName", "lastName"]
-      }
+        attributes: ["id", "firstName", "lastName"],
+      },
     ],
   });
   if (!spotData.length) {
