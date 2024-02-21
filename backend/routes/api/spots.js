@@ -8,7 +8,6 @@ const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
-const { ReviewImage } = require("../../db/models");
 
 const router = express.Router();
 
