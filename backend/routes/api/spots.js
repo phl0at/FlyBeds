@@ -202,8 +202,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
       preview,
     });
   } else {
-    // currently don't know what to do if the spot doesn't belong to current user
-    return res.status(404).json({message: "You do not own this spot"})
+    return res.status(403).json({message: "Forbidden"})
   }
 });
 
@@ -228,8 +227,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     await spotData.save();
     return res.json(spotData);
   } else {
-    // currently don't know what to do if the spot doesn't belong to current user
-    return res.status(404).json({message: "You do not own this spot"})
+    return res.status(403).json({message: "Forbidden"})
   }
 });
 
@@ -242,8 +240,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
     await spotData.destroy()
     return res.json({message: "Successfully deleted"})
   } else {
-    // currently don't know what to do if the spot doesn't belong to current user
-    return res.status(404).json("You do not own this spot")
+    return res.status(403).json("Forbidden")
   }
 })
 
