@@ -2,10 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const sequelize = require("sequelize");
 const { check } = require("express-validator");
-const {
-  handleValidationErrors,
-  handleBodyValidations,
-} = require("../../utils/validation");
+const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
@@ -163,7 +160,7 @@ const validateSpot = [
     .notEmpty()
     .isFloat({ min: 0 })
     .withMessage("Price per day must be a positive number"),
-  handleBodyValidations,
+  handleValidationErrors,
 ];
 
 router.post("/", requireAuth, validateSpot, async (req, res) => {
@@ -185,5 +182,69 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
 
   return res.json(newSpot);
 });
+
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const currUser = req.user.dataValues;
+  const { spotId } = req.params;
+  const { url, preview } = req.body;
+  const spotData = await Spot.findByPk(spotId);
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
+  if (spotData.ownerId === currUser.id) {
+    const newSpotImage = await SpotImage.create({
+      spotId,
+      url,
+      preview,
+    });
+    return res.json({
+      id: newSpotImage.id,
+      url,
+      preview,
+    });
+  } else {
+    // currently don't know what to do if the spot doesn't belong to current user
+    return res.status(404).json({message: "You do not own this spot"})
+  }
+});
+
+router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
+  const currUser = req.user.dataValues;
+  const { spotId } = req.params;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+  const spotData = await Spot.findByPk(spotId);
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
+  if (spotData.ownerId === currUser.id) {
+    spotData.address = address;
+    spotData.city = city;
+    spotData.state = state;
+    spotData.country = country;
+    spotData.lat = lat;
+    spotData.lng = lng;
+    spotData.name = name;
+    spotData.description = description;
+    spotData.price = price;
+    await spotData.save();
+    return res.json(spotData);
+  } else {
+    // currently don't know what to do if the spot doesn't belong to current user
+    return res.status(404).json({message: "You do not own this spot"})
+  }
+});
+
+router.delete("/:spotId", requireAuth, async (req, res) => {
+  const currUser = req.user.dataValues;
+  const { spotId } = req.params;
+  const spotData = await Spot.findByPk(spotId)
+  if(!spotData) return res.status(404).json({message: "Spot couldn't be found"})
+  if(spotData.ownerId === currUser.id){
+    await spotData.destroy()
+    return res.json({message: "Successfully deleted"})
+  } else {
+    // currently don't know what to do if the spot doesn't belong to current user
+    return res.status(404).json("You do not own this spot")
+  }
+})
 
 module.exports = router;

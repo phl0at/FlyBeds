@@ -15,6 +15,7 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+          onDelete: "CASCADE"
         },
         firstName: {
           type: Sequelize.STRING(50),
