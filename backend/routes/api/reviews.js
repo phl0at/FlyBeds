@@ -10,7 +10,18 @@ const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
 const { ReviewImage } = require("../../db/models");
 const router = express.Router();
-
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors,
+];
 // ------ GET REVIEWS OF CURRENT USER ------ //
 
 router.get("/current", requireAuth, async (req, res) => {
@@ -53,6 +64,9 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
   if (!reviewData)
     return res.status(404).json({ message: "Review couldn't be found" });
 
+  if (reviewData.userId !== currUser.id)
+    return res.status(403).json({ message: "forbidden " });
+
   const allImages = await ReviewImage.findAll({
     where: {
       reviewId,
@@ -60,11 +74,9 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
   });
 
   if (allImages.length >= 10)
-    return res
-      .status(403)
-      .json({
-        message: "Maximum number of images for this resource was reached",
-      });
+    return res.status(403).json({
+      message: "Maximum number of images for this resource was reached",
+    });
 
   const newImage = await ReviewImage.create({
     reviewId,
@@ -72,11 +84,47 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
   });
   const imageData = await ReviewImage.findOne({
     where: {
-      id: newImage.id
+      id: newImage.id,
     },
     attributes: ["id", "url"],
   });
   return res.json(imageData);
+});
+
+// ------ EDIT A REVIEW ------ //
+
+router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
+  const { reviewId } = req.params;
+  const currUser = req.user.dataValues;
+  const { review, stars } = req.body;
+  const reviewData = await Review.findByPk(reviewId);
+  console.log("USER ID", currUser.id, "REVIEW USER", reviewData);
+  if (!reviewData)
+    return res.status(404).json({ message: "Review couldn't be found" });
+  if (currUser.id !== reviewData.userId)
+    return res.status(403).json({ message: "Forbidden" });
+
+  reviewData.review = review;
+  reviewData.stars = stars;
+  await reviewData.save();
+
+  return res.json(reviewData);
+});
+
+// ------ DELETE A REVIEW ------ //
+
+router.delete("/:reviewId", requireAuth, async (req, res) => {
+  const { reviewId } = req.params;
+  const currUser = req.user.dataValues;
+  const reviewData = await Review.findByPk(reviewId);
+  if (!reviewData)
+    return res.status(404).json({ message: "Review couldn't be found" });
+  if (currUser.id !== reviewData.userId)
+    return res.status(403).json({ message: "Forbidden" });
+
+  await reviewData.destroy();
+
+  return res.json({ message: "Successfully deleted" });
 });
 
 module.exports = router;

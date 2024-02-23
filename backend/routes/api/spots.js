@@ -12,6 +12,18 @@ const { ReviewImage } = require("../../db/models");
 
 const router = express.Router();
 
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors
+];
 const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
@@ -287,18 +299,6 @@ router.get("/:spotId/reviews", async (req, res) => {
 
 // ------ CREATE REVIEW BASED ON SPOT ID ------ //
 
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Review text is required"),
-  check("stars")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: 1, max: 5 })
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors
-];
 
 router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res) => {
   let { spotId } = req.params;
