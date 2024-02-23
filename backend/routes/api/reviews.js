@@ -22,6 +22,7 @@ router.get("/current", requireAuth, async (req, res) => {
     include: [
       {
         model: User,
+        attributes: ["id", "firstName", "lastName"]
       },
       {
         model: Spot,
@@ -38,8 +39,9 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
+
+
   return res.json({ Reviews: reviewData });
 });
 
 module.exports = router;
-

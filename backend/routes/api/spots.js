@@ -8,6 +8,7 @@ const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
+const { ReviewImage } = require("../../db/models");
 
 const router = express.Router();
 
@@ -55,7 +56,7 @@ const validateSpot = [
   handleValidationErrors,
 ];
 
-// ----- GET ALL SPOTS ------
+// ----- GET ALL SPOTS ------ //
 
 router.get("/", async (req, res) => {
   const spotData = await Spot.findAll();
@@ -87,8 +88,7 @@ router.get("/", async (req, res) => {
   return res.json({ Spots: spotData });
 });
 
-
-// ----- GET ALL SPOTS OF CURRENT USER ------
+// ----- GET ALL SPOTS OF CURRENT USER ------ //
 
 router.get("/current", requireAuth, async (req, res) => {
   const currentUserId = req.user.dataValues.id;
@@ -124,9 +124,7 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: spotData });
 });
 
-
-
-// ----- GET ALL SPOTS BY ID ------
+// ----- GET ALL SPOTS BY ID ------ //
 
 router.get("/:spotId", async (req, res) => {
   const { spotId } = req.params;
@@ -172,7 +170,7 @@ router.get("/:spotId", async (req, res) => {
   return res.json(spotData);
 });
 
-// ----- CREATE A SPOT ------
+// ----- CREATE A SPOT ------ //
 
 router.post("/", requireAuth, validateSpot, async (req, res) => {
   const currUserId = req.user.dataValues.id;
@@ -194,9 +192,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   return res.json(newSpot);
 });
 
-
-// ----- ADD IMAGE TO SPOT ------
-
+// ----- ADD IMAGE TO SPOT ------ //
 
 router.post("/:spotId/images", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
@@ -221,8 +217,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   }
 });
 
-
-// ----- EDIT A SPOT ------
+// ----- EDIT A SPOT ------ //
 
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const currUser = req.user.dataValues;
@@ -249,7 +244,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   }
 });
 
-// ----- DELETE A SPOT ------
+// ----- DELETE A SPOT ------ //
 
 router.delete("/:spotId", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
@@ -261,8 +256,80 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
     await spotData.destroy();
     return res.json({ message: "Successfully deleted" });
   } else {
-    return res.status(403).json({ message: "Forbidden"});
+    return res.status(403).json({ message: "Forbidden" });
   }
+});
+
+// ------ GET REVIEWS BY SPOT ID ------ //
+
+router.get("/:spotId/reviews", async (req, res) => {
+  const { spotId } = req.params;
+  const reviewData = await Review.findAll({
+    where: {
+      spotId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: ReviewImage,
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+  if (!reviewData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
+
+  return res.json({ Review: reviewData });
+});
+
+// ------ CREATE REVIEW BASED ON SPOT ID ------ //
+
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors
+];
+
+router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res) => {
+  let { spotId } = req.params;
+  spotId = Number(spotId)
+  const { review, stars } = req.body;
+  const currUser = req.user.dataValues;
+  const spotData = await Spot.findByPk(spotId);
+  if (!spotData) {
+    return res.status(404).json({ message: "Spot couldn't be found" });
+  }
+  const existingReview = await Review.findOne({
+    where: {
+      spotId,
+      userId: currUser.id,
+    },
+  });
+  if (existingReview) {
+    return res
+      .status(500)
+      .json({ message: "User already has a review for this spot" });
+  }
+
+  const newReview = await Review.create({
+    userId: currUser.id,
+    spotId,
+    review,
+    stars
+  })
+
+  return res.json(newReview)
+
 });
 
 module.exports = router;
