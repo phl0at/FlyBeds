@@ -140,7 +140,6 @@ router.get("/current", requireAuth, async (req, res) => {
 
 router.get("/:spotId", async (req, res) => {
   const { spotId } = req.params;
-  const spotImages = await SpotImage.findAll();
   const reviewData = await Review.findAll();
   const spotData = await Spot.findOne({
     where: {

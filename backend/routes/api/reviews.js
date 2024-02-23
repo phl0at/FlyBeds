@@ -82,13 +82,11 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     reviewId,
     url,
   });
-  const imageData = await ReviewImage.findOne({
-    where: {
-      id: newImage.id,
-    },
-    attributes: ["id", "url"],
+
+  return res.json({
+    id: newImage.id,
+    url,
   });
-  return res.json(imageData);
 });
 
 // ------ EDIT A REVIEW ------ //
@@ -98,7 +96,6 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   const currUser = req.user.dataValues;
   const { review, stars } = req.body;
   const reviewData = await Review.findByPk(reviewId);
-  console.log("USER ID", currUser.id, "REVIEW USER", reviewData);
   if (!reviewData)
     return res.status(404).json({ message: "Review couldn't be found" });
   if (currUser.id !== reviewData.userId)
