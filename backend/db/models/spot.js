@@ -10,16 +10,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Spot.belongsTo(models.User, { foreignKey: "ownerId", as: "Owner" });
-      Spot.hasMany(models.Review, { foreignKey: "spotId"});
+      Spot.hasMany(models.Review, { foreignKey: "spotId" });
       Spot.hasMany(models.Booking, { foreignKey: "spotId" });
-      Spot.hasMany(models.SpotImage, { foreignKey: "spotId"});
+      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
     }
   }
   Spot.init(
     {
       ownerId: DataTypes.INTEGER,
       address: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       city: DataTypes.STRING,
       state: DataTypes.STRING,
@@ -28,19 +28,39 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.FLOAT,
         validate: {
           min: -90,
-          max: 90
-        }
+          max: 90,
+        },
       },
-      lng:{
+      lng: {
         type: DataTypes.FLOAT,
         validate: {
           min: -180,
-          max: 180
-        }
+          max: 180,
+        },
       },
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        get() {
+          const date = new Date(`${this.dataValues.createdAt}`);
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        get() {
+          const date = new Date(`${this.dataValues.createdAt}`);
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
+      },
     },
     {
       sequelize,
