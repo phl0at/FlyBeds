@@ -9,8 +9,20 @@ const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
 const { ReviewImage } = require("../../db/models");
+const { Booking } = require("../../db/models");
 
 const router = express.Router();
+const date = new Date();
+
+const validateBooking = [
+  check("startDate")
+    .isAfter(`${date.toISOString().split("T")[0]}`)
+    .withMessage("startDate cannot be in the past"),
+  check("endDate")
+    .isAfter(this.startDate)
+    .withMessage("endDate cannot be on or before startDate"),
+  handleValidationErrors,
+];
 
 const validateReview = [
   check("review")
@@ -332,6 +344,95 @@ router.post(
     });
 
     return res.status(201).json(newReview);
+  }
+);
+
+// ------ GET BOOKINGS FOR SPOT BY SPOT ID ------ //
+
+router.get("/:spotId/bookings", requireAuth, async (req, res) => {
+  const currUser = req.user.dataValues;
+  const { spotId } = req.params;
+  const bookData = await Booking.findAll({
+    where: {
+      spotId,
+    },
+  });
+  const spotData = await Spot.findByPk(spotId);
+
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
+
+  if (spotData.ownerId !== currUser.id) {
+    const bookData = await Booking.findAll({
+      where: {
+        spotId,
+      },
+      attributes: ["spotId", "startDate", "endDate"],
+    });
+    return res.json({ Bookings: bookData });
+  } else {
+    const bookData = await Booking.findAll({
+      where: {
+        spotId,
+      },
+      include: {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+    });
+    return res.json({ Bookings: bookData });
+  }
+});
+
+// ------ CREATE BOOKING FOR SPOT BY SPOT ID ------ //
+
+router.post(
+  "/:spotId/bookings",
+  requireAuth,
+  validateBooking,
+  async (req, res) => {
+    let { spotId } = req.params;
+    spotId = Number(spotId)
+    const { startDate, endDate } = req.body;
+    const currUser = req.user.dataValues;
+    const spotData = await Spot.findByPk(spotId);
+    const bookData = await Booking.findAll({
+      where: {
+        spotId,
+      },
+    });
+
+    if (!spotData)
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    if (currUser.id === spotData.ownerId)
+      return res.status(403).json({ message: "Forbidden" });
+
+    for (let i = 0; i < bookData.length; i++) {
+      let booking = bookData[i].dataValues;
+      let currStart = booking.startDate.toISOString().split("T")[0];
+      let currEnd = booking.endDate.toISOString().split("T")[0];
+      let errors = {};
+      if (startDate >= currStart && startDate <= currEnd)
+        errors.startDate = "Start date conflicts with an existing booking";
+      if (endDate >= currStart && endDate <= currEnd)
+        errors.endDate = "End date conflicts with an existing booking";
+      if (errors.startDate || errors.endDate)
+        return res
+          .status(403)
+          .json({
+            message: "Sorry, this spot is already booked for the specified dates",
+            errors,
+          });
+    }
+
+    const newBooking = await Booking.create({
+      userId: currUser.id,
+      spotId,
+      startDate,
+      endDate,
+    });
+
+    return res.json(newBooking);
   }
 );
 
