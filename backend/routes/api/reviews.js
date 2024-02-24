@@ -26,6 +26,9 @@ const validateReview = [
 
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
+  // see if this can be refactored to just include the SpotImages in the Spot query
+  const spotData = await Spot.findAll();
+  const spotImages = await SpotImage.findAll();
   const reviewData = await Review.findAll({
     where: {
       userId: currUser.id,
@@ -36,12 +39,6 @@ router.get("/current", requireAuth, async (req, res) => {
         attributes: ["id", "firstName", "lastName"],
       },
       {
-        model: Spot,
-        attributes: {
-          exclude: ["description", "createdAt", "updatedAt"],
-        },
-      },
-      {
         model: ReviewImage,
         attributes: {
           exclude: ["createdAt", "updatedAt", "reviewId"],
@@ -50,6 +47,27 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
+  // iterate all spots
+  for (let i = 0; i < spotData.length; i++) {
+    let currSpot = spotData[i].dataValues;
+
+    // iterate all spot images and add a previewImage to the
+    // corresponding spot
+    for (let k = 0; k < spotImages.length; k++) {
+      let currImage = spotImages[k].dataValues;
+      if (currSpot.id === currImage.spotId && currImage.preview === true) {
+        currSpot.previewImage = currImage.url;
+      }
+    }
+    // iterate all reviews and add the spot being reviewed for the
+    // response
+    for (let j = 0; j < reviewData.length; j++) {
+      let currRev = reviewData[j].dataValues;
+      if (currRev.spotId === currSpot.id) {
+        currRev.Spot = currSpot;
+      }
+    }
+  }
   return res.json({ Reviews: reviewData });
 });
 
@@ -65,7 +83,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     return res.status(404).json({ message: "Review couldn't be found" });
 
   if (reviewData.userId !== currUser.id)
-    return res.status(403).json({ message: "forbidden " });
+    return res.status(403).json({ message: "Forbidden " });
 
   const allImages = await ReviewImage.findAll({
     where: {
