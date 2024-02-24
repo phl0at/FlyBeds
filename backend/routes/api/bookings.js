@@ -13,6 +13,18 @@ const { Booking } = require("../../db/models");
 
 const router = express.Router();
 
+const date = new Date();
+const currDate = `${date.toISOString().split("T")[0]}`;
+const validateBooking = [
+  check("startDate")
+    .isAfter(currDate)
+    .withMessage("startDate cannot be in the past"),
+  check("endDate")
+    .isAfter(this.startDate)
+    .withMessage("endDate cannot be on or before startDate"),
+  handleValidationErrors,
+];
+
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const bookData = await Booking.findAll({
@@ -45,6 +57,88 @@ router.get("/current", requireAuth, async (req, res) => {
   }
 
   return res.json({ Bookings: bookData });
+});
+
+router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
+  const { bookingId } = req.params;
+  const { startDate, endDate } = req.body;
+  const currUser = req.user.dataValues;
+  const editBook = await Booking.findByPk(bookingId);
+
+  if (!editBook)
+    // booking doesn't exist
+    return res.status(404).json({ message: "Booking couldn't be found" });
+
+  if (editBook.userId !== currUser.id)
+    // current user doesn't own booking
+    return res.status(403).json({ message: "Forbidden" });
+
+  if (editBook.endDate < currDate)
+    // booking has already past
+    return res.status(403).json({ message: "Past bookings can't be modified" });
+
+  const bookData = await Booking.findAll({
+    where: {
+      spotId: editBook.spotId,
+    },
+  });
+
+  // iterate bookings of the same spot and check for conflicts with dates provided in req.body
+  for (let i = 0; i < bookData.length; i++) {
+    let booking = bookData[i].dataValues;
+    let currStart = booking.startDate.toISOString().split("T")[0];
+    let currEnd = booking.endDate.toISOString().split("T")[0];
+    let errors = {};
+    if (startDate >= currStart && startDate <= currEnd)
+      errors.startDate = "Start date conflicts with an existing booking";
+    if (endDate >= currStart && endDate <= currEnd)
+      errors.endDate = "End date conflicts with an existing booking";
+    if (errors.startDate || errors.endDate)
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors,
+      });
+  }
+
+  // update and return new booking dates
+  editBook.startDate = startDate;
+  editBook.endDate = endDate;
+  await editBook.save();
+  return res.json(editBook);
+});
+
+router.delete("/:bookingId", requireAuth, async (req, res) => {
+  const { bookingId } = req.params;
+  const currUser = req.user.dataValues;
+  const bookData = await Booking.findOne({
+    where: {
+      id: bookingId,
+    },
+    include: {
+      model: Spot,
+    },
+  });
+  if (!bookData)
+    return res.status(404).json({ message: "Booking couldn't be found" });
+
+  if (bookData.userId === currUser.id || bookData.Spot.ownerId === currUser.id) {
+    console.log(currDate)
+    if (bookData.startDate < currDate) {
+      return res
+        .status(403)
+        .json({ message: "Bookings that have been started can't be deleted" });
+    }
+
+    await bookData.destroy();
+    return res.json({ message: "Successfully deleted" });
+  } else {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  if (bookData.startDate > currDate && bookData.endDate < currDate)
+    return res
+      .status(403)
+      .json({ message: "Bookings that have been started can't be deleted" });
 });
 
 module.exports = router;
