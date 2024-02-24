@@ -9,19 +9,39 @@ const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
 const { ReviewImage } = require("../../db/models");
-const { Booking } = require("../../db/models")
+const { Booking } = require("../../db/models");
 
 const router = express.Router();
 
 router.get("/current", requireAuth, async (req, res) => {
+  const currUser = req.user.dataValues;
+  const bookData = await Booking.findAll({
+    where: {
+        userId: currUser.id
+    }
+  });
+  const spotData = await Spot.findAll();
+  const spotImages = await SpotImage.findAll();
 
-})
+  for (let i = 0; i < spotData.length; i++) {
+    let currSpot = spotData[i].dataValues;
 
+    for (let k = 0; k < spotImages.length; k++) {
+      let currImage = spotImages[k].dataValues;
+      if (currSpot.id === currImage.spotId && currImage.preview === true) {
+        currSpot.previewImage = currImage.url;
+      }
+    }
+    for (let j = 0; j < bookData.length; j++) {
+      let currBook = bookData[j].dataValues;
 
+      if (currSpot.id === currBook.spotId) {
+        currBook.Spot = currSpot;
+      }
+    }
+  }
 
-
-
-
-
+  return res.json(bookData);
+});
 
 module.exports = router;
