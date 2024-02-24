@@ -17,8 +17,8 @@ router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const bookData = await Booking.findAll({
     where: {
-        userId: currUser.id
-    }
+      userId: currUser.id,
+    },
   });
   const spotData = await Spot.findAll();
   const spotImages = await SpotImage.findAll();
@@ -30,6 +30,9 @@ router.get("/current", requireAuth, async (req, res) => {
       let currImage = spotImages[k].dataValues;
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
+        delete currSpot.description;
+        delete currSpot.createdAt;
+        delete currSpot.updatedAt;
       }
     }
     for (let j = 0; j < bookData.length; j++) {
@@ -41,7 +44,7 @@ router.get("/current", requireAuth, async (req, res) => {
     }
   }
 
-  return res.json(bookData);
+  return res.json({ Bookings: bookData });
 });
 
 module.exports = router;
