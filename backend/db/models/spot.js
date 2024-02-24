@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       ownerId: DataTypes.INTEGER,
       address: {
-        type: DataTypes.STRING,
-        unique: true
+        type: DataTypes.STRING
       },
       city: DataTypes.STRING,
       state: DataTypes.STRING,

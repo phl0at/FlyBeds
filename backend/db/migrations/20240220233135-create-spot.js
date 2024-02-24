@@ -19,8 +19,7 @@ module.exports = {
         onDelete: "CASCADE"
       },
       address: {
-        type: Sequelize.STRING,
-        unique: true
+        type: Sequelize.STRING
       },
       city: {
         type: Sequelize.STRING
