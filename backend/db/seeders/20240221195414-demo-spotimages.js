@@ -48,6 +48,66 @@ module.exports = {
           url: "imgur.com/exterior",
           preview: true
         },
+        {
+          spotId: 5,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 5,
+          url: "imgur.com/exterior",
+          preview: true
+        },
+        {
+          spotId: 6,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 6,
+          url: "imgur.com/exterior",
+          preview: true
+        },
+        {
+          spotId: 7,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 7,
+          url: "imgur.com/exterior",
+          preview: true
+        },
+        {
+          spotId: 8,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 8,
+          url: "imgur.com/exterior",
+          preview: true
+        },
+        {
+          spotId: 9,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 9,
+          url: "imgur.com/exterior",
+          preview: true
+        },
+        {
+          spotId: 10,
+          url: "imgur.com/interior",
+          preview: false
+        },
+        {
+          spotId: 10,
+          url: "imgur.com/exterior",
+          preview: true
+        },
       ],
       { validate: true }
     );
