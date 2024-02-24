@@ -20,7 +20,27 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     spotId: DataTypes.INTEGER,
     review: DataTypes.STRING,
-    stars: DataTypes.INTEGER
+    stars: DataTypes.INTEGER,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      get() {
+        const date = new Date(`${this.dataValues.createdAt}`);
+        return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+          "it-IT"
+        )}`;
+      },
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      get() {
+        const date = new Date(`${this.dataValues.createdAt}`);
+        return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+          "it-IT"
+        )}`;
+      },
+    },
   }, {
     sequelize,
     modelName: 'Review',
