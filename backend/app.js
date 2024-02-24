@@ -6,7 +6,7 @@ const csurf = require("csurf");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const { environment } = require("./config");
-const { ValidationError } = require('sequelize');
+const { ValidationError } = require("sequelize");
 const isProduction = environment === "production";
 const app = express();
 const routes = require("./routes");
@@ -53,7 +53,7 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
-    err.title = 'Validation error';
+    err.title = "Validation error";
     err.errors = errors;
   }
   next(err);
@@ -62,20 +62,22 @@ app.use((err, _req, _res, next) => {
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
-  if(isProduction){
+  if (!isProduction) {
+    if (err.message === "Authentication required" || err.message === "Invalid credentials") {
+      return res.json({ message: err.message });
+    }
     return res.json({
       message: err.message,
       errors: err.errors,
     });
   } else {
     res.json({
-      title: err.title || 'Server Error',
+      title: err.title || "Server Error",
       message: err.message,
       errors: err.errors,
-      stack: err.stack
+      stack: err.stack,
     });
   }
 });
-
 
 module.exports = app;
