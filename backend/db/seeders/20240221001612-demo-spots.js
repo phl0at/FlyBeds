@@ -85,7 +85,7 @@ module.exports = {
         },
         {
           ownerId: 1,
-          address: " Demo Dr",
+          address: "7 Demo Dr",
           city: "Demo 7",
           state: "Florida",
           country: "USA",
