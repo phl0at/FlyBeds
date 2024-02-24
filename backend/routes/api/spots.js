@@ -392,7 +392,7 @@ router.post(
   validateBooking,
   async (req, res) => {
     let { spotId } = req.params;
-    spotId = Number(spotId)
+    spotId = Number(spotId);
     const { startDate, endDate } = req.body;
     const currUser = req.user.dataValues;
     const spotData = await Spot.findByPk(spotId);
@@ -417,12 +417,10 @@ router.post(
       if (endDate >= currStart && endDate <= currEnd)
         errors.endDate = "End date conflicts with an existing booking";
       if (errors.startDate || errors.endDate)
-        return res
-          .status(403)
-          .json({
-            message: "Sorry, this spot is already booked for the specified dates",
-            errors,
-          });
+        return res.status(403).json({
+          message: "Sorry, this spot is already booked for the specified dates",
+          errors,
+        });
     }
 
     const newBooking = await Booking.create({
@@ -435,5 +433,6 @@ router.post(
     return res.json(newBooking);
   }
 );
+
 
 module.exports = router;
