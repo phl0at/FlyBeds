@@ -57,6 +57,9 @@ router.get("/current", requireAuth, async (req, res) => {
       let currImage = spotImages[k].dataValues;
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
+        delete currSpot.description
+        delete currSpot.createdAt
+        delete currSpot.updatedAt
       }
     }
     // iterate all reviews and add the spot being reviewed for the
@@ -83,7 +86,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     return res.status(404).json({ message: "Review couldn't be found" });
 
   if (reviewData.userId !== currUser.id)
-    return res.status(403).json({ message: "Forbidden " });
+    return res.status(403).json({ message: "Forbidden" });
 
   const allImages = await ReviewImage.findAll({
     where: {
