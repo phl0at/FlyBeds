@@ -42,28 +42,28 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        get() {
-          const date = new Date()
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
-        },
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        get() {
-          const date = new Date();
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
-        },
-      },
+      // createdAt: {
+      //   allowNull: false,
+      //   type: DataTypes.DATE,
+      //   defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      //   get() {
+      //     const date = new Date()
+      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+      //       "it-IT"
+      //     )}`;
+      //   },
+      // },
+      // updatedAt: {
+      //   allowNull: false,
+      //   type: DataTypes.DATE,
+      //   defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      //   get() {
+      //     const date = new Date();
+      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+      //       "it-IT"
+      //     )}`;
+      //   },
+      // },
     },
     {
       sequelize,
