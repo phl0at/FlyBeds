@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const date = new Date();
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     /**
@@ -45,20 +46,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
         get() {
-          const date = new Date(`${this.dataValues.createdAt}`);
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
+          return `${date.toISOString().split("T")[0]}`;
         },
       },
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
         get() {
-          const date = new Date(`${this.dataValues.createdAt}`);
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
+          return `${date.toISOString().split("T")[0]}`;
         },
       },
     },

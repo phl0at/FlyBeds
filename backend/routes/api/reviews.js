@@ -1,6 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const sequelize = require("sequelize");
 const { validateReview } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");

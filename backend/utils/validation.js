@@ -1,6 +1,4 @@
 const { validationResult } = require("express-validator");
-const { environment } = require("../config");
-const isProduction = environment === "production";
 const { check } = require("express-validator");
 const currDate = new Date().toISOString().split("T")[0]
 // middleware for formatting errors from express-validator middleware
