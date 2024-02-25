@@ -24,17 +24,29 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        get() {
+          const date = new Date(`${this.dataValues.createdAt}`);
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
       },
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        get() {
+          const date = new Date();
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
       },
     },
     {
       sequelize,
       modelName: "Review",
-      timestamps: false,
+      timestamps: true,
     }
   );
   return Review;

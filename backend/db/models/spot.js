@@ -45,12 +45,24 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        get() {
+          const date = new Date()
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
       },
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        get() {
+          const date = new Date();
+          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+            "it-IT"
+          )}`;
+        },
       },
     },
     {
