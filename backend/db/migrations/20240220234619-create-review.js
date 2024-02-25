@@ -15,7 +15,7 @@ module.exports = {
           model: "Users",
           key: "id",
         },
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
       },
       spotId: {
         type: Sequelize.INTEGER,
@@ -24,7 +24,7 @@ module.exports = {
           model: "Spots",
           key: "id",
         },
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
       },
       review: {
         type: Sequelize.STRING,
@@ -35,12 +35,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },

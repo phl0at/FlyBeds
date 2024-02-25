@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-const date = new Date();
+
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     /**
@@ -42,30 +42,21 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      // createdAt: {
-      //   allowNull: false,
-      //   type: DataTypes.DATE,
-      //   set() {
-      //     const date = new Date(`${this.dataValues.createdAt}`);
-      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-      //       "it-IT"
-      //     )}`;
-      //   },
-      // },
-      // updatedAt: {
-      //   allowNull: false,
-      //   type: DataTypes.DATE,
-      //   set() {
-      //     const date = new Date(`${this.dataValues.createdAt}`);
-      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-      //       "it-IT"
-      //     )}`;
-      //   },
-      // },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+      },
     },
     {
       sequelize,
       modelName: "Spot",
+      timestamps: true
     }
   );
   return Spot;
