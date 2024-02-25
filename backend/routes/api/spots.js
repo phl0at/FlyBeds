@@ -1,9 +1,12 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const sequelize = require("sequelize");
-const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
+// const bcrypt = require("bcryptjs");
+// const sequelize = require("sequelize");
+const {
+  validateSpot,
+  validateReview,
+  validateBooking,
+} = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
@@ -12,73 +15,6 @@ const { ReviewImage } = require("../../db/models");
 const { Booking } = require("../../db/models");
 
 const router = express.Router();
-const date = new Date();
-
-const validateBooking = [
-  check("startDate")
-    .isAfter(`${date.toISOString().split("T")[0]}`)
-    .withMessage("startDate cannot be in the past"),
-  check("endDate")
-    .isAfter(this.startDate)
-    .withMessage("endDate cannot be on or before startDate"),
-  handleValidationErrors,
-];
-
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Review text is required"),
-  check("stars")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: 1, max: 5 })
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors,
-];
-const validateSpot = [
-  check("address")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Street address is required"),
-  check("city")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("City is required"),
-  check("state")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("State is required"),
-  check("country")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Country is required"),
-  check("lat")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: -90, max: 90 })
-    .withMessage("Latitude must be within -90 and 90"),
-  check("lng")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: -180, max: 180 })
-    .withMessage("Longitude must be within -180 and 180"),
-  check("name")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isLength({ max: 50 })
-    .withMessage("Name must be less than 50 characters"),
-  check("description")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Description is required"),
-  check("price")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: 0 })
-    .withMessage("Price per day must be a positive number"),
-  handleValidationErrors,
-];
 
 // ----- GET ALL SPOTS ------ //
 
@@ -433,6 +369,5 @@ router.post(
     return res.json(newBooking);
   }
 );
-
 
 module.exports = router;

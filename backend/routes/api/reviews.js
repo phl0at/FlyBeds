@@ -1,27 +1,15 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const sequelize = require("sequelize");
-const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const { validateReview } = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 const { Spot } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
 const { ReviewImage } = require("../../db/models");
 const router = express.Router();
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Review text is required"),
-  check("stars")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isFloat({ min: 1, max: 5 })
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors,
-];
+
 // ------ GET REVIEWS OF CURRENT USER ------ //
 
 router.get("/current", requireAuth, async (req, res) => {
@@ -57,9 +45,9 @@ router.get("/current", requireAuth, async (req, res) => {
       let currImage = spotImages[k].dataValues;
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
-        delete currSpot.description
-        delete currSpot.createdAt
-        delete currSpot.updatedAt
+        delete currSpot.description;
+        delete currSpot.createdAt;
+        delete currSpot.updatedAt;
       }
     }
     // iterate all reviews and add the spot being reviewed for the
