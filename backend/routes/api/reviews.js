@@ -12,7 +12,6 @@ const router = express.Router();
 
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
-  // see if this can be refactored to just include the SpotImages in the Spot query
   const spotData = await Spot.findAll();
   const spotImages = await SpotImage.findAll();
   const reviewData = await Review.findAll({
@@ -32,6 +31,16 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     ],
   });
+
+  for (let n = 0; n < reviewData.length; n++) {
+    let review = reviewData[n].dataValues;
+    review.createdAt = `${review.createdAt.toISOString().split("T")[0]} ${
+      review.createdAt.toISOString().split("T")[1].split(".")[0]
+    }`;
+    review.updatedAt = `${review.updatedAt.toISOString().split("T")[0]} ${
+      review.updatedAt.toISOString().split("T")[1].split(".")[0]
+    }`;
+  }
 
   // iterate all spots
   for (let i = 0; i < spotData.length; i++) {
@@ -112,7 +121,21 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   reviewData.stars = stars;
   await reviewData.save();
 
-  return res.json(reviewData);
+  const returnData = {
+    id: reviewId,
+    userId: currUser.id,
+    spotId: reviewData.spotId,
+    review,
+    stars,
+    createdAt: `${reviewData.createdAt.toISOString().split("T")[0]} ${
+      reviewData.createdAt.toISOString().split("T")[1].split(".")[0]
+    }`,
+    updatedAt: `${reviewData.createdAt.toISOString().split("T")[0]} ${
+      reviewData.createdAt.toISOString().split("T")[1].split(".")[0]
+    }`,
+  };
+
+  return res.json(returnData);
 });
 
 // ------ DELETE A REVIEW ------ //

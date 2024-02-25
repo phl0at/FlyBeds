@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Spot",
-      timestamps: true
+
     }
   );
   return Spot;

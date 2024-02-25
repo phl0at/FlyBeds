@@ -301,7 +301,15 @@ router.get("/:spotId/reviews", async (req, res) => {
       },
     ],
   });
-
+  for (let n = 0; n < reviewData.length; n++) {
+    let review = reviewData[n].dataValues;
+    review.createdAt = `${review.createdAt.toISOString().split("T")[0]} ${
+      review.createdAt.toISOString().split("T")[1].split(".")[0]
+    }`;
+    review.updatedAt = `${review.updatedAt.toISOString().split("T")[0]} ${
+      review.updatedAt.toISOString().split("T")[1].split(".")[0]
+    }`;
+  }
   return res.json({ Reviews: reviewData });
 });
 
@@ -339,7 +347,20 @@ router.post(
       stars,
     });
 
-    return res.status(201).json(newReview);
+    const returnData = {
+      userId: currUser.id,
+      spotId,
+      review,
+      stars,
+      createdAt: `${new Date().toISOString().split("T")[0]} ${
+        new Date().toISOString().split("T")[1].split(".")[0]
+      }`,
+      updatedAt: `${new Date().toISOString().split("T")[0]} ${
+        new Date().toISOString().split("T")[1].split(".")[0]
+      }`,
+    };
+
+    return res.status(201).json(returnData);
   }
 );
 
