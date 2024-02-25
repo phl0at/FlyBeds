@@ -20,26 +20,26 @@ module.exports = (sequelize, DataTypes) => {
       spotId: DataTypes.INTEGER,
       review: DataTypes.STRING,
       stars: DataTypes.INTEGER,
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        set() {
-          const date = new Date(`${this.dataValues.createdAt}`);
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
-        },
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        set() {
-          const date = new Date(`${this.dataValues.createdAt}`);
-          return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
-            "it-IT"
-          )}`;
-        },
-      },
+      // createdAt: {
+      //   allowNull: false,
+      //   type: DataTypes.DATE,
+      //   set() {
+      //     const date = new Date(`${this.dataValues.createdAt}`);
+      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+      //       "it-IT"
+      //     )}`;
+      //   },
+      // },
+      // updatedAt: {
+      //   allowNull: false,
+      //   type: DataTypes.DATE,
+      //   set() {
+      //     const date = new Date(`${this.dataValues.createdAt}`);
+      //     return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
+      //       "it-IT"
+      //     )}`;
+      //   },
+      // },
     },
     {
       sequelize,
