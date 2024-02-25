@@ -1,10 +1,10 @@
 const { validationResult } = require("express-validator");
 const { check } = require("express-validator");
-const currDate = new Date().toISOString().split("T")[0]
+const currDate = new Date().toISOString().split("T")[0];
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
 const handleValidationErrors = (req, _res, next) => {
-const validationErrors = validationResult(req);
+  const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
     const errors = {};
@@ -20,6 +20,45 @@ const validationErrors = validationResult(req);
   }
   next();
 };
+
+const validateQuery = [
+  check("page")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 1, max: 10 })
+    .withMessage("Page must be greater than or equal to 1"),
+  check("size")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isFloat({ min: 1, max: 20 })
+    .withMessage("Size must be greater than or equal to 1"),
+  check("maxLat")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ max: 90 })
+    .withMessage("Maximum latitude is invalid"),
+  check("minLat")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: -90 })
+    .withMessage("Minimum latitude is invalid"),
+  check("maxLng")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: 180 })
+    .withMessage("Maximum longitude is invalid"),
+  check("minLng")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: -180 })
+    .withMessage("Minimum longitude is invalid"),
+  check("minPrice")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: 0 })
+    .withMessage("Minimum price must be greater than or equal to 0"),
+  check("maxPrice")
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: 0 })
+    .withMessage("Maximum price must be greater than or equal to 0"),
+  handleValidationErrors,
+];
+
 const validateBooking = [
   check("startDate")
     .isAfter(currDate)
@@ -90,5 +129,6 @@ module.exports = {
   handleValidationErrors,
   validateSpot,
   validateReview,
-  validateBooking
+  validateBooking,
+  validateQuery,
 };

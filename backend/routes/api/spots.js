@@ -3,6 +3,7 @@ const {
   validateSpot,
   validateReview,
   validateBooking,
+  validateQuery,
 } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
@@ -11,13 +12,40 @@ const { SpotImage } = require("../../db/models");
 const { Review } = require("../../db/models");
 const { ReviewImage } = require("../../db/models");
 const { Booking } = require("../../db/models");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
 // ----- GET ALL SPOTS ------ //
 
-router.get("/", async (req, res) => {
-  const spotData = await Spot.findAll();
+router.get("/", validateQuery, async (req, res) => {
+  let {
+    page = 1,
+    size = 20,
+    minLat,
+    maxLat,
+    minLng,
+    maxLng,
+    minPrice,
+    maxPrice,
+  } = req.query;
+  page = Number(page);
+  size = Number(size);
+  let where = {};
+  if (minLat) where.lat = { [Op.gte]: minLat };
+  if (maxLat) where.lat = { [Op.lte]: maxLat };
+  if (minLat && maxLat) where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
+  if (minLng) where.lng = { [Op.gte]: minLng };
+  if (maxLng) where.lng = { [Op.lte]: maxLng };
+  if (minLng && maxLng) where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
+  if (minPrice) where.price = { [Op.gte]: minPrice };
+  if (maxPrice) where.price = { [Op.lte]: maxPrice };
+  if (minPrice && maxPrice) where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
+  const spotData = await Spot.findAll({
+    where,
+    limit: size,
+    offset: size * (page - 1),
+  });
   const reviewData = await Review.findAll();
   const spotImages = await SpotImage.findAll();
   let sum = [];
@@ -43,7 +71,7 @@ router.get("/", async (req, res) => {
     }
   }
 
-  return res.json({ Spots: spotData });
+  return res.json({ Spots: spotData, page, size });
 });
 
 // ----- GET ALL SPOTS OF CURRENT USER ------ //
