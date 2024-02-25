@@ -159,7 +159,6 @@ module.exports = {
           stars: 3,
         },
       ],
-      { validate: true }
     );
   },
 

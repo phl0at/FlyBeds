@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
         get() {
-          const date = new Date(`${this.dataValues.createdAt}`);
+          const date = new Date(`${this.dataValues.updatedAt}`);
           return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
             "it-IT"
           )}`;

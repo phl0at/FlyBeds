@@ -133,7 +133,6 @@ module.exports = {
         },
 
       ],
-      { validate: true }
     );
   },
 
