@@ -63,8 +63,8 @@ router.get("/", validateQuery, async (req, res) => {
 
       if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
       if (reviewData[j + 1] === undefined) {
-        currSpot.avgRating =
-          sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+        let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+        currSpot.avgRating = Number(avg.toFixed(1))
         sum = [];
       }
     }
@@ -105,8 +105,8 @@ router.get("/current", requireAuth, async (req, res) => {
 
       if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
       if (reviewData[j + 1] === undefined) {
-        currSpot.avgRating =
-          sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+        let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+        currSpot.avgRating = Number(avg.toFixed(1))
         sum = [];
       }
     }
@@ -163,8 +163,8 @@ router.get("/:spotId", async (req, res) => {
       sum.push(currReview.stars);
     }
     if (reviewData[j + 1] === undefined) {
-      spotData.dataValues.avgRating =
-        sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+      let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+      spotData.dataValues.avgRating = Number(avg.toFixed(1))
       sum = [];
     }
   }
