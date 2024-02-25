@@ -23,13 +23,11 @@ const handleValidationErrors = (req, _res, next) => {
 
 const validateQuery = [
   check("page")
-    .exists({ checkFalsy: true })
-    .notEmpty()
+    .optional({ nullable: true, checkFalsy: true })
     .isFloat({ min: 1, max: 10 })
     .withMessage("Page must be greater than or equal to 1"),
   check("size")
-    .exists({ checkFalsy: true })
-    .notEmpty()
+    .optional({ nullable: true, checkFalsy: true })
     .isFloat({ min: 1, max: 20 })
     .withMessage("Size must be greater than or equal to 1"),
   check("maxLat")
@@ -42,7 +40,7 @@ const validateQuery = [
     .withMessage("Minimum latitude is invalid"),
   check("maxLng")
     .optional({ nullable: true, checkFalsy: true })
-    .isFloat({ min: 180 })
+    .isFloat({ max: 180 })
     .withMessage("Maximum longitude is invalid"),
   check("minLng")
     .optional({ nullable: true, checkFalsy: true })
