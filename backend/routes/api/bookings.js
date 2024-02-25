@@ -13,8 +13,8 @@ const { Booking } = require("../../db/models");
 
 const router = express.Router();
 
-const date = new Date();
-const currDate = `${date.toISOString().split("T")[0]}`;
+
+const currDate = new Date().toISOString().split("T")[0]
 const validateBooking = [
   check("startDate")
     .isAfter(currDate)
