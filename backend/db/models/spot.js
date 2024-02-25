@@ -42,20 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        get() {
-          return `${date.toISOString().split("T")[0]}`;
-        },
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        get() {
-          return `${date.toISOString().split("T")[0]}`;
-        },
-      },
     },
     {
       sequelize,
