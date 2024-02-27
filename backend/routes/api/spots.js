@@ -52,12 +52,6 @@ router.get("/", validateQuery, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
-    // currSpot.createdAt = `${currSpot.createdAt.toISOString().split("T")[0]} ${
-    //   currSpot.createdAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
-    // currSpot.updatedAt = `${currSpot.updatedAt.toISOString().split("T")[0]} ${
-    //   currSpot.updatedAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
@@ -94,12 +88,6 @@ router.get("/current", requireAuth, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
-    // currSpot.createdAt = `${currSpot.createdAt.toISOString().split("T")[0]} ${
-    //   currSpot.createdAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
-    // currSpot.updatedAt = `${currSpot.updatedAt.toISOString().split("T")[0]} ${
-    //   currSpot.updatedAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
@@ -148,12 +136,6 @@ router.get("/:spotId", async (req, res) => {
     });
   }
   spotData.dataValues.numReviews = 0;
-  // spotData.dataValues.createdAt = `${
-  //   spotData.dataValues.createdAt.toISOString().split("T")[0]
-  // } ${spotData.dataValues.createdAt.toISOString().split("T")[1].split(".")[0]}`;
-  // spotData.dataValues.updatedAt = `${
-  //   spotData.dataValues.updatedAt.toISOString().split("T")[0]
-  // } ${spotData.dataValues.updatedAt.toISOString().split("T")[1].split(".")[0]}`;
   let sum = [];
   for (let j = 0; j < reviewData.length; j++) {
     let currReview = reviewData[j].dataValues;
@@ -190,13 +172,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     description,
     price,
   });
-
-  // newSpot.dataValues.createdAt = `${
-  //   newSpot.dataValues.createdAt.toISOString().split("T")[0]
-  // } ${newSpot.dataValues.createdAt.toISOString().split("T")[1].split(".")[0]}`;
-  // newSpot.dataValues.updatedAt = `${
-  //   newSpot.dataValues.updatedAt.toISOString().split("T")[0]
-  // } ${newSpot.dataValues.updatedAt.toISOString().split("T")[1].split(".")[0]}`;
 
   return res.status(201).json(newSpot);
 });
@@ -247,16 +222,6 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     spotData.description = description;
     spotData.price = price;
     await spotData.save();
-    // spotData.dataValues.createdAt = `${
-    //   spotData.dataValues.createdAt.toISOString().split("T")[0]
-    // } ${
-    //   spotData.dataValues.createdAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
-    // spotData.dataValues.updatedAt = `${
-    //   spotData.dataValues.updatedAt.toISOString().split("T")[0]
-    // } ${
-    //   spotData.dataValues.updatedAt.toISOString().split("T")[1].split(".")[0]
-    // }`;
     return res.json(spotData);
   } else {
     return res.status(403).json({ message: "Forbidden" });
@@ -301,15 +266,6 @@ router.get("/:spotId/reviews", async (req, res) => {
       },
     ],
   });
-  // for (let n = 0; n < reviewData.length; n++) {
-  //   let review = reviewData[n].dataValues;
-  //   review.createdAt = `${review.createdAt.toISOString().split("T")[0]} ${
-  //     review.createdAt.toISOString().split("T")[1].split(".")[0]
-  //   }`;
-  //   review.updatedAt = `${review.updatedAt.toISOString().split("T")[0]} ${
-  //     review.updatedAt.toISOString().split("T")[1].split(".")[0]
-  //   }`;
-  // }
   return res.json({ Reviews: reviewData });
 });
 
@@ -346,19 +302,6 @@ router.post(
       review,
       stars,
     });
-
-    // const returnData = {
-    //   userId: currUser.id,
-    //   spotId,
-    //   review,
-    //   stars,
-    //   createdAt: `${new Date().toISOString().split("T")[0]} ${
-    //     new Date().toISOString().split("T")[1].split(".")[0]
-    //   }`,
-    //   updatedAt: `${new Date().toISOString().split("T")[0]} ${
-    //     new Date().toISOString().split("T")[1].split(".")[0]
-    //   }`,
-    // };
 
     return res.status(201).json(newReview);
   }
@@ -429,10 +372,22 @@ router.post(
       let currStart = booking.startDate.toISOString().split("T")[0];
       let currEnd = booking.endDate.toISOString().split("T")[0];
       let errors = {};
+      // start date falls within an existing booking
       if (startDate >= currStart && startDate <= currEnd)
         errors.startDate = "Start date conflicts with an existing booking";
       if (endDate >= currStart && endDate <= currEnd)
+        // end date falls within an existing booking
         errors.endDate = "End date conflicts with an existing booking";
+      // start/end within an existing booking
+      if (startDate >= currStart && endDate <= currEnd) {
+        errors.endDate = "End date conflicts with an existing booking";
+        errors.startDate = "Start date conflicts with an existing booking";
+      }
+      // start/end wrapped around an existing booking
+      if (startDate <= currStart && endDate >= currEnd) {
+        errors.endDate = "End date conflicts with an existing booking";
+        errors.startDate = "Start date conflicts with an existing booking";
+      }
       if (errors.startDate || errors.endDate)
         return res.status(403).json({
           message: "Sorry, this spot is already booked for the specified dates",

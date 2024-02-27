@@ -20,7 +20,7 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 
   if (imageData.Review.userId !== currUser.id) {
 
-    return res.status(403).json({ message: "Forbidden " });
+    return res.status(403).json({ message: "Forbidden" });
   } else {
 
     await imageData.destroy();
