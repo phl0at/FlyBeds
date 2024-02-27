@@ -74,7 +74,7 @@ router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
     let errors = {};
     console.log('CURRENT ID', booking.id,'PARAM ID', bookingId)
     //don't want to throw errors for the booking we want to edit!
-    if (booking.id !== bookingId) {
+    if (booking.id !== Number(bookingId)) {
       // start date falls within an existing booking
       if (startDate >= currStart && startDate <= currEnd)
         errors.startDate = "Start date conflicts with an existing booking";
