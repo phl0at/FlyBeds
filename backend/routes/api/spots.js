@@ -54,6 +54,7 @@ router.get("/", validateQuery, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
+    currSpot.previewImage = "";
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
@@ -67,7 +68,6 @@ router.get("/", validateQuery, async (req, res) => {
 
     for (let k = 0; k < spotImages.length; k++) {
       let currImage = spotImages[k].dataValues;
-      currSpot.previewImage = "";
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
@@ -91,6 +91,7 @@ router.get("/current", requireAuth, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
+    currSpot.previewImage = "";
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
@@ -103,7 +104,6 @@ router.get("/current", requireAuth, async (req, res) => {
     }
     for (let k = 0; k < spotImages.length; k++) {
       let currImage = spotImages[k].dataValues;
-      currSpot.previewImage = "";
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
