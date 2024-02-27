@@ -109,6 +109,7 @@ module.exports = {
           preview: true
         },
       ],
+      { validate: true }
     );
   },
 

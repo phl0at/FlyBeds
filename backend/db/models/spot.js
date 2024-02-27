@@ -43,9 +43,9 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,
       createdAt: {
-        allowNull: false,
         type: DataTypes.DATE,
         get() {
+          if (!this.dataValues.createdAt) return null;
           const date = new Date(`${this.dataValues.createdAt}`);
           return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
             "it-IT"
@@ -53,9 +53,9 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       updatedAt: {
-        allowNull: false,
         type: DataTypes.DATE,
         get() {
+          if (!this.dataValues.updatedAt) return null;
           const date = new Date(`${this.dataValues.updatedAt}`);
           return `${date.toISOString().split("T")[0]} ${date.toLocaleTimeString(
             "it-IT"

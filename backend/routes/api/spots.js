@@ -64,7 +64,7 @@ router.get("/", validateQuery, async (req, res) => {
       if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
       if (reviewData[j + 1] === undefined) {
         let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-        currSpot.avgRating = Number(avg.toFixed(1))
+        currSpot.avgRating = Number(avg.toFixed(1));
         sum = [];
       }
     }
@@ -106,7 +106,7 @@ router.get("/current", requireAuth, async (req, res) => {
       if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
       if (reviewData[j + 1] === undefined) {
         let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-        currSpot.avgRating = Number(avg.toFixed(1))
+        currSpot.avgRating = Number(avg.toFixed(1));
         sum = [];
       }
     }
@@ -164,7 +164,7 @@ router.get("/:spotId", async (req, res) => {
     }
     if (reviewData[j + 1] === undefined) {
       let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-      spotData.dataValues.avgRating = Number(avg.toFixed(1))
+      spotData.dataValues.avgRating = Number(avg.toFixed(1));
       sum = [];
     }
   }

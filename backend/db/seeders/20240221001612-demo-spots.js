@@ -17,8 +17,8 @@ module.exports = {
           city: "Demo 1",
           state: "Florida",
           country: "USA",
-          lat: 30,
-          lng: -80,
+          lat: 30.0,
+          lng: -80.0,
           name: "Demo 1",
           description: "Demo 1",
           price: 10000,
@@ -131,8 +131,8 @@ module.exports = {
           description: "Demo 10",
           price: 10000,
         },
-
       ],
+      { validate: true }
     );
   },
 

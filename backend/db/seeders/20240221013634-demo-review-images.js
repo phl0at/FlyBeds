@@ -109,6 +109,7 @@ module.exports = {
           url: "URL 25",
         },
       ],
+      { validate: true }
     );
   },
 
