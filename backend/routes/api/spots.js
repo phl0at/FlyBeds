@@ -31,6 +31,8 @@ router.get("/", validateQuery, async (req, res) => {
   } = req.query;
   page = Number(page);
   size = Number(size);
+  if(page === 0) page = 1;
+  if(size === 0) size = 20;
   let where = {};
   if (minLat) where.lat = { [Op.gte]: minLat };
   if (maxLat) where.lat = { [Op.lte]: maxLat };
