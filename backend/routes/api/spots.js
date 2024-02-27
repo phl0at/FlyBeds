@@ -31,8 +31,8 @@ router.get("/", validateQuery, async (req, res) => {
   } = req.query;
   page = Number(page);
   size = Number(size);
-  if(page === 0) page = 1;
-  if(size === 0) size = 20;
+  if (page === 0) page = 1;
+  if (size === 0) size = 20;
   let where = {};
   if (minLat) where.lat = { [Op.gte]: minLat };
   if (maxLat) where.lat = { [Op.lte]: maxLat };
@@ -67,6 +67,7 @@ router.get("/", validateQuery, async (req, res) => {
 
     for (let k = 0; k < spotImages.length; k++) {
       let currImage = spotImages[k].dataValues;
+      currSpot.previewImage = "";
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
@@ -102,6 +103,7 @@ router.get("/current", requireAuth, async (req, res) => {
     }
     for (let k = 0; k < spotImages.length; k++) {
       let currImage = spotImages[k].dataValues;
+      currSpot.previewImage = "";
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
