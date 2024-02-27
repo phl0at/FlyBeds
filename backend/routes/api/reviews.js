@@ -32,16 +32,6 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
-  // for (let n = 0; n < reviewData.length; n++) {
-  //   let review = reviewData[n].dataValues;
-  //   review.createdAt = `${review.createdAt.toISOString().split("T")[0]} ${
-  //     review.createdAt.toISOString().split("T")[1].split(".")[0]
-  //   }`;
-  //   review.updatedAt = `${review.updatedAt.toISOString().split("T")[0]} ${
-  //     review.updatedAt.toISOString().split("T")[1].split(".")[0]
-  //   }`;
-  // }
-
   // iterate all spots
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
@@ -120,20 +110,6 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   reviewData.review = review;
   reviewData.stars = stars;
   await reviewData.save();
-
-  // const returnData = {
-  //   id: reviewId,
-  //   userId: currUser.id,
-  //   spotId: reviewData.spotId,
-  //   review,
-  //   stars,
-  //   createdAt: `${reviewData.createdAt.toISOString().split("T")[0]} ${
-  //     reviewData.createdAt.toISOString().split("T")[1].split(".")[0]
-  //   }`,
-  //   updatedAt: `${reviewData.createdAt.toISOString().split("T")[0]} ${
-  //     reviewData.createdAt.toISOString().split("T")[1].split(".")[0]
-  //   }`,
-  // };
 
   return res.json(reviewData);
 });
