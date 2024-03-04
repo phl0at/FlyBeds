@@ -20,7 +20,8 @@ router.get("/current", requireAuth, async (req, res) => {
 
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
-
+    currSpot.previewImage = null;
+    
     for (let k = 0; k < spotImages.length; k++) {
       let currImage = spotImages[k].dataValues;
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
