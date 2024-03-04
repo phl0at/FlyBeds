@@ -54,7 +54,7 @@ router.get("/", validateQuery, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
-    currSpot.previewImage = "";
+    currSpot.previewImage = null;
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
@@ -91,7 +91,7 @@ router.get("/current", requireAuth, async (req, res) => {
   let sum = [];
   for (let i = 0; i < spotData.length; i++) {
     let currSpot = spotData[i].dataValues;
-    currSpot.previewImage = "";
+    currSpot.previewImage = null;
     for (let j = 0; j < reviewData.length; j++) {
       let currReview = reviewData[j].dataValues;
 
