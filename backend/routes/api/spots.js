@@ -217,22 +217,24 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const currUser = req.user.dataValues;
   const { spotId } = req.params;
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
   const spotData = await Spot.findByPk(spotId);
-  if (!spotData)
-    return res.status(404).json({ message: "Spot couldn't be found" });
+
+  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+
   if (spotData.ownerId === currUser.id) {
-    spotData.address = address;
-    spotData.city = city;
-    spotData.state = state;
-    spotData.country = country;
-    spotData.lat = lat;
-    spotData.lng = lng;
-    spotData.name = name;
-    spotData.description = description;
-    spotData.price = price;
-    await spotData.save();
+    await spotData.update({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price
+    })
     return res.json(spotData);
   } else {
     return res.status(403).json({ message: "Forbidden" });
@@ -245,8 +247,8 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
-  if (!spotData)
-    return res.status(404).json({ message: "Spot couldn't be found" });
+  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+
   if (spotData.ownerId === currUser.id) {
     await spotData.destroy();
     return res.json({ message: "Successfully deleted" });
@@ -260,8 +262,9 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 router.get("/:spotId/reviews", async (req, res) => {
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
-  if (!spotData)
-    return res.status(404).json({ message: "Spot couldn't be found" });
+  
+  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+
   const reviewData = await Review.findAll({
     where: {
       spotId,
