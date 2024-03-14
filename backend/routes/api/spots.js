@@ -1,4 +1,3 @@
-const express = require("express");
 const {
   validateSpot,
   validateReview,
@@ -6,7 +5,6 @@ const {
   validateQuery,
   setQueries,
 } = require("../../utils/validation");
-const { requireAuth } = require("../../utils/auth");
 const {
   User,
   Spot,
@@ -15,6 +13,8 @@ const {
   ReviewImage,
   Booking,
 } = require("../../db/models");
+const express = require("express");
+const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 // ----- GET ALL SPOTS ------ //
@@ -262,7 +262,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 router.get("/:spotId/reviews", async (req, res) => {
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
-  
+
   if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
 
   const reviewData = await Review.findAll({
