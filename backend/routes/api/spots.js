@@ -217,11 +217,13 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const currUser = req.user.dataValues;
   const { spotId } = req.params;
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
 
   const spotData = await Spot.findByPk(spotId);
 
-  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
 
   if (spotData.ownerId === currUser.id) {
     await spotData.update({
@@ -233,8 +235,8 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
       lng,
       name,
       description,
-      price
-    })
+      price,
+    });
     return res.json(spotData);
   } else {
     return res.status(403).json({ message: "Forbidden" });
@@ -247,7 +249,8 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
-  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
 
   if (spotData.ownerId === currUser.id) {
     await spotData.destroy();
@@ -263,7 +266,8 @@ router.get("/:spotId/reviews", async (req, res) => {
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
 
-  if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
+  if (!spotData)
+    return res.status(404).json({ message: "Spot couldn't be found" });
 
   const reviewData = await Review.findAll({
     where: {
@@ -326,11 +330,6 @@ router.post(
 router.get("/:spotId/bookings", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const { spotId } = req.params;
-  const bookData = await Booking.findAll({
-    where: {
-      spotId,
-    },
-  });
   const spotData = await Spot.findByPk(spotId);
 
   if (!spotData)
@@ -369,15 +368,16 @@ router.post(
     spotId = Number(spotId);
     const { startDate, endDate } = req.body;
     const currUser = req.user.dataValues;
-    const spotData = await Spot.findByPk(spotId);
-    const bookData = await Booking.findAll({
-      where: {
-        spotId,
-      },
+    const spotData = await Spot.findOne({
+      where: spotId,
+      include: [{ model: Booking }],
     });
+
+    const bookData = spotData.dataValues.Bookings;
 
     if (!spotData)
       return res.status(404).json({ message: "Spot couldn't be found" });
+
     if (currUser.id === spotData.ownerId)
       return res.status(403).json({ message: "Forbidden" });
 
@@ -386,12 +386,15 @@ router.post(
       let currStart = booking.startDate.toISOString().split("T")[0];
       let currEnd = booking.endDate.toISOString().split("T")[0];
       let errors = {};
+
       // start date falls within an existing booking
-      if (startDate >= currStart && startDate <= currEnd)
+      if (startDate >= currStart && startDate <= currEnd) {
         errors.startDate = "Start date conflicts with an existing booking";
-      if (endDate >= currStart && endDate <= currEnd)
-        // end date falls within an existing booking
+      }
+      // end date falls within an existing booking
+      if (endDate >= currStart && endDate <= currEnd) {
         errors.endDate = "End date conflicts with an existing booking";
+      }
       // start/end within an existing booking
       if (startDate >= currStart && endDate <= currEnd) {
         errors.endDate = "End date conflicts with an existing booking";
@@ -402,6 +405,7 @@ router.post(
         errors.endDate = "End date conflicts with an existing booking";
         errors.startDate = "Start date conflicts with an existing booking";
       }
+
       if (errors.startDate || errors.endDate)
         return res.status(403).json({
           message: "Sorry, this spot is already booked for the specified dates",
