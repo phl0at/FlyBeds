@@ -4,6 +4,7 @@ const {
   validateReview,
   validateBooking,
   validateQuery,
+  setQueries,
 } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
@@ -29,51 +30,48 @@ router.get("/", validateQuery, async (req, res) => {
     minPrice,
     maxPrice,
   } = req.query;
+
   page = Number(page);
   size = Number(size);
+
   if (page === 0) page = 1;
   if (size === 0) size = 20;
-  let where = {};
-  if (minLat) where.lat = { [Op.gte]: minLat };
-  if (maxLat) where.lat = { [Op.lte]: maxLat };
-  if (minLat && maxLat) where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
-  if (minLng) where.lng = { [Op.gte]: minLng };
-  if (maxLng) where.lng = { [Op.lte]: maxLng };
-  if (minLng && maxLng) where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
-  if (minPrice) where.price = { [Op.gte]: minPrice };
-  if (maxPrice) where.price = { [Op.lte]: maxPrice };
-  if (minPrice && maxPrice)
-    where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
+
+  let where = setQueries(minLat, maxLat, minLng, maxLng, minPrice, maxPrice);
+
   const spotData = await Spot.findAll({
     where,
     limit: size,
     offset: size * (page - 1),
+    include: [{ model: Review }, { model: SpotImage }],
   });
-  const reviewData = await Review.findAll();
-  const spotImages = await SpotImage.findAll();
-  let sum = [];
+  //iterate all spots and set the default previewImage value
   for (let i = 0; i < spotData.length; i++) {
-    let currSpot = spotData[i].dataValues;
+    let sum = [];
+    const currSpot = spotData[i].dataValues;
     currSpot.previewImage = null;
-    for (let j = 0; j < reviewData.length; j++) {
-      let currReview = reviewData[j].dataValues;
+    //iterate all reviews and add the avgRating to each one's spot
+    for (let j = 0; j < currSpot.Reviews.length; j++) {
+      const currReview = currSpot.Reviews[j].dataValues;
 
       if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
-      if (reviewData[j + 1] === undefined) {
-        let avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
+
+      if (currSpot.Reviews[j + 1] === undefined) {
+        const avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
         currSpot.avgRating = Number(avg.toFixed(1));
-        sum = [];
       }
     }
+    //iterate all spot images and add a previewImage to each one's spot
+    for (let k = 0; k < currSpot.SpotImages.length; k++) {
+      const currImage = currSpot.SpotImages[k].dataValues;
 
-    for (let k = 0; k < spotImages.length; k++) {
-      let currImage = spotImages[k].dataValues;
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
     }
+    delete currSpot.Reviews;
+    delete currSpot.SpotImages;
   }
-
   return res.json({ Spots: spotData, page, size });
 });
 

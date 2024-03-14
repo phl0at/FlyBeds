@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { validationResult } = require("express-validator");
 const { check } = require("express-validator");
 const currDate = new Date().toISOString().split("T")[0];
@@ -63,8 +64,8 @@ const validateBooking = [
     .withMessage("startDate cannot be in the past"),
   check("endDate")
     .custom(async (endDate, { req }) => {
-      if(endDate <= req.body.startDate){
-        throw new Error()
+      if (endDate <= req.body.startDate) {
+        throw new Error();
       }
     })
     .withMessage("endDate cannot be on or before startDate"),
@@ -127,7 +128,25 @@ const validateSpot = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
+
+const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
+  let where = {};
+  if (minLat) where.lat = { [Op.gte]: minLat };
+  if (maxLat) where.lat = { [Op.lte]: maxLat };
+  if (minLat && maxLat) where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
+  if (minLng) where.lng = { [Op.gte]: minLng };
+  if (maxLng) where.lng = { [Op.lte]: maxLng };
+  if (minLng && maxLng) where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
+  if (minPrice) where.price = { [Op.gte]: minPrice };
+  if (maxPrice) where.price = { [Op.lte]: maxPrice };
+  if (minPrice && maxPrice)
+    where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
+
+  return where;
+};
+
 module.exports = {
+  setQueries,
   handleValidationErrors,
   validateSpot,
   validateReview,
