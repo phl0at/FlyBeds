@@ -55,6 +55,23 @@ router.get("/current", requireAuth, async (req, res) => {
   }
 
   return res.json({ Bookings: bookData });
+  //old code
+  // for (const spot of spotData) {
+  //   const bookings = spot.dataValues.Bookings;
+
+  // for (let i = 0; i < spotData.length; i++) {
+  //   let currSpot = spotData[i].dataValues;
+  //   currSpot.previewImage = null;
+
+  //   for (let k = 0; k < spotImages.length; k++) {
+  //     let currImage = spotImages[k].dataValues;
+  //     if (currSpot.id === currImage.spotId && currImage.preview === true) {
+  //       currSpot.previewImage = currImage.url;
+  //       delete currSpot.description;
+  //       delete currSpot.createdAt;
+  //       delete currSpot.updatedAt;
+  //     }
+  //   }
 });
 
 router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
