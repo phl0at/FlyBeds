@@ -17,28 +17,9 @@ router.get("/current", requireAuth, async (req, res) => {
   });
   const bookData = [];
 
-  // for (const spot of spotData) {
-  //   const bookings = spot.dataValues.Bookings;
+  for (const spot of spotData) {
+    const bookings = spot.dataValues.Bookings;
 
-  // for (let i = 0; i < spotData.length; i++) {
-  //   let currSpot = spotData[i].dataValues;
-  //   currSpot.previewImage = null;
-
-  //   for (let k = 0; k < spotImages.length; k++) {
-  //     let currImage = spotImages[k].dataValues;
-  //     if (currSpot.id === currImage.spotId && currImage.preview === true) {
-  //       currSpot.previewImage = currImage.url;
-  //       delete currSpot.description;
-  //       delete currSpot.createdAt;
-  //       delete currSpot.updatedAt;
-  //     }
-  //   }
-    for (let j = 0; j < bookData.length; j++) {
-      let currBook = bookData[j].dataValues;
-
-      if (currSpot.id === currBook.spotId) {
-        currBook.Spot = currSpot;
-      }
     for (const image of spot.dataValues.SpotImages) {
       const imageData = image.dataValues;
 
