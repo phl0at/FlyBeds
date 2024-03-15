@@ -1,42 +1,75 @@
 const express = require("express");
 const { validateBooking } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
-const { Spot } = require("../../db/models");
-const { SpotImage } = require("../../db/models");
-const { Booking } = require("../../db/models");
+const { Spot, SpotImage, Booking } = require("../../db/models");
 const currDate = new Date().toISOString().split("T")[0];
-
 const router = express.Router();
+
+// ------ GET CURRENT USER BOOKINGS ------ //
 
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
-  const bookData = await Booking.findAll({
-    where: {
-      userId: currUser.id,
-    },
+  const spotData = await Spot.findAll({
+    include: [
+      { model: SpotImage, where: { preview: true } },
+      { model: Booking, where: { userId: currUser.id } },
+    ],
   });
-  const spotData = await Spot.findAll();
-  const spotImages = await SpotImage.findAll();
+  const bookData = [];
 
-  for (let i = 0; i < spotData.length; i++) {
-    let currSpot = spotData[i].dataValues;
-    currSpot.previewImage = null;
+  // for (const spot of spotData) {
+  //   const bookings = spot.dataValues.Bookings;
 
-    for (let k = 0; k < spotImages.length; k++) {
-      let currImage = spotImages[k].dataValues;
-      if (currSpot.id === currImage.spotId && currImage.preview === true) {
-        currSpot.previewImage = currImage.url;
-        delete currSpot.description;
-        delete currSpot.createdAt;
-        delete currSpot.updatedAt;
-      }
-    }
+  // for (let i = 0; i < spotData.length; i++) {
+  //   let currSpot = spotData[i].dataValues;
+  //   currSpot.previewImage = null;
+
+  //   for (let k = 0; k < spotImages.length; k++) {
+  //     let currImage = spotImages[k].dataValues;
+  //     if (currSpot.id === currImage.spotId && currImage.preview === true) {
+  //       currSpot.previewImage = currImage.url;
+  //       delete currSpot.description;
+  //       delete currSpot.createdAt;
+  //       delete currSpot.updatedAt;
+  //     }
+  //   }
     for (let j = 0; j < bookData.length; j++) {
       let currBook = bookData[j].dataValues;
 
       if (currSpot.id === currBook.spotId) {
         currBook.Spot = currSpot;
       }
+    for (const image of spot.dataValues.SpotImages) {
+      const imageData = image.dataValues;
+
+      if (imageData.spotId === spot.id)
+        spot.dataValues.previewImage = imageData.url;
+    }
+
+    for (const booking of bookings) {
+      booking.dataValues.Spot = {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        price: spot.price,
+        previewImage: spot.dataValues.previewImage,
+      };
+      bookData.push({
+        id: booking.id,
+        spotId: booking.spotId,
+        Spot: booking.dataValues.Spot,
+        userId: booking.userId,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        createdAt: booking.createdAt,
+        updatedAt: booking.updatedAt,
+      });
     }
   }
 
