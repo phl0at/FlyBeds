@@ -30,10 +30,8 @@ router.get("/", validateQuery, async (req, res) => {
     minPrice,
     maxPrice,
   } = req.query;
-
   page = Number(page);
   size = Number(size);
-
   if (page === 0) page = 1;
   if (size === 0) size = 20;
 
@@ -46,25 +44,26 @@ router.get("/", validateQuery, async (req, res) => {
     include: [{ model: Review }, { model: SpotImage }],
   });
   //iterate all spots and set the default previewImage value
-  for (let i = 0; i < spotData.length; i++) {
-    let sum = [];
-    const currSpot = spotData[i].dataValues;
+  for (const spot of spotData) {
+    let starSum = 0;
+    let starNum = 0;
+    const currSpot = spot.dataValues;
     currSpot.previewImage = null;
     currSpot.avgRating = null;
     //iterate all reviews and add the avgRating to each one's spot
-    for (let j = 0; j < currSpot.Reviews.length; j++) {
-      const currReview = currSpot.Reviews[j].dataValues;
+    for (const review of currSpot.Reviews) {
+      const currReview = review.dataValues;
 
-      if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
-
-      if (currSpot.Reviews[j + 1] === undefined) {
-        const avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-        currSpot.avgRating = Number(avg.toFixed(1));
+      if (currSpot.id === currReview.spotId) {
+        starSum += currReview.stars;
+        starNum++;
       }
+      const avg = starSum / starNum;
+      currSpot.avgRating = Number(avg.toFixed(1));
     }
     //iterate all spot images and add a previewImage to each one's spot
-    for (let k = 0; k < currSpot.SpotImages.length; k++) {
-      const currImage = currSpot.SpotImages[k].dataValues;
+    for (const image of currSpot.SpotImages) {
+      const currImage = image.dataValues;
 
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
@@ -88,25 +87,26 @@ router.get("/current", requireAuth, async (req, res) => {
   });
 
   //iterate all spots and set the default previewImage value
-  for (let i = 0; i < spotData.length; i++) {
-    let sum = [];
-    const currSpot = spotData[i].dataValues;
+  for (const spot of spotData) {
+    let starSum = 0;
+    let starNum = 0;
+    const currSpot = spot.dataValues;
     currSpot.previewImage = null;
     currSpot.avgRating = null;
     //iterate all reviews and add the avgRating to each one's spot
-    for (let j = 0; j < currSpot.Reviews.length; j++) {
-      const currReview = currSpot.Reviews[j].dataValues;
+    for (const review of currSpot.Reviews) {
+      const currReview = review.dataValues;
 
-      if (currSpot.id === currReview.spotId) sum.push(currReview.stars);
-
-      if (currSpot.Reviews[j + 1] === undefined) {
-        const avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-        currSpot.avgRating = Number(avg.toFixed(1));
+      if (currSpot.id === currReview.spotId) {
+        starSum += currReview.stars;
+        starNum++;
       }
+      const avg = starSum / starNum;
+      currSpot.avgRating = Number(avg.toFixed(1));
     }
     //iterate all spot images and add a previewImage to each one's spot
-    for (let k = 0; k < currSpot.SpotImages.length; k++) {
-      const currImage = currSpot.SpotImages[k].dataValues;
+    for (const image of currSpot.SpotImages) {
+      const currImage = image.dataValues;
 
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
@@ -144,22 +144,16 @@ router.get("/:spotId", async (req, res) => {
       message: "Spot couldn't be found",
     });
   }
-
   const reviewData = spotData.dataValues.Reviews;
   spotData.dataValues.numReviews = 0;
+  let starSum = 0;
 
-  for (let i = 0; i < reviewData.length; j++) {
-    let sum = [];
-    const currReview = reviewData[i].dataValues;
-
-    if (spotData.dataValues.id === currReview.spotId) {
-      spotData.dataValues.numReviews++;
-      sum.push(currReview.stars);
-    }
-    if (reviewData[i + 1] === undefined) {
-      const avg = sum.reduce((acc, curr) => acc + curr, 0) / sum.length;
-      spotData.dataValues.avgRating = Number(avg.toFixed(1));
-    }
+  for (const review of reviewData) {
+    const currReview = review.dataValues;
+    spotData.dataValues.numReviews++;
+    starSum += currReview.stars;
+    const avg = starSum / spotData.dataValues.numReviews;
+    spotData.dataValues.avgRating = Number(avg.toFixed(1));
   }
   delete spotData.dataValues.Reviews;
   return res.json(spotData);
@@ -375,11 +369,9 @@ router.post(
 
     const bookData = spotData.dataValues.Bookings;
 
-    if (!spotData)
-      return res.status(404).json({ message: "Spot couldn't be found" });
+    if (!spotData) return res.status(404).json({ message: "Spot couldn't be found" });
 
-    if (currUser.id === spotData.ownerId)
-      return res.status(403).json({ message: "Forbidden" });
+    if (currUser.id === spotData.ownerId) return res.status(403).json({ message: "Forbidden" });
 
     for (let i = 0; i < bookData.length; i++) {
       let booking = bookData[i].dataValues;
