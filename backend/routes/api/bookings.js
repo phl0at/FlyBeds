@@ -5,7 +5,9 @@ const { Spot, SpotImage, Booking } = require("../../db/models");
 const currDate = new Date().toISOString().split("T")[0];
 const router = express.Router();
 
-// ------ GET CURRENT USER BOOKINGS ------ //
+// ------------------------------------ //
+// ------ GET CURR USER BOOKINGS ------ //
+// ------------------------------------ //
 
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
@@ -74,22 +76,26 @@ router.get("/current", requireAuth, async (req, res) => {
   //   }
 });
 
+// ---------------------------- //
+// ------ EDIT A BOOKING ------ //
+// ---------------------------- //
+
 router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
   const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
   const currUser = req.user.dataValues;
   const editBook = await Booking.findByPk(bookingId);
 
+  // booking doesn't exist
   if (!editBook)
-    // booking doesn't exist
     return res.status(404).json({ message: "Booking couldn't be found" });
 
+  // current user doesn't own booking
   if (editBook.userId !== currUser.id)
-    // current user doesn't own booking
     return res.status(403).json({ message: "Forbidden" });
 
+  // booking has already past
   if (editBook.endDate < currDate)
-    // booking has already past
     return res.status(403).json({ message: "Past bookings can't be modified" });
 
   const bookData = await Booking.findAll({
@@ -107,11 +113,13 @@ router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
     //don't want to throw errors for the booking we want to edit!
     if (booking.id !== Number(bookingId)) {
       // start date falls within an existing booking
-      if (startDate >= currStart && startDate <= currEnd)
+      if (startDate >= currStart && startDate <= currEnd) {
         errors.startDate = "Start date conflicts with an existing booking";
-      if (endDate >= currStart && endDate <= currEnd)
-        // end date falls within an existing booking
+      }
+      // end date falls within an existing booking
+      if (endDate >= currStart && endDate <= currEnd) {
         errors.endDate = "End date conflicts with an existing booking";
+      }
       // start/end within an existing booking
       if (startDate >= currStart && endDate <= currEnd) {
         errors.endDate = "End date conflicts with an existing booking";
