@@ -67,7 +67,7 @@ const requireAuth = function (req, _res, next) {
 };
 
 const confirmSpotOwnership = (currUser, spotData, res) => {
-  if (currUser.id === spotData.ownerId)
+  if (currUser.id !== spotData.ownerId)
     return res.status(403).json({ message: "Forbidden" });
 };
 
