@@ -110,8 +110,10 @@ router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
     let currStart = booking.startDate.toISOString().split("T")[0];
     let currEnd = booking.endDate.toISOString().split("T")[0];
     let errors = {};
+
     //don't want to throw errors for the booking we want to edit!
     if (booking.id !== Number(bookingId)) {
+
       // start date falls within an existing booking
       if (startDate >= currStart && startDate <= currEnd) {
         errors.startDate = "Start date conflicts with an existing booking";
@@ -145,6 +147,10 @@ router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
   return res.json(editBook);
 });
 
+// ------------------------------ //
+// ------ DELETE A BOOKING ------ //
+// ------------------------------ //
+
 router.delete("/:bookingId", requireAuth, async (req, res) => {
   const { bookingId } = req.params;
   const currUser = req.user.dataValues;
@@ -163,7 +169,7 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
     bookData.userId === currUser.id ||
     bookData.Spot.ownerId === currUser.id
   ) {
-    console.log(currDate);
+
     if (bookData.startDate < currDate) {
       return res
         .status(403)
