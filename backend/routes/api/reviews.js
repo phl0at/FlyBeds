@@ -63,8 +63,8 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     include: [{ model: ReviewImage }],
   });
 
-  confirmReviewExists(reviewData);
-  confirmReviewOwnership(currUser, reviewData);
+  confirmReviewExists(reviewData, res);
+  confirmReviewOwnership(currUser, reviewData, res);
 
   const allImages = reviewData.dataValues.ReviewImages;
 
@@ -88,8 +88,8 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   const { review, stars } = req.body;
   const reviewData = await Review.findByPk(reviewId);
 
-  confirmReviewExists(reviewData);
-  confirmReviewOwnership(currUser, reviewData);
+  confirmReviewExists(reviewData, res);
+  confirmReviewOwnership(currUser, reviewData, res);
 
   await reviewData.update({
     review,
@@ -108,8 +108,8 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const reviewData = await Review.findByPk(reviewId);
 
-  confirmReviewExists(reviewData);
-  confirmReviewOwnership(currUser, reviewData);
+  confirmReviewExists(reviewData, res);
+  confirmReviewOwnership(currUser, reviewData, res);
 
   await reviewData.destroy();
 

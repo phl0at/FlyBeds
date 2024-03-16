@@ -81,12 +81,12 @@ const confirmSpotExists = (spotData, res) => {
 
 // --- CHECK IF BOOKING QUERIED FOR EXISTS ---
 
-const confirmBookingExists = (bookData) => {
+const confirmBookingExists = (bookData, res) => {
   if (!bookData)
     return res.status(404).json({ message: "Booking couldn't be found" });
 };
 
-const confirmReviewExists = (reviewData) => {
+const confirmReviewExists = (reviewData, res) => {
   if (!reviewData)
     return res.status(404).json({ message: "Review couldn't be found" });
 };

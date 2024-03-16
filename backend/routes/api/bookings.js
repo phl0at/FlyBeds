@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBooking } = require("../../utils/validation");
+const { validateBooking, validateDates } = require("../../utils/validation");
 const { requireAuth, confirmBookingOwnership } = require("../../utils/auth");
 const { confirmBookingExists } = require("../../utils/helper");
 const { Spot, SpotImage, Booking } = require("../../db/models");
@@ -70,8 +70,8 @@ router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
   const currUser = req.user.dataValues;
   const editBook = await Booking.findByPk(bookingId);
 
-  confirmBookingExists(editBook);
-  confirmBookingOwnership(currUser, editBook);
+  confirmBookingExists(editBook, res);
+  confirmBookingOwnership(currUser, editBook, res);
 
   // booking has already past
   if (editBook.endDate < currDate)
@@ -106,7 +106,7 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
       model: Spot,
     },
   });
-  confirmBookingExists(bookData);
+  confirmBookingExists(bookData, res);
 
   if (
     bookData.userId === currUser.id ||

@@ -66,17 +66,17 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
-const confirmSpotOwnership = (currUser, spotData) => {
+const confirmSpotOwnership = (currUser, spotData, res) => {
   if (currUser.id === spotData.ownerId)
     return res.status(403).json({ message: "Forbidden" });
 };
 
-const confirmBookingOwnership = (currUser, editBook) => {
+const confirmBookingOwnership = (currUser, editBook, res) => {
   if (editBook.userId !== currUser.id)
     return res.status(403).json({ message: "Forbidden" });
 };
 
-const confirmReviewOwnership = (currUser, reviewData) => {
+const confirmReviewOwnership = (currUser, reviewData, res) => {
   if (currUser.id !== reviewData.userId)
     return res.status(403).json({ message: "Forbidden" });
 };

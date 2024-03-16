@@ -145,7 +145,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   const { url, preview } = req.body;
   const spotData = await Spot.findByPk(spotId);
   confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData);
+  confirmSpotOwnership(currUser, spotData, res);
 
   const newSpotImage = await SpotImage.create({
     spotId,
@@ -172,7 +172,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
 
   const spotData = await Spot.findByPk(spotId);
   confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData);
+  confirmSpotOwnership(currUser, spotData, res);
 
   await spotData.update({
     address,
@@ -197,7 +197,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
   const { spotId } = req.params;
   const spotData = await Spot.findByPk(spotId);
   confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData);
+  confirmSpotOwnership(currUser, spotData, res);
 
   await spotData.destroy();
   return res.json({ message: "Successfully deleted" });
@@ -322,7 +322,7 @@ router.post(
       include: [{ model: Booking }],
     });
     confirmSpotExists(spotData, res);
-    confirmSpotOwnership(currUser, spotData);
+    confirmSpotOwnership(currUser, spotData, res);
     const bookData = spotData.dataValues.Bookings;
     validateDates(bookData, endDate, startDate, res);
 
