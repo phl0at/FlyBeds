@@ -58,14 +58,20 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     include: [{ model: ReviewImage }],
   });
 
-  if (!reviewData) return res.status(404).json({ message: "Review couldn't be found" });
+  if (!reviewData)
+    return res.status(404).json({ message: "Review couldn't be found" });
 
-  if (reviewData.userId !== currUser.id) return res.status(403).json({ message: "Forbidden" });
+  if (reviewData.userId !== currUser.id)
+    return res.status(403).json({ message: "Forbidden" });
 
   const allImages = reviewData.dataValues.ReviewImages;
 
   if (allImages.length >= 10)
-    return res.status(403).json({ message: "Maximum number of images for this resource was reached" });
+    return res
+      .status(403)
+      .json({
+        message: "Maximum number of images for this resource was reached",
+      });
 
   const newImage = await ReviewImage.create({ reviewId, url });
 
@@ -80,14 +86,16 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   const { review, stars } = req.body;
   const reviewData = await Review.findByPk(reviewId);
 
-  if (!reviewData) return res.status(404).json({ message: "Review couldn't be found" });
+  if (!reviewData)
+    return res.status(404).json({ message: "Review couldn't be found" });
 
-  if (currUser.id !== reviewData.userId) return res.status(403).json({ message: "Forbidden" });
+  if (currUser.id !== reviewData.userId)
+    return res.status(403).json({ message: "Forbidden" });
 
   await reviewData.update({
     review,
-    stars
-  })
+    stars,
+  });
 
   return res.json(reviewData);
 });
@@ -99,9 +107,11 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
   const currUser = req.user.dataValues;
   const reviewData = await Review.findByPk(reviewId);
 
-  if (!reviewData) return res.status(404).json({ message: "Review couldn't be found" });
+  if (!reviewData)
+    return res.status(404).json({ message: "Review couldn't be found" });
 
-  if (currUser.id !== reviewData.userId) return res.status(403).json({ message: "Forbidden" });
+  if (currUser.id !== reviewData.userId)
+    return res.status(403).json({ message: "Forbidden" });
 
   await reviewData.destroy();
 
