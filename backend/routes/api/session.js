@@ -19,7 +19,11 @@ const validateLogin = [
   handleValidationErrors,
 ];
 
-// Log in
+
+// -------------------- //
+// ------ LOG IN ------ //
+// -------------------- //
+
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
@@ -55,13 +59,19 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 });
 
-// Log out
+// --------------------- //
+// ------ LOG OUT ------ //
+// --------------------- //
+
 router.delete("/", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "Success" });
 });
 
-// Restore session user
+// ---------------------------------- //
+// ------ RESTORE SESSION USER ------ //
+// ---------------------------------- //
+
 router.get("/", (req, res) => {
   const { user } = req;
   if (user) {

@@ -152,6 +152,62 @@ const validateSpot = [
   handleValidationErrors,
 ];
 
+const validateDates = (bookData, bookingId, endDate, startDate, res) => {
+  for (const book of bookData) {
+    let booking = book.dataValues;
+    let currStart = booking.startDate.toISOString().split("T")[0];
+    let currEnd = booking.endDate.toISOString().split("T")[0];
+    let errors = {};
+
+    if (bookingId) {
+      //don't want to throw errors for the booking we want to edit!
+      if (booking.id !== Number(bookingId)) {
+        // start date falls within an existing booking
+        if (startDate >= currStart && startDate <= currEnd) {
+          errors.startDate = "Start date conflicts with an existing booking";
+        }
+        // end date falls within an existing booking
+        if (endDate >= currStart && endDate <= currEnd) {
+          errors.endDate = "End date conflicts with an existing booking";
+        }
+        // start/end within an existing booking
+        if (startDate >= currStart && endDate <= currEnd) {
+          errors.endDate = "End date conflicts with an existing booking";
+          errors.startDate = "Start date conflicts with an existing booking";
+        }
+        // start/end wrapped around an existing booking
+        if (startDate <= currStart && endDate >= currEnd) {
+          errors.endDate = "End date conflicts with an existing booking";
+          errors.startDate = "Start date conflicts with an existing booking";
+        }
+      }
+    } else {
+      // start date falls within an existing booking
+      if (startDate >= currStart && startDate <= currEnd) {
+        errors.startDate = "Start date conflicts with an existing booking";
+      }
+      // end date falls within an existing booking
+      if (endDate >= currStart && endDate <= currEnd) {
+        errors.endDate = "End date conflicts with an existing booking";
+      }
+      // start/end within an existing booking
+      if (startDate >= currStart && endDate <= currEnd) {
+        errors.endDate = "End date conflicts with an existing booking";
+        errors.startDate = "Start date conflicts with an existing booking";
+      }
+      // start/end wrapped around an existing booking
+      if (startDate <= currStart && endDate >= currEnd) {
+        errors.endDate = "End date conflicts with an existing booking";
+        errors.startDate = "Start date conflicts with an existing booking";
+      }
+    }
+    if (errors.startDate || errors.endDate)
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors,
+      });
+  }
+};
 
 module.exports = {
   handleValidationErrors,
@@ -160,4 +216,5 @@ module.exports = {
   validateBooking,
   validateQuery,
   validateSignup,
+  validateDates,
 };

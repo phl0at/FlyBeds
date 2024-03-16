@@ -6,7 +6,10 @@ const { User } = require("../../db/models");
 
 const router = express.Router();
 
-// Sign up
+// --------------------- //
+// ------ SIGN UP ------ //
+// --------------------- //
+
 router.post("/", validateSignup, async (req, res) => {
   const { email, password, username, firstName, lastName } = req.body;
   const hashedPassword = bcrypt.hashSync(password);

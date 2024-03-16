@@ -66,5 +66,26 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
+const confirmSpotOwnership = (currUser, spotData) => {
+  if (currUser.id === spotData.ownerId)
+    return res.status(403).json({ message: "Forbidden" });
+};
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+const confirmBookingOwnership = (currUser, editBook) => {
+  if (editBook.userId !== currUser.id)
+    return res.status(403).json({ message: "Forbidden" });
+};
+
+const confirmReviewOwnership = (currUser, reviewData) => {
+  if (currUser.id !== reviewData.userId)
+    return res.status(403).json({ message: "Forbidden" });
+};
+
+module.exports = {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+  confirmSpotOwnership,
+  confirmBookingOwnership,
+  confirmReviewOwnership
+};
