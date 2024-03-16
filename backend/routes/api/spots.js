@@ -3,7 +3,6 @@ const {
   validateReview,
   validateBooking,
   validateQuery,
-  setQueries,
 } = require("../../utils/validation");
 const {
   User,
@@ -13,6 +12,7 @@ const {
   ReviewImage,
   Booking,
 } = require("../../db/models");
+const { setQueries, formatSpots, findSpots } = require("../../utils/helper");
 const express = require("express");
 const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
@@ -35,7 +35,7 @@ router.get("/", validateQuery, async (req, res) => {
   if (page === 0) page = 1;
   if (size === 0) size = 20;
 
-  let where = setQueries(minLat, maxLat, minLng, maxLng, minPrice, maxPrice);
+  const where = setQueries(minLat, maxLat, minLng, maxLng, minPrice, maxPrice);
 
   const spotData = await Spot.findAll({
     where,
@@ -43,36 +43,10 @@ router.get("/", validateQuery, async (req, res) => {
     offset: size * (page - 1),
     include: [{ model: Review }, { model: SpotImage }],
   });
-  //iterate all spots and set the default previewImage value
-  for (const spot of spotData) {
-    let starSum = 0;
-    let starNum = 0;
-    const currSpot = spot.dataValues;
-    currSpot.previewImage = null;
-    currSpot.avgRating = null;
-    //iterate all reviews and add the avgRating to each one's spot
-    for (const review of currSpot.Reviews) {
-      const currReview = review.dataValues;
 
-      if (currSpot.id === currReview.spotId) {
-        starSum += currReview.stars;
-        starNum++;
-      }
-      const avg = starSum / starNum;
-      currSpot.avgRating = Number(avg.toFixed(1));
-    }
-    //iterate all spot images and add a previewImage to each one's spot
-    for (const image of currSpot.SpotImages) {
-      const currImage = image.dataValues;
+  const formattedSpots = formatSpots(spotData)
 
-      if (currSpot.id === currImage.spotId && currImage.preview === true) {
-        currSpot.previewImage = currImage.url;
-      }
-    }
-    delete currSpot.Reviews;
-    delete currSpot.SpotImages;
-  }
-  return res.json({ Spots: spotData, page, size });
+  return res.json({ Spots: formattedSpots, page, size });
 });
 
 // ----- GET ALL SPOTS OF CURRENT USER ------ //
@@ -86,36 +60,9 @@ router.get("/current", requireAuth, async (req, res) => {
     include: [{ model: Review }, { model: SpotImage }],
   });
 
-  //iterate all spots and set the default previewImage value
-  for (const spot of spotData) {
-    let starSum = 0;
-    let starNum = 0;
-    const currSpot = spot.dataValues;
-    currSpot.previewImage = null;
-    currSpot.avgRating = null;
-    //iterate all reviews and add the avgRating to each one's spot
-    for (const review of currSpot.Reviews) {
-      const currReview = review.dataValues;
+  const formattedSpots = formatSpots(spotData)
 
-      if (currSpot.id === currReview.spotId) {
-        starSum += currReview.stars;
-        starNum++;
-      }
-      const avg = starSum / starNum;
-      currSpot.avgRating = Number(avg.toFixed(1));
-    }
-    //iterate all spot images and add a previewImage to each one's spot
-    for (const image of currSpot.SpotImages) {
-      const currImage = image.dataValues;
-
-      if (currSpot.id === currImage.spotId && currImage.preview === true) {
-        currSpot.previewImage = currImage.url;
-      }
-    }
-    delete currSpot.Reviews;
-    delete currSpot.SpotImages;
-  }
-  return res.json({ Spots: spotData });
+  return res.json({ Spots: formattedSpots });
 });
 
 // ----- GET ALL SPOTS BY ID ------ //
@@ -371,7 +318,7 @@ router.post(
       return res.status(404).json({ message: "Spot couldn't be found" });
 
     const bookData = spotData.dataValues.Bookings;
-    
+
     if (currUser.id === spotData.ownerId)
       return res.status(403).json({ message: "Forbidden" });
 
