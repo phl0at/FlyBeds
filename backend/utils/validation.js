@@ -153,53 +153,41 @@ const validateSpot = [
 ];
 
 const validateDates = (bookData, bookingId, endDate, startDate, res) => {
+  let errors = {};
+  const validator = (startDate, endDate, currStart, currEnd) => {
+    // start date falls within an existing booking
+    if (startDate >= currStart && startDate <= currEnd) {
+      errors.startDate = "Start date conflicts with an existing booking";
+    }
+    // end date falls within an existing booking
+    if (endDate >= currStart && endDate <= currEnd) {
+      errors.endDate = "End date conflicts with an existing booking";
+    }
+    // start/end within an existing booking
+    if (startDate >= currStart && endDate <= currEnd) {
+      errors.startDate = "Start date conflicts with an existing booking";
+      errors.endDate = "End date conflicts with an existing booking";
+    }
+    // start/end wrapped around an existing booking
+    if (startDate <= currStart && endDate >= currEnd) {
+      errors.startDate = "Start date conflicts with an existing booking";
+      errors.endDate = "End date conflicts with an existing booking";
+    }
+
+    return errors;
+  };
   for (const book of bookData) {
     let booking = book.dataValues;
     let currStart = booking.startDate.toISOString().split("T")[0];
     let currEnd = booking.endDate.toISOString().split("T")[0];
-    let errors = {};
 
     if (bookingId) {
       //don't want to throw errors for the booking we want to edit!
       if (booking.id !== Number(bookingId)) {
-        // start date falls within an existing booking
-        if (startDate >= currStart && startDate <= currEnd) {
-          errors.startDate = "Start date conflicts with an existing booking";
-        }
-        // end date falls within an existing booking
-        if (endDate >= currStart && endDate <= currEnd) {
-          errors.endDate = "End date conflicts with an existing booking";
-        }
-        // start/end within an existing booking
-        if (startDate >= currStart && endDate <= currEnd) {
-          errors.startDate = "Start date conflicts with an existing booking";
-          errors.endDate = "End date conflicts with an existing booking";
-        }
-        // start/end wrapped around an existing booking
-        if (startDate <= currStart && endDate >= currEnd) {
-          errors.startDate = "Start date conflicts with an existing booking";
-          errors.endDate = "End date conflicts with an existing booking";
-        }
+        validator(startDate, endDate, currStart, currEnd);
       }
     } else {
-      // start date falls within an existing booking
-      if (startDate >= currStart && startDate <= currEnd) {
-        errors.startDate = "Start date conflicts with an existing booking";
-      }
-      // end date falls within an existing booking
-      if (endDate >= currStart && endDate <= currEnd) {
-        errors.endDate = "End date conflicts with an existing booking";
-      }
-      // start/end within an existing booking
-      if (startDate >= currStart && endDate <= currEnd) {
-        errors.startDate = "Start date conflicts with an existing booking";
-        errors.endDate = "End date conflicts with an existing booking";
-      }
-      // start/end wrapped around an existing booking
-      if (startDate <= currStart && endDate >= currEnd) {
-        errors.startDate = "Start date conflicts with an existing booking";
-        errors.endDate = "End date conflicts with an existing booking";
-      }
+      validator(startDate, endDate, currStart, currEnd);
     }
     if (errors.startDate || errors.endDate)
       return res.status(403).json({
