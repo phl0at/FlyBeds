@@ -367,11 +367,11 @@ router.post(
       include: [{ model: Booking }],
     });
 
-    const bookData = spotData.dataValues.Bookings;
-
     if (!spotData)
       return res.status(404).json({ message: "Spot couldn't be found" });
 
+    const bookData = spotData.dataValues.Bookings;
+    
     if (currUser.id === spotData.ownerId)
       return res.status(403).json({ message: "Forbidden" });
 
