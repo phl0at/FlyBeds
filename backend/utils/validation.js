@@ -172,13 +172,13 @@ const validateDates = (bookData, bookingId, endDate, startDate, res) => {
         }
         // start/end within an existing booking
         if (startDate >= currStart && endDate <= currEnd) {
-          errors.endDate = "End date conflicts with an existing booking";
           errors.startDate = "Start date conflicts with an existing booking";
+          errors.endDate = "End date conflicts with an existing booking";
         }
         // start/end wrapped around an existing booking
         if (startDate <= currStart && endDate >= currEnd) {
-          errors.endDate = "End date conflicts with an existing booking";
           errors.startDate = "Start date conflicts with an existing booking";
+          errors.endDate = "End date conflicts with an existing booking";
         }
       }
     } else {
@@ -192,13 +192,13 @@ const validateDates = (bookData, bookingId, endDate, startDate, res) => {
       }
       // start/end within an existing booking
       if (startDate >= currStart && endDate <= currEnd) {
-        errors.endDate = "End date conflicts with an existing booking";
         errors.startDate = "Start date conflicts with an existing booking";
+        errors.endDate = "End date conflicts with an existing booking";
       }
       // start/end wrapped around an existing booking
       if (startDate <= currStart && endDate >= currEnd) {
-        errors.endDate = "End date conflicts with an existing booking";
         errors.startDate = "Start date conflicts with an existing booking";
+        errors.endDate = "End date conflicts with an existing booking";
       }
     }
     if (errors.startDate || errors.endDate)

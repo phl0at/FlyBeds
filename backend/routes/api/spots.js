@@ -317,14 +317,18 @@ router.post(
     spotId = Number(spotId);
     const { startDate, endDate } = req.body;
     const currUser = req.user.dataValues;
+    const bookingId = undefined;
     const spotData = await Spot.findOne({
       where: spotId,
       include: [{ model: Booking }],
     });
     confirmSpotExists(spotData, res);
-    confirmSpotOwnership(currUser, spotData, res);
+
+    //spot cannot belong to user!
+    if (currUser.id === spotData.ownerId) return res.status(403).json({ message: "Forbidden" });
+
     const bookData = spotData.dataValues.Bookings;
-    validateDates(bookData, endDate, startDate, res);
+    validateDates(bookData, bookingId, endDate, startDate, res);
 
     const newBooking = await Booking.create({
       userId: currUser.id,
