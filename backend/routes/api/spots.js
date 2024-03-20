@@ -1,11 +1,4 @@
 const {
-  validateSpot,
-  validateReview,
-  validateBooking,
-  validateQuery,
-  validateDates,
-} = require("../../utils/validation");
-const {
   User,
   Spot,
   SpotImage,
@@ -13,6 +6,13 @@ const {
   ReviewImage,
   Booking,
 } = require("../../db/models");
+const {
+  validateSpot,
+  validateReview,
+  validateBooking,
+  validateQuery,
+  validateDates,
+} = require("../../utils/validation");
 const {
   setQueries,
   formatOneSpot,

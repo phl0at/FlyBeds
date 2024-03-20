@@ -1,9 +1,8 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const { validateSignup } = require("../../utils/validation");
-const { setTokenCookie } = require("../../utils/auth");
 const { User } = require("../../db/models");
-
+const { setTokenCookie } = require("../../utils/auth");
+const { validateSignup } = require("../../utils/validation");
+const bcrypt = require("bcryptjs");
+const express = require("express");
 const router = express.Router();
 
 // --------------------- //

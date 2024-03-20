@@ -1,8 +1,8 @@
-const express = require("express");
-const { validateBooking, validateDates } = require("../../utils/validation");
-const { requireAuth, confirmBooking } = require("../../utils/auth");
 const { Spot, SpotImage, Booking } = require("../../db/models");
+const { requireAuth, confirmBooking } = require("../../utils/auth");
+const { validateBooking, validateDates } = require("../../utils/validation");
 const currDate = new Date().toISOString().split("T")[0];
+const express = require("express");
 const router = express.Router();
 
 // ------------------------------------ //

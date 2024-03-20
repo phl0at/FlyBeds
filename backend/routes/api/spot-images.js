@@ -1,8 +1,7 @@
-const express = require("express");
-const { requireAuth } = require("../../utils/auth");
 const { Spot, SpotImage } = require("../../db/models");
+const { requireAuth } = require("../../utils/auth");
+const express = require("express");
 const router = express.Router();
-
 
 // ------------------------------- //
 // ------ DELETE SPOT IMAGE ------ //
