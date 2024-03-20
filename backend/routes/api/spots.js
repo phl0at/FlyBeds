@@ -75,7 +75,7 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 // --------------------------------- //
-// ------ GET ALL SPOTS BY ID ------ //
+// ------ GET A SPOT BY ID ------ //
 // --------------------------------- //
 
 router.get("/:spotId", notOwner, confirmSpot, async (req, res) => {
