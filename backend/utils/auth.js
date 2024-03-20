@@ -96,7 +96,7 @@ const confirmSpot = async (req, _res, next) => {
 };
 
 // If current user doesn't own the Booking, return an error
-const confirmBooking = async (req, res, next) => {
+const confirmBooking = async (req, _res, next) => {
   const bookData = await Booking.findByPk(req.params.bookingId);
 
   if (!bookData) {
@@ -107,15 +107,15 @@ const confirmBooking = async (req, res, next) => {
   } else {
     if (req.notOwner) {
       req.bookData = bookData;
-      next();
+      return next();
     } else if (req.user.id !== bookData.userId) {
       const err = new Error("Forbidden");
       err.hideTitle = true;
       err.status = 403;
-      next(err);
+      return next(err);
     } else {
       req.bookData = bookData;
-      next();
+      return next();
     }
   }
 };

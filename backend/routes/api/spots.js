@@ -98,9 +98,7 @@ router.get("/:spotId", notOwner, confirmSpot, async (req, res) => {
     ],
   });
 
-  const reviewData = spotData.dataValues.Reviews;
-
-  const formattedSpot = formatOneSpot(spotData, reviewData);
+  const formattedSpot = formatOneSpot(spotData, spotData.dataValues.Reviews);
 
   return res.json(formattedSpot);
 });

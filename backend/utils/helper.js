@@ -4,16 +4,26 @@ const { Op } = require("sequelize");
 
 const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
   let where = {};
-  if (minLat) where.lat = { [Op.gte]: minLat };
-  if (maxLat) where.lat = { [Op.lte]: maxLat };
-  if (minLat && maxLat) where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
-  if (minLng) where.lng = { [Op.gte]: minLng };
-  if (maxLng) where.lng = { [Op.lte]: maxLng };
-  if (minLng && maxLng) where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
-  if (minPrice) where.price = { [Op.gte]: minPrice };
-  if (maxPrice) where.price = { [Op.lte]: maxPrice };
-  if (minPrice && maxPrice)
+
+  if (minLat && maxLat) {
+    where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
+  } else if (minLat) {
+    where.lat = { [Op.gte]: minLat };
+  } else if (maxLat) {
+    where.lat = { [Op.lte]: maxLat };
+  }
+
+  if (minLng && maxLng) {
+    where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
+  } else if (minLng) {
+    where.lng = { [Op.gte]: minLng };
+  } else if (maxLng) where.lng = { [Op.lte]: maxLng };
+
+  if (minPrice && maxPrice) {
     where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
+  } else if (minPrice) {
+    where.price = { [Op.gte]: minPrice };
+  } else if (maxPrice) where.price = { [Op.lte]: maxPrice };
 
   return where;
 };
