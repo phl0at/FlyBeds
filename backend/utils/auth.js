@@ -64,29 +64,35 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
+// If ownership doesn't need to be confirmed
+const notOwner = (_req, res, next) => {
+  res.locals.notOwner = true;
+  return next();
+};
+
 // If current user doesn't own the Spot or Spot doesn't exist, return an error
 const confirmSpot = async (req, res, next) => {
   const spotData = await Spot.findByPk(req.params.spotId);
 
   if (!spotData) {
-
     const err = new Error("Spot couldn't be found");
     err.hideTitle = true;
     err.status = 404;
     return next(err);
-
-  } else if (req.user.id === spotData.ownerId) {
-
-    res.locals.spotData = spotData;
-    return next();
-
   } else {
+    res.locals.spotData = spotData;
+  }
 
+  if (res.locals.notOwner) {
+    return next();
+  } else if (req.user.id !== spotData.ownerId) {
     const err = new Error("Forbidden");
     err.hideTitle = true;
     err.status = 403;
     return next(err);
   }
+
+  return next();
 };
 
 // If current user doesn't own the Booking, return an error
@@ -106,6 +112,7 @@ module.exports = {
   restoreUser,
   requireAuth,
   confirmSpot,
+  notOwner,
   confirmBookingOwnership,
   confirmReviewOwnership,
 };
