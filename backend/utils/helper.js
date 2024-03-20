@@ -72,15 +72,8 @@ const formatSpotsArray = (spotData) => {
   return spotData;
 };
 
-
-const confirmReviewExists = (reviewData, res) => {
-  if (!reviewData)
-    return res.status(404).json({ message: "Review couldn't be found" });
-};
-
 module.exports = {
   setQueries,
   formatSpotsArray,
   formatOneSpot,
-  confirmReviewExists
 };

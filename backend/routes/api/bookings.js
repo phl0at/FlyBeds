@@ -72,10 +72,10 @@ router.put(
   requireAuth,
   validateBooking,
   confirmBooking,
+  validateDates,
   async (req, res) => {
-    const { bookingId } = req.params;
     const { startDate, endDate } = req.body;
-    const editBook = res.locals.bookData;
+    const editBook = req.bookData;
 
     // booking has already past
     if (editBook.endDate < currDate) {
@@ -84,14 +84,6 @@ router.put(
       err.status = 403;
       return next(err);
     }
-
-    const bookData = await Booking.findAll({
-      where: {
-        spotId: editBook.spotId,
-      },
-    });
-    validateDates(bookData, bookingId, endDate, startDate, res);
-
     await editBook.update({
       startDate,
       endDate,

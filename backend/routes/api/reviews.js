@@ -87,7 +87,7 @@ router.put(
   confirmReview,
   async (req, res) => {
     const { review, stars } = req.body;
-    const reviewData = res.locals.reviewData;
+    const reviewData = req.reviewData;
     await reviewData.update({
       review,
       stars,
@@ -100,8 +100,8 @@ router.put(
 // ------ DELETE A REVIEW ------ //
 // ----------------------------- //
 
-router.delete("/:reviewId", requireAuth, confirmReview, async (_req, res) => {
-  const reviewData = res.locals.reviewData;
+router.delete("/:reviewId", requireAuth, confirmReview, async (req, res) => {
+  const reviewData = req.reviewData;
   await reviewData.destroy();
   return res.json({ message: "Successfully deleted" });
 });

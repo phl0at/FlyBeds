@@ -171,7 +171,7 @@ router.put(
       price,
     } = req.body;
 
-    const spotData = res.locals.spotData;
+    const spotData = req.spotData;
 
     await spotData.update({
       address,
@@ -192,8 +192,8 @@ router.put(
 // ------ DELETE A SPOT ------ //
 // --------------------------- //
 
-router.delete("/:spotId", requireAuth, confirmSpot, async (_req, res) => {
-  const spotData = res.locals.spotData;
+router.delete("/:spotId", requireAuth, confirmSpot, async (req, res) => {
+  const spotData = req.spotData;
   await spotData.destroy();
   return res.json({ message: "Successfully deleted" });
 });
@@ -274,7 +274,7 @@ router.get(
   async (req, res) => {
     const currUser = req.user.dataValues;
     const { spotId } = req.params;
-    const spotData = res.locals.spotData;
+    const spotData = req.spotData;
 
     if (spotData.ownerId !== currUser.id) {
       const bookData = await Booking.findAll({
@@ -309,12 +309,12 @@ router.post(
   notOwner,
   confirmSpot,
   validateBooking,
+  validateDates,
   async (req, res) => {
     let { spotId } = req.params;
     spotId = Number(spotId);
     const { startDate, endDate } = req.body;
     const currUser = req.user.dataValues;
-    const bookingId = undefined;
     const spotData = await Spot.findOne({
       where: { id: spotId },
       include: [{ model: Booking }],
@@ -323,11 +323,6 @@ router.post(
     //spot cannot belong to user!
     if (currUser.id === spotData.ownerId)
       return res.status(403).json({ message: "Forbidden" });
-
-    const bookData = spotData.dataValues.Bookings;
-    // this doesn't work - throws correct errors but doesn't stop booking from
-    // being created. will refactor to be express middleware
-    validateDates(bookData, bookingId, endDate, startDate, res);
 
     const newBooking = await Booking.create({
       userId: currUser.id,

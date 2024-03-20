@@ -1,3 +1,4 @@
+const { Booking } = require("../db/models");
 const { validationResult } = require("express-validator");
 const { check } = require("express-validator");
 const currDate = new Date().toISOString().split("T")[0];
@@ -151,50 +152,52 @@ const validateSpot = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
-
-const validateDates = (bookData, bookingId, endDate, startDate, res) => {
-  let errors = {};
-  const validator = (startDate, endDate, currStart, currEnd) => {
-    // start date falls within an existing booking
-    if (startDate >= currStart && startDate <= currEnd) {
-      errors.startDate = "Start date conflicts with an existing booking";
-    }
-    // end date falls within an existing booking
-    if (endDate >= currStart && endDate <= currEnd) {
-      errors.endDate = "End date conflicts with an existing booking";
-    }
-    // start/end within an existing booking
-    if (startDate >= currStart && endDate <= currEnd) {
-      errors.startDate = "Start date conflicts with an existing booking";
-      errors.endDate = "End date conflicts with an existing booking";
-    }
-    // start/end wrapped around an existing booking
-    if (startDate <= currStart && endDate >= currEnd) {
-      errors.startDate = "Start date conflicts with an existing booking";
-      errors.endDate = "End date conflicts with an existing booking";
-    }
-
-    return errors;
-  };
-  for (const book of bookData) {
-    let booking = book.dataValues;
-    let currStart = booking.startDate.toISOString().split("T")[0];
-    let currEnd = booking.endDate.toISOString().split("T")[0];
-
-    if (bookingId) {
-      //don't want to throw errors for the booking we want to edit!
-      if (booking.id !== Number(bookingId)) {
-        validator(startDate, endDate, currStart, currEnd);
-      }
-    } else {
-      validator(startDate, endDate, currStart, currEnd);
-    }
-    if (errors.startDate || errors.endDate)
-      return res.status(403).json({
-        message: "Sorry, this spot is already booked for the specified dates",
-        errors,
-      });
+const compareDates = (startDate, endDate, currStart, currEnd) => {
+  const errors = {};
+  // start date falls within an existing booking
+  if (startDate >= currStart && startDate <= currEnd) {
+    errors.startDate = "Start date conflicts with an existing booking";
   }
+  // end date falls within an existing booking
+  if (endDate >= currStart && endDate <= currEnd) {
+    errors.endDate = "End date conflicts with an existing booking";
+  }
+  // start/end within an existing booking
+  if (startDate >= currStart && endDate <= currEnd) {
+    errors.startDate = "Start date conflicts with an existing booking";
+    errors.endDate = "End date conflicts with an existing booking";
+  }
+  // start/end wrapped around an existing booking
+  if (startDate <= currStart && endDate >= currEnd) {
+    errors.startDate = "Start date conflicts with an existing booking";
+    errors.endDate = "End date conflicts with an existing booking";
+  }
+
+  return errors;
+};
+
+const validateDates = async (req, _res, next) => {
+  const { startDate, endDate } = req.body;
+  const allBookings = await Booking.findAll();
+
+  for (const booking of allBookings) {
+    const currStart = booking.dataValues.startDate.toISOString().split("T")[0];
+    const currEnd = booking.dataValues.endDate.toISOString().split("T")[0];
+
+    if(Number(req.params.bookingId) === booking.id) continue;
+
+    const errors = compareDates(startDate, endDate, currStart, currEnd);
+
+    if (errors.startDate || errors.endDate) {
+      const err = new Error(
+        "Sorry, this spot is already booked for the specified dates"
+      );
+      err.errors = errors;
+      err.status = 403;
+      return next(err);
+    }
+  }
+  return next();
 };
 
 module.exports = {

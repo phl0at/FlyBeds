@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
-const { User, Spot } = require("../db/models");
+const { User, Spot, Booking } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie
@@ -65,13 +65,13 @@ const requireAuth = function (req, _res, next) {
 };
 
 // If ownership isn't required
-const notOwner = (_req, res, next) => {
-  res.locals.notOwner = true;
+const notOwner = (req, _res, next) => {
+  req.notOwner = true;
   return next();
 };
 
 // If current user doesn't own the Spot or Spot doesn't exist, return an error
-const confirmSpot = async (req, res, next) => {
+const confirmSpot = async (req, _res, next) => {
   const spotData = await Spot.findByPk(req.params.spotId);
 
   if (!spotData) {
@@ -80,10 +80,10 @@ const confirmSpot = async (req, res, next) => {
     err.status = 404;
     return next(err);
   } else {
-    res.locals.spotData = spotData;
+    req.spotData = spotData;
   }
 
-  if (res.locals.notOwner) {
+  if (req.notOwner) {
     return next();
   } else if (req.user.id !== spotData.ownerId) {
     const err = new Error("Forbidden");
@@ -96,27 +96,27 @@ const confirmSpot = async (req, res, next) => {
 };
 
 // If current user doesn't own the Booking, return an error
-const confirmBooking = async (res, req, next) => {
+const confirmBooking = async (req, res, next) => {
   const bookData = await Booking.findByPk(req.params.bookingId);
-
+  
   if (!bookData) {
     const err = new Error("Booking couldn't be found");
     err.hideTitle = true;
     err.status = 404;
-    return next(err);
+    next(err);
   } else {
-    res.locals.bookData = bookData;
-  }
-
-  if (res.locals.notOwner) {
-    return next();
-  } else if (req.user.id !== bookData.userId) {
-    const err = new Error("Forbidden");
-    err.hideTitle = true;
-    err.status = 403;
-    return next(err);
-  } else {
-    return next();
+    if (req.notOwner) {
+      req.bookData = bookData;
+      next();
+    } else if (req.user.id !== bookData.userId) {
+      const err = new Error("Forbidden");
+      err.hideTitle = true;
+      err.status = 403;
+      next(err);
+    } else {
+      req.bookData = bookData;
+      next();
+    }
   }
 };
 
@@ -130,10 +130,10 @@ const confirmReview = async (req, res, next) => {
     err.status = 404;
     return next(err);
   } else {
-    res.locals.reviewData = reviewData;
+    req.reviewData = reviewData;
   }
 
-  if (res.locals.notOwner) {
+  if (req.notOwner) {
     return next();
   } else if (req.user.id !== reviewData.userId) {
     const err = new Error("Forbidden");
@@ -142,9 +142,8 @@ const confirmReview = async (req, res, next) => {
     return next(err);
   } else {
     return next();
+  }
 };
-}
-
 
 module.exports = {
   setTokenCookie,
