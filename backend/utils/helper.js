@@ -23,7 +23,9 @@ const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
     where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
   } else if (minPrice) {
     where.price = { [Op.gte]: minPrice };
-  } else if (maxPrice) where.price = { [Op.lte]: maxPrice };
+  } else if (maxPrice) {
+    where.price = { [Op.lte]: maxPrice };
+  }
 
   return where;
 };
