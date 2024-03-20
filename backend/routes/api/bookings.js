@@ -73,7 +73,7 @@ router.put(
   validateBooking,
   confirmBooking,
   validateDates,
-  async (req, res) => {
+  async (req, res, next) => {
     const { startDate, endDate } = req.body;
     const editBook = req.bookData;
 
@@ -96,7 +96,7 @@ router.put(
 // ------ DELETE A BOOKING ------ //
 // ------------------------------ //
 
-router.delete("/:bookingId", requireAuth, async (req, res) => {
+router.delete("/:bookingId", requireAuth, async (req, res, next) => {
   const { bookingId } = req.params;
   const currUser = req.user.dataValues;
   const bookData = await Booking.findOne({

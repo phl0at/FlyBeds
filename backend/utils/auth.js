@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
-const { User, Spot, Booking } = require("../db/models");
+const { User, Spot, Booking, Review } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie
@@ -98,7 +98,7 @@ const confirmSpot = async (req, _res, next) => {
 // If current user doesn't own the Booking, return an error
 const confirmBooking = async (req, res, next) => {
   const bookData = await Booking.findByPk(req.params.bookingId);
-  
+
   if (!bookData) {
     const err = new Error("Booking couldn't be found");
     err.hideTitle = true;
@@ -121,10 +121,10 @@ const confirmBooking = async (req, res, next) => {
 };
 
 // If current user doesn't own the Review, return an error
-const confirmReview = async (req, res, next) => {
+const confirmReview = async (req, _res, next) => {
   const reviewData = await Review.findByPk(req.params.reviewId);
 
-  if (!bookData) {
+  if (!reviewData) {
     const err = new Error("Booking couldn't be found");
     err.hideTitle = true;
     err.status = 404;
