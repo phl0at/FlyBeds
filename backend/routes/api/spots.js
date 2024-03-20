@@ -20,9 +20,8 @@ const {
   confirmSpotExists,
 } = require("../../utils/helper");
 const express = require("express");
-const { requireAuth, confirmSpotOwnership } = require("../../utils/auth");
+const { requireAuth, confirmSpot } = require("../../utils/auth");
 const router = express.Router();
-
 
 // --------------------------- //
 // ------ GET ALL SPOTS ------ //
@@ -76,7 +75,6 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: formattedSpots });
 });
 
-
 // --------------------------------- //
 // ------ GET ALL SPOTS BY ID ------ //
 // --------------------------------- //
@@ -105,7 +103,7 @@ router.get("/:spotId", async (req, res) => {
 
   const reviewData = spotData.dataValues.Reviews;
 
-  const formattedSpot = formatOneSpot(spotData, reviewData)
+  const formattedSpot = formatOneSpot(spotData, reviewData);
 
   return res.json(formattedSpot);
 });
@@ -134,75 +132,90 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   return res.status(201).json(newSpot);
 });
 
-
 // ------------------------------- //
 // ------ ADD IMAGE TO SPOT ------ //
 // ------------------------------- //
 
-router.post("/:spotId/images", requireAuth, async (req, res) => {
-  const currUser = req.user.dataValues;
-  const { spotId } = req.params;
-  const { url, preview } = req.body;
-  const spotData = await Spot.findByPk(spotId);
-  confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData, res);
+router.post(
+  "/:spotId/images",
+  requireAuth,
+  confirmSpot,
+  async (req, res) => {
+    const { spotId } = req.params;
+    const { url, preview } = req.body;
+    const spotData = await Spot.findByPk(spotId);
+    confirmSpotExists(spotData, res);
 
-  const newSpotImage = await SpotImage.create({
-    spotId,
-    url,
-    preview,
-  });
+    const newSpotImage = await SpotImage.create({
+      spotId,
+      url,
+      preview,
+    });
 
-  return res.json({
-    id: newSpotImage.id,
-    url,
-    preview,
-  });
-});
+    return res.json({
+      id: newSpotImage.id,
+      url,
+      preview,
+    });
+  }
+);
 
 // ------------------------- //
 // ------ EDIT A SPOT ------ //
 // ------------------------- //
 
-router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
-  const currUser = req.user.dataValues;
-  const { spotId } = req.params;
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+router.put(
+  "/:spotId",
+  requireAuth,
+  validateSpot,
+  confirmSpot,
+  async (req, res) => {
+    const currUser = req.user.dataValues;
+    const { spotId } = req.params;
+    const {
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    } = req.body;
 
-  const spotData = await Spot.findByPk(spotId);
-  confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData, res);
+    const spotData = await Spot.findByPk(spotId);
+    confirmSpotExists(spotData, res);
 
-  await spotData.update({
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-  });
-  return res.json(spotData);
-});
+    await spotData.update({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    });
+    return res.json(spotData);
+  }
+);
 
 // --------------------------- //
 // ------ DELETE A SPOT ------ //
 // --------------------------- //
 
-router.delete("/:spotId", requireAuth, async (req, res) => {
-  const currUser = req.user.dataValues;
-  const { spotId } = req.params;
-  const spotData = await Spot.findByPk(spotId);
-  confirmSpotExists(spotData, res);
-  confirmSpotOwnership(currUser, spotData, res);
-
-  await spotData.destroy();
-  return res.json({ message: "Successfully deleted" });
-});
-
+router.delete(
+  "/:spotId",
+  requireAuth,
+  confirmSpot,
+  async (req, res) => {
+    const spotData = res.locals.spotData;
+    await spotData.destroy();
+    return res.json({ message: "Successfully deleted" });
+  }
+);
 
 // ------------------------------------ //
 // ------ GET REVIEWS BY SPOT ID ------ //
@@ -230,7 +243,6 @@ router.get("/:spotId/reviews", async (req, res) => {
   });
   return res.json({ Reviews: reviewData });
 });
-
 
 // -------------------------------------------- //
 // ------ CREATE REVIEW BASED ON SPOT ID ------ //
@@ -303,7 +315,6 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
   }
 });
 
-
 // ------------------------------------------------ //
 // ------ CREATE BOOKING FOR SPOT BY SPOT ID ------ //
 // ------------------------------------------------ //
@@ -325,7 +336,8 @@ router.post(
     confirmSpotExists(spotData, res);
 
     //spot cannot belong to user!
-    if (currUser.id === spotData.ownerId) return res.status(403).json({ message: "Forbidden" });
+    if (currUser.id === spotData.ownerId)
+      return res.status(403).json({ message: "Forbidden" });
 
     const bookData = spotData.dataValues.Bookings;
     validateDates(bookData, bookingId, endDate, startDate, res);

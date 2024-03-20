@@ -62,14 +62,16 @@ app.use((err, _req, _res, next) => {
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
-  if (isProduction) {
-    if (err.message === "Authentication required" || err.message === "Invalid credentials") {
+  if (!isProduction) {
+    // if (err.message === "Authentication required" || err.message === "Invalid credentials") {
+    if (err.hideTitle) {
       return res.json({ message: err.message });
+    } else {
+      return res.json({
+        message: err.message,
+        errors: err.errors,
+      });
     }
-    return res.json({
-      message: err.message,
-      errors: err.errors,
-    });
   } else {
     res.json({
       title: err.title || "Server Error",

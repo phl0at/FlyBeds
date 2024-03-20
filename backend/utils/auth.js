@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
-const { User } = require("../db/models");
+const { User, Spot } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie
@@ -55,27 +55,47 @@ const restoreUser = (req, res, next) => {
 };
 
 // If there is no current user, return an error
-
 const requireAuth = function (req, _res, next) {
   if (req.user) return next();
 
   const err = new Error("Authentication required");
-  err.title = "Authentication required";
-  err.errors = { message: "Authentication required" };
+  err.hideTitle = true;
   err.status = 401;
   return next(err);
 };
 
-const confirmSpotOwnership = (currUser, spotData, res) => {
-  if (currUser.id !== spotData.ownerId)
-    return res.status(403).json({ message: "Forbidden" });
+// If current user doesn't own the Spot or Spot doesn't exist, return an error
+const confirmSpot = async (req, res, next) => {
+  const spotData = await Spot.findByPk(req.params.spotId);
+
+  if (!spotData) {
+
+    const err = new Error("Spot couldn't be found");
+    err.hideTitle = true;
+    err.status = 404;
+    return next(err);
+
+  } else if (req.user.id === spotData.ownerId) {
+
+    res.locals.spotData = spotData;
+    return next();
+
+  } else {
+
+    const err = new Error("Forbidden");
+    err.hideTitle = true;
+    err.status = 403;
+    return next(err);
+  }
 };
 
+// If current user doesn't own the Booking, return an error
 const confirmBookingOwnership = (currUser, editBook, res) => {
   if (editBook.userId !== currUser.id)
     return res.status(403).json({ message: "Forbidden" });
 };
 
+// If current user doesn't own the Review, return an error
 const confirmReviewOwnership = (currUser, reviewData, res) => {
   if (currUser.id !== reviewData.userId)
     return res.status(403).json({ message: "Forbidden" });
@@ -85,7 +105,7 @@ module.exports = {
   setTokenCookie,
   restoreUser,
   requireAuth,
-  confirmSpotOwnership,
+  confirmSpot,
   confirmBookingOwnership,
-  confirmReviewOwnership
+  confirmReviewOwnership,
 };
