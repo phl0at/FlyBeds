@@ -1,6 +1,3 @@
-const express = require("express");
-const { validateReview } = require("../../utils/validation");
-const { requireAuth, confirmReviewOwnership } = require("../../utils/auth");
 const {
   User,
   Spot,
@@ -8,7 +5,9 @@ const {
   Review,
   ReviewImage,
 } = require("../../db/models");
-const { confirmReviewExists } = require("../../utils/helper");
+const { requireAuth, confirmReview } = require("../../utils/auth");
+const { validateReview } = require("../../utils/validation");
+const express = require("express");
 const router = express.Router();
 
 // ----------------------------------------- //
@@ -54,65 +53,56 @@ router.get("/current", requireAuth, async (req, res) => {
 // ------ ADD IMAGE TO REVIEW BY REVIEW ID ------ //
 // ---------------------------------------------- //
 
-router.post("/:reviewId/images", requireAuth, async (req, res) => {
-  const { reviewId } = req.params;
-  const currUser = req.user.dataValues;
-  const { url } = req.body;
-  const reviewData = await Review.findOne({
-    where: { id: reviewId },
-    include: [{ model: ReviewImage }],
-  });
-
-  confirmReviewExists(reviewData, res);
-  confirmReviewOwnership(currUser, reviewData, res);
-
-  const allImages = reviewData.dataValues.ReviewImages;
-
-  if (allImages.length >= 10)
-    return res.status(403).json({
-      message: "Maximum number of images for this resource was reached",
+router.post(
+  "/:reviewId/images",
+  requireAuth,
+  confirmReview,
+  async (req, res) => {
+    const { reviewId } = req.params;
+    const { url } = req.body;
+    const reviewData = await Review.findOne({
+      where: { id: reviewId },
+      include: [{ model: ReviewImage }],
     });
 
-  const newImage = await ReviewImage.create({ reviewId, url });
+    if (reviewData.dataValues.ReviewImages.length >= 10)
+      return res.status(403).json({
+        message: "Maximum number of images for this resource was reached",
+      });
 
-  return res.json({ id: newImage.id, url });
-});
+    const newImage = await ReviewImage.create({ reviewId, url });
+
+    return res.json({ id: newImage.id, url });
+  }
+);
 
 // --------------------------- //
 // ------ EDIT A REVIEW ------ //
 // --------------------------- //
 
-router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
-  const { reviewId } = req.params;
-  const currUser = req.user.dataValues;
-  const { review, stars } = req.body;
-  const reviewData = await Review.findByPk(reviewId);
-
-  confirmReviewExists(reviewData, res);
-  confirmReviewOwnership(currUser, reviewData, res);
-
-  await reviewData.update({
-    review,
-    stars,
-  });
-
-  return res.json(reviewData);
-});
+router.put(
+  "/:reviewId",
+  requireAuth,
+  validateReview,
+  confirmReview,
+  async (req, res) => {
+    const { review, stars } = req.body;
+    const reviewData = res.locals.reviewData;
+    await reviewData.update({
+      review,
+      stars,
+    });
+    return res.json(reviewData);
+  }
+);
 
 // ----------------------------- //
 // ------ DELETE A REVIEW ------ //
 // ----------------------------- //
 
-router.delete("/:reviewId", requireAuth, async (req, res) => {
-  const { reviewId } = req.params;
-  const currUser = req.user.dataValues;
-  const reviewData = await Review.findByPk(reviewId);
-
-  confirmReviewExists(reviewData, res);
-  confirmReviewOwnership(currUser, reviewData, res);
-
+router.delete("/:reviewId", requireAuth, confirmReview, async (_req, res) => {
+  const reviewData = res.locals.reviewData;
   await reviewData.destroy();
-
   return res.json({ message: "Successfully deleted" });
 });
 

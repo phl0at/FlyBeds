@@ -64,7 +64,7 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
-// If ownership doesn't need to be confirmed
+// If ownership isn't required
 const notOwner = (_req, res, next) => {
   res.locals.notOwner = true;
   return next();
@@ -90,29 +90,68 @@ const confirmSpot = async (req, res, next) => {
     err.hideTitle = true;
     err.status = 403;
     return next(err);
+  } else {
+    return next();
   }
-
-  return next();
 };
 
 // If current user doesn't own the Booking, return an error
-const confirmBookingOwnership = (currUser, editBook, res) => {
-  if (editBook.userId !== currUser.id)
-    return res.status(403).json({ message: "Forbidden" });
+const confirmBooking = async (res, req, next) => {
+  const bookData = await Booking.findByPk(req.params.bookingId);
+
+  if (!bookData) {
+    const err = new Error("Booking couldn't be found");
+    err.hideTitle = true;
+    err.status = 404;
+    return next(err);
+  } else {
+    res.locals.bookData = bookData;
+  }
+
+  if (res.locals.notOwner) {
+    return next();
+  } else if (req.user.id !== bookData.userId) {
+    const err = new Error("Forbidden");
+    err.hideTitle = true;
+    err.status = 403;
+    return next(err);
+  } else {
+    return next();
+  }
 };
 
 // If current user doesn't own the Review, return an error
-const confirmReviewOwnership = (currUser, reviewData, res) => {
-  if (currUser.id !== reviewData.userId)
-    return res.status(403).json({ message: "Forbidden" });
+const confirmReview = async (req, res, next) => {
+  const reviewData = await Review.findByPk(req.params.reviewId);
+
+  if (!bookData) {
+    const err = new Error("Booking couldn't be found");
+    err.hideTitle = true;
+    err.status = 404;
+    return next(err);
+  } else {
+    res.locals.reviewData = reviewData;
+  }
+
+  if (res.locals.notOwner) {
+    return next();
+  } else if (req.user.id !== reviewData.userId) {
+    const err = new Error("Forbidden");
+    err.hideTitle = true;
+    err.status = 403;
+    return next(err);
+  } else {
+    return next();
 };
+}
+
 
 module.exports = {
   setTokenCookie,
   restoreUser,
   requireAuth,
-  confirmSpot,
   notOwner,
-  confirmBookingOwnership,
-  confirmReviewOwnership,
+  confirmSpot,
+  confirmBooking,
+  confirmReview,
 };

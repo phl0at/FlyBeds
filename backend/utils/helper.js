@@ -72,19 +72,6 @@ const formatSpotsArray = (spotData) => {
   return spotData;
 };
 
-// --- CHECK IF SPOT QUERIED FOR EXISTS ---
-
-const confirmSpotExists = (spotData, res) => {
-  if (!spotData)
-    return res.status(404).json({ message: "Spot couldn't be found" });
-};
-
-// --- CHECK IF BOOKING QUERIED FOR EXISTS ---
-
-const confirmBookingExists = (bookData, res) => {
-  if (!bookData)
-    return res.status(404).json({ message: "Booking couldn't be found" });
-};
 
 const confirmReviewExists = (reviewData, res) => {
   if (!reviewData)
@@ -95,7 +82,5 @@ module.exports = {
   setQueries,
   formatSpotsArray,
   formatOneSpot,
-  confirmSpotExists,
-  confirmBookingExists,
   confirmReviewExists
 };

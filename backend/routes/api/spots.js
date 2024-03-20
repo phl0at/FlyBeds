@@ -18,8 +18,8 @@ const {
   formatOneSpot,
   formatSpotsArray,
 } = require("../../utils/helper");
-const express = require("express");
 const { requireAuth, confirmSpot, notOwner } = require("../../utils/auth");
+const express = require("express");
 const router = express.Router();
 
 // --------------------------- //
@@ -325,6 +325,8 @@ router.post(
       return res.status(403).json({ message: "Forbidden" });
 
     const bookData = spotData.dataValues.Bookings;
+    // this doesn't work - throws correct errors but doesn't stop booking from
+    // being created. will refactor to be express middleware
     validateDates(bookData, bookingId, endDate, startDate, res);
 
     const newBooking = await Booking.create({

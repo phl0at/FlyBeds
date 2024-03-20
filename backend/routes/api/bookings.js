@@ -1,7 +1,6 @@
 const express = require("express");
 const { validateBooking, validateDates } = require("../../utils/validation");
-const { requireAuth, confirmBookingOwnership } = require("../../utils/auth");
-const { confirmBookingExists } = require("../../utils/helper");
+const { requireAuth, confirmBooking } = require("../../utils/auth");
 const { Spot, SpotImage, Booking } = require("../../db/models");
 const currDate = new Date().toISOString().split("T")[0];
 const router = express.Router();
@@ -26,6 +25,10 @@ router.get("/current", requireAuth, async (req, res) => {
     for (const image of spot.dataValues.SpotImages) {
       const imageData = image.dataValues;
 
+      // come back to this later. because of the way im querying with includes,
+      // i may not need to have this conditional. would have to rename image
+      // urls in seed data to test since they are all exactly the same
+      // across all spot images
       if (imageData.spotId === spot.id)
         spot.dataValues.previewImage = imageData.url;
     }
@@ -64,32 +67,38 @@ router.get("/current", requireAuth, async (req, res) => {
 // ------ EDIT A BOOKING ------ //
 // ---------------------------- //
 
-router.put("/:bookingId", requireAuth, validateBooking, async (req, res) => {
-  const { bookingId } = req.params;
-  const { startDate, endDate } = req.body;
-  const currUser = req.user.dataValues;
-  const editBook = await Booking.findByPk(bookingId);
+router.put(
+  "/:bookingId",
+  requireAuth,
+  validateBooking,
+  confirmBooking,
+  async (req, res) => {
+    const { bookingId } = req.params;
+    const { startDate, endDate } = req.body;
+    const editBook = res.locals.bookData;
 
-  confirmBookingExists(editBook, res);
-  confirmBookingOwnership(currUser, editBook, res);
+    // booking has already past
+    if (editBook.endDate < currDate) {
+      const err = new Error("Past bookings can't be modified");
+      err.hideTitle = true;
+      err.status = 403;
+      return next(err);
+    }
 
-  // booking has already past
-  if (editBook.endDate < currDate)
-    return res.status(403).json({ message: "Past bookings can't be modified" });
+    const bookData = await Booking.findAll({
+      where: {
+        spotId: editBook.spotId,
+      },
+    });
+    validateDates(bookData, bookingId, endDate, startDate, res);
 
-  const bookData = await Booking.findAll({
-    where: {
-      spotId: editBook.spotId,
-    },
-  });
-  validateDates(bookData, bookingId, endDate, startDate, res);
-
-  await editBook.update({
-    startDate,
-    endDate
-  })
-  return res.json(editBook);
-});
+    await editBook.update({
+      startDate,
+      endDate,
+    });
+    return res.json(editBook);
+  }
+);
 
 // ------------------------------ //
 // ------ DELETE A BOOKING ------ //
@@ -106,22 +115,31 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
       model: Spot,
     },
   });
-  confirmBookingExists(bookData, res);
+  if (!bookData) {
+    const err = new Error("Booking couldn't be found");
+    err.hideTitle = true;
+    err.status = 404;
+    return next(err);
+  }
 
   if (
     bookData.userId === currUser.id ||
     bookData.Spot.ownerId === currUser.id
   ) {
     if (bookData.startDate < currDate) {
-      return res
-        .status(403)
-        .json({ message: "Bookings that have been started can't be deleted" });
+      const err = new Error("Bookings that have been started can't be deleted");
+      err.hideTitle = true;
+      err.status = 403;
+      return next(err);
+    } else {
+      await bookData.destroy();
+      return res.json({ message: "Successfully deleted" });
     }
-    await bookData.destroy();
-
-    return res.json({ message: "Successfully deleted" });
   } else {
-    return res.status(403).json({ message: "Forbidden" });
+    const err = new Error("Forbidden");
+    err.hideTitle = true;
+    err.status = 403;
+    return next(err);
   }
 });
 
