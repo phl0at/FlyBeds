@@ -128,8 +128,10 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
 // ------------------------------- //
 
 router.post("/:spotId/images", requireAuth, confirmSpot, async (req, res) => {
-  const { spotId } = req.params;
-  const { url, preview } = req.body;
+  const {
+    params: spotId,
+    body: { url, preview },
+  } = req;
   const newSpotImage = await SpotImage.create({
     spotId,
     url,
@@ -153,19 +155,19 @@ router.put(
   confirmSpot,
   async (req, res) => {
     const {
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-    } = req.body;
-
-    const spotData = req.spotData;
-
+      body: {
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price,
+      },
+      spotData,
+    } = req;
     await spotData.update({
       address,
       city,
@@ -186,7 +188,7 @@ router.put(
 // --------------------------- //
 
 router.delete("/:spotId", requireAuth, confirmSpot, async (req, res) => {
-  const spotData = req.spotData;
+  const { spotData } = req;
   await spotData.destroy();
   return res.json({ message: "Successfully deleted" });
 });
@@ -226,24 +228,23 @@ router.post(
   notOwner,
   confirmSpot,
   async (req, res) => {
-    let { spotId } = req.params;
-    spotId = Number(spotId);
-    const { review, stars } = req.body;
     const currUser = req.user;
-
+    let {
+      params: { spotId },
+      body: { review, stars },
+    } = req;
+    spotId = Number(spotId);
     const existingReview = await Review.findOne({
       where: {
         spotId,
         userId: currUser.id,
       },
     });
-
     if (existingReview) {
       return res
         .status(500)
         .json({ message: "User already has a review for this spot" });
     }
-
     const newReview = await Review.create({
       userId: currUser.id,
       spotId,
@@ -269,7 +270,6 @@ router.get(
       spotData,
       params: { spotId },
     } = req;
-
     if (spotData.ownerId !== currUser.id) {
       const bookData = await Booking.findAll({
         where: {
@@ -305,12 +305,12 @@ router.post(
   validateBooking,
   validateDates,
   async (req, res) => {
+    const currUser = req.user;
     let {
       spotData,
       params: { spotId },
+      body: { startDate, endDate },
     } = req;
-    const { startDate, endDate } = req.body;
-    const currUser = req.user;
     spotId = Number(spotId);
 
     if (currUser.id === spotData.ownerId)

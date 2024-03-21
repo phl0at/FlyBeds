@@ -63,17 +63,18 @@ router.put(
   confirmBooking,
   validateDates,
   async (req, res, next) => {
-    const { startDate, endDate } = req.body;
-    const editBook = req.bookData;
-
-    if (editBook.endDate < currDate) {
+    const {
+      body: { startDate, endDate },
+      bookData,
+    } = req;
+    if (bookData.endDate < currDate) {
       const err = new Error("Past bookings can't be modified");
       err.hideTitle = true;
       err.status = 403;
       return next(err);
     } else {
-      await editBook.update({ startDate, endDate });
-      return res.json(editBook);
+      await bookData.update({ startDate, endDate });
+      return res.json(bookData);
     }
   }
 );
@@ -87,7 +88,7 @@ router.delete(
   requireAuth,
   confirmBooking,
   async (req, res, next) => {
-    const bookData = req.bookData;
+    const { bookData } = req;
 
     if (bookData.startDate < currDate) {
       const err = new Error("Bookings that have been started can't be deleted");
