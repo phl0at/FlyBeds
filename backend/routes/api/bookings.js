@@ -10,7 +10,7 @@ const router = express.Router();
 // ------------------------------------ //
 
 router.get("/current", requireAuth, async (req, res) => {
-  const currUser = req.user.dataValues;
+  const currUser = req.user;
   const spotData = await Spot.findAll({
     include: [
       { model: SpotImage, where: { preview: true } },
@@ -20,11 +20,8 @@ router.get("/current", requireAuth, async (req, res) => {
   const bookData = [];
 
   for (const spot of spotData) {
-    const bookings = spot.dataValues.Bookings;
-
-    for (const image of spot.dataValues.SpotImages) {
-      spot.dataValues.previewImage = image.dataValues.url;
-    }
+    const bookings = spot.Bookings;
+    spot.dataValues.previewImage = spot.SpotImages[0].url;
 
     for (const booking of bookings) {
       booking.dataValues.Spot = {
