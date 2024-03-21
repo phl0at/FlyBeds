@@ -32,11 +32,11 @@ const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
 
 // --- FORMAT ONE SPOT ---
 
-const formatOneSpot = (spotData, reviewData) => {
+const formatOneSpot = (spotData) => {
   spotData.dataValues.numReviews = 0;
   let starSum = 0;
 
-  for (const review of reviewData) {
+  for (const review of spotData.dataValues.Reviews) {
     const currReview = review.dataValues;
     spotData.dataValues.numReviews++;
     starSum += currReview.stars;

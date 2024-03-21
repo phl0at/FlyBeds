@@ -52,7 +52,6 @@ router.get("/", validateQuery, async (req, res) => {
   });
 
   const formattedSpots = formatSpotsArray(spotData);
-
   return res.json({ Spots: formattedSpots, page, size });
 });
 
@@ -70,7 +69,6 @@ router.get("/current", requireAuth, async (req, res) => {
   });
 
   const formattedSpots = formatSpotsArray(spotData);
-
   return res.json({ Spots: formattedSpots });
 });
 
@@ -98,8 +96,7 @@ router.get("/:spotId", notOwner, confirmSpot, async (req, res) => {
     ],
   });
 
-  const formattedSpot = formatOneSpot(spotData, spotData.dataValues.Reviews);
-
+  const formattedSpot = formatOneSpot(spotData);
   return res.json(formattedSpot);
 });
 
@@ -123,7 +120,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     description,
     price,
   });
-
   return res.status(201).json(newSpot);
 });
 
@@ -139,7 +135,6 @@ router.post("/:spotId/images", requireAuth, confirmSpot, async (req, res) => {
     url,
     preview,
   });
-
   return res.json({
     id: newSpotImage.id,
     url,
@@ -255,7 +250,6 @@ router.post(
       review,
       stars,
     });
-
     return res.status(201).json(newReview);
   }
 );
@@ -328,7 +322,6 @@ router.post(
       startDate,
       endDate,
     });
-
     return res.json(newBooking);
   }
 );

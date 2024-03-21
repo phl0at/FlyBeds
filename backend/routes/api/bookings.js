@@ -1,5 +1,5 @@
 const { Spot, SpotImage, Booking } = require("../../db/models");
-const { requireAuth, confirmBooking } = require("../../utils/auth");
+const { requireAuth, notOwner, confirmBooking } = require("../../utils/auth");
 const { validateBooking, validateDates } = require("../../utils/validation");
 const currDate = new Date().toISOString().split("T")[0];
 const express = require("express");
@@ -23,14 +23,7 @@ router.get("/current", requireAuth, async (req, res) => {
     const bookings = spot.dataValues.Bookings;
 
     for (const image of spot.dataValues.SpotImages) {
-      const imageData = image.dataValues;
-
-      // come back to this later. because of the way im querying with includes,
-      // i may not need to have this conditional. would have to rename image
-      // urls in seed data to test since they are all exactly the same
-      // across all spot images
-      if (imageData.spotId === spot.id)
-        spot.dataValues.previewImage = imageData.url;
+      spot.dataValues.previewImage = image.dataValues.url;
     }
 
     for (const booking of bookings) {
@@ -59,7 +52,6 @@ router.get("/current", requireAuth, async (req, res) => {
       });
     }
   }
-
   return res.json({ Bookings: bookData });
 });
 
@@ -96,43 +88,45 @@ router.put(
 // ------ DELETE A BOOKING ------ //
 // ------------------------------ //
 
-router.delete("/:bookingId", requireAuth, async (req, res, next) => {
-  const { bookingId } = req.params;
-  const currUser = req.user.dataValues;
-  const bookData = await Booking.findOne({
-    where: {
-      id: bookingId,
-    },
-    include: {
-      model: Spot,
-    },
-  });
-  if (!bookData) {
-    const err = new Error("Booking couldn't be found");
-    err.hideTitle = true;
-    err.status = 404;
-    return next(err);
-  }
+router.delete(
+  "/:bookingId",
+  requireAuth,
+  notOwner,
+  confirmBooking,
+  async (req, res, next) => {
+    const { bookingId } = req.params;
+    const currUser = req.user.dataValues;
+    const bookData = await Booking.findOne({
+      where: {
+        id: bookingId,
+      },
+      include: {
+        model: Spot,
+      },
+    });
 
-  if (
-    bookData.userId === currUser.id ||
-    bookData.Spot.ownerId === currUser.id
-  ) {
-    if (bookData.startDate < currDate) {
-      const err = new Error("Bookings that have been started can't be deleted");
+    if (
+      bookData.userId === currUser.id ||
+      bookData.Spot.ownerId === currUser.id
+    ) {
+      if (bookData.startDate < currDate) {
+        const err = new Error(
+          "Bookings that have been started can't be deleted"
+        );
+        err.hideTitle = true;
+        err.status = 403;
+        return next(err);
+      } else {
+        await bookData.destroy();
+        return res.json({ message: "Successfully deleted" });
+      }
+    } else {
+      const err = new Error("Forbidden");
       err.hideTitle = true;
       err.status = 403;
       return next(err);
-    } else {
-      await bookData.destroy();
-      return res.json({ message: "Successfully deleted" });
     }
-  } else {
-    const err = new Error("Forbidden");
-    err.hideTitle = true;
-    err.status = 403;
-    return next(err);
   }
-});
+);
 
 module.exports = router;

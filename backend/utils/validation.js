@@ -21,6 +21,17 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+const validateLogin = [
+  check("credential")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Email or username is required"),
+  check("password")
+    .exists({ checkFalsy: true })
+    .withMessage("Password is required"),
+  handleValidationErrors,
+];
+
 const validateSignup = [
   check("email")
     .exists({ checkFalsy: true })
@@ -172,7 +183,6 @@ const compareDates = (startDate, endDate, currStart, currEnd) => {
     errors.startDate = "Start date conflicts with an existing booking";
     errors.endDate = "End date conflicts with an existing booking";
   }
-
   return errors;
 };
 
@@ -184,10 +194,10 @@ const validateDates = async (req, _res, next) => {
     const currStart = booking.dataValues.startDate.toISOString().split("T")[0];
     const currEnd = booking.dataValues.endDate.toISOString().split("T")[0];
 
+    // skip booking if it's the one we want to edit
     if(Number(req.params.bookingId) === booking.id) continue;
 
     const errors = compareDates(startDate, endDate, currStart, currEnd);
-
     if (errors.startDate || errors.endDate) {
       const err = new Error(
         "Sorry, this spot is already booked for the specified dates"
@@ -207,5 +217,6 @@ module.exports = {
   validateBooking,
   validateQuery,
   validateSignup,
+  validateLogin,
   validateDates,
 };
