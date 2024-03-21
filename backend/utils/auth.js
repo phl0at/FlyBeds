@@ -94,30 +94,6 @@ const confirmSpot = async (req, _res, next) => {
   }
 };
 
-// If current user doesn't own the Booking, return an error
-const confirmBooking = async (req, _res, next) => {
-  const bookData = await Booking.findByPk(req.params.bookingId);
-
-  if (!bookData) {
-    const err = new Error("Booking couldn't be found");
-    err.hideTitle = true;
-    err.status = 404;
-    next(err);
-  } else {
-    req.bookData = bookData;
-  }
-  if (req.notOwner) {
-    return next();
-  } else if (req.user.id !== bookData.userId) {
-    const err = new Error("Forbidden");
-    err.hideTitle = true;
-    err.status = 403;
-    return next(err);
-  } else {
-    return next();
-  }
-};
-
 // If current user doesn't own the Review, return an error
 const confirmReview = async (req, _res, next) => {
   const reviewData = await Review.findByPk(req.params.reviewId);
@@ -140,6 +116,50 @@ const confirmReview = async (req, _res, next) => {
   } else {
     return next();
   }
+};
+
+// If current user doesn't own the Booking, return an error
+const confirmBooking = async (req, _res, next) => {
+  const bookData = await Booking.findOne({
+    where: {
+      id: req.params.bookingId,
+    },
+    include: {
+      model: Spot,
+    },
+  });
+  if (!bookData) {
+    const err = new Error("Booking couldn't be found");
+    err.hideTitle = true;
+    err.status = 404;
+    next(err);
+  } else {
+    req.bookData = bookData;
+  }
+  if (req.notOwner) {
+    return next();
+  }
+  if (req.route.methods.delete) {
+    if (
+      bookData.userId === req.user.id ||
+      bookData.Spot.ownerId === req.user.id
+    ) {
+      return next();
+    } else {
+      const err = new Error("Forbidden");
+      err.hideTitle = true;
+      err.status = 403;
+      return next(err);
+    }
+  } else {
+    if (req.user.id !== bookData.userId) {
+      const err = new Error("Forbidden");
+      err.hideTitle = true;
+      err.status = 403;
+      return next(err);
+    }
+  }
+  return next();
 };
 
 module.exports = {

@@ -71,12 +71,10 @@ router.put(
       err.hideTitle = true;
       err.status = 403;
       return next(err);
+    } else {
+      await editBook.update({ startDate, endDate });
+      return res.json(editBook);
     }
-    await editBook.update({
-      startDate,
-      endDate,
-    });
-    return res.json(editBook);
   }
 );
 
@@ -87,40 +85,18 @@ router.put(
 router.delete(
   "/:bookingId",
   requireAuth,
-  notOwner,
   confirmBooking,
   async (req, res, next) => {
-    const { bookingId } = req.params;
-    const currUser = req.user;
-    const bookData = await Booking.findOne({
-      where: {
-        id: bookingId,
-      },
-      include: {
-        model: Spot,
-      },
-    });
+    const bookData = req.bookData;
 
-    if (
-      bookData.userId === currUser.id ||
-      bookData.Spot.ownerId === currUser.id
-    ) {
-      if (bookData.startDate < currDate) {
-        const err = new Error(
-          "Bookings that have been started can't be deleted"
-        );
-        err.hideTitle = true;
-        err.status = 403;
-        return next(err);
-      } else {
-        await bookData.destroy();
-        return res.json({ message: "Successfully deleted" });
-      }
-    } else {
-      const err = new Error("Forbidden");
+    if (bookData.startDate < currDate) {
+      const err = new Error("Bookings that have been started can't be deleted");
       err.hideTitle = true;
       err.status = 403;
       return next(err);
+    } else {
+      await bookData.destroy();
+      return res.json({ message: "Successfully deleted" });
     }
   }
 );
