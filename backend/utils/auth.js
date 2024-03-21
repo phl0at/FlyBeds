@@ -115,7 +115,7 @@ const confirmReview = async (req, _res, next) => {
     err.status = 403;
     return next(err);
   } else if (req.route.path === "/:reviewId/images") {
-    if (reviewData.dataValues.ReviewImages.length >= 10) {
+    if (reviewData.ReviewImages.length >= 10) {
       const err = new Error("Maximum number of images for this resource was reached");
       err.hideTitle = true;
       err.status = 403;
