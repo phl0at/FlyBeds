@@ -15,7 +15,7 @@ const router = express.Router();
 // ----------------------------------------- //
 
 router.get("/current", requireAuth, async (req, res) => {
-  const currUser = req.user.dataValues;
+  const currUser = req.user;
   const reviewData = await Review.findAll({
     where: {
       userId: currUser.id,
@@ -41,8 +41,8 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
   for (const review of reviewData) {
-    const currSpot = review.dataValues.Spot.dataValues;
-    const currImage = currSpot.SpotImages[0].dataValues;
+    const currSpot = review.Spot.dataValues;
+    const currImage = currSpot.SpotImages[0];
     currSpot.previewImage = currImage.url;
     delete currSpot.SpotImages;
   }

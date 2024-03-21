@@ -66,7 +66,6 @@ router.put(
     const { startDate, endDate } = req.body;
     const editBook = req.bookData;
 
-    // booking has already past
     if (editBook.endDate < currDate) {
       const err = new Error("Past bookings can't be modified");
       err.hideTitle = true;
@@ -92,7 +91,7 @@ router.delete(
   confirmBooking,
   async (req, res, next) => {
     const { bookingId } = req.params;
-    const currUser = req.user.dataValues;
+    const currUser = req.user;
     const bookData = await Booking.findOne({
       where: {
         id: bookingId,

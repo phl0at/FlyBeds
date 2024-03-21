@@ -60,10 +60,10 @@ router.get("/", validateQuery, async (req, res) => {
 // ------------------------------------------- //
 
 router.get("/current", requireAuth, async (req, res) => {
-  const currentUserId = req.user.dataValues.id;
+  const currUser = req.user;
   const spotData = await Spot.findAll({
     where: {
-      ownerId: currentUserId,
+      ownerId: currUser.id,
     },
     include: [{ model: Review }, { model: SpotImage }],
   });
@@ -72,9 +72,9 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: formattedSpots });
 });
 
-// --------------------------------- //
+// ------------------------------ //
 // ------ GET A SPOT BY ID ------ //
-// --------------------------------- //
+// ------------------------------ //
 
 router.get("/:spotId", notOwner, confirmSpot, async (req, res) => {
   const { spotId } = req.params;
@@ -105,11 +105,11 @@ router.get("/:spotId", notOwner, confirmSpot, async (req, res) => {
 // --------------------------- //
 
 router.post("/", requireAuth, validateSpot, async (req, res) => {
-  const currUserId = req.user.dataValues.id;
+  const currUser = req.user;
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   const newSpot = await Spot.create({
-    ownerId: currUserId,
+    ownerId: currUser.id,
     address,
     city,
     state,
@@ -229,7 +229,7 @@ router.post(
     let { spotId } = req.params;
     spotId = Number(spotId);
     const { review, stars } = req.body;
-    const currUser = req.user.dataValues;
+    const currUser = req.user;
 
     const existingReview = await Review.findOne({
       where: {
@@ -264,9 +264,11 @@ router.get(
   notOwner,
   confirmSpot,
   async (req, res) => {
-    const currUser = req.user.dataValues;
-    const { spotId } = req.params;
-    const spotData = req.spotData;
+    const currUser = req.user;
+    const {
+      spotData,
+      params: { spotId },
+    } = req;
 
     if (spotData.ownerId !== currUser.id) {
       const bookData = await Booking.findAll({
@@ -303,13 +305,14 @@ router.post(
   validateBooking,
   validateDates,
   async (req, res) => {
-    let { spotId } = req.params;
-    spotId = Number(spotId);
+    let {
+      spotData,
+      params: { spotId },
+    } = req;
     const { startDate, endDate } = req.body;
     const currUser = req.user;
-    const spotData = req.spotData;
+    spotId = Number(spotId);
 
-    //spot cannot belong to user!
     if (currUser.id === spotData.ownerId)
       return res.status(403).json({ message: "Forbidden" });
 

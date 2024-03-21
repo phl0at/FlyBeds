@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.delete("/:imageId", requireAuth, async (req, res) => {
   const { imageId } = req.params;
-  const currUser = req.user.dataValues;
+  const currUser = req.user;
   const imageData = await ReviewImage.findOne({
     where: {
       id: imageId,
