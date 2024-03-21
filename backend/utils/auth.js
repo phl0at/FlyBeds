@@ -125,7 +125,7 @@ const confirmReview = async (req, _res, next) => {
   const reviewData = await Review.findByPk(req.params.reviewId);
 
   if (!reviewData) {
-    const err = new Error("Booking couldn't be found");
+    const err = new Error("Review couldn't be found");
     err.hideTitle = true;
     err.status = 404;
     return next(err);
