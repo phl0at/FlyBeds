@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
-const { User, Spot, Booking, Review } = require("../db/models");
+const { User, Spot, Booking, Review, ReviewImage } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie
@@ -89,15 +89,16 @@ const confirmSpot = async (req, _res, next) => {
     err.hideTitle = true;
     err.status = 403;
     return next(err);
-  } else {
-    return next();
   }
+  return next();
 };
 
 // If current user doesn't own the Review, return an error
 const confirmReview = async (req, _res, next) => {
-  const reviewData = await Review.findByPk(req.params.reviewId);
-
+  const reviewData = await Review.findOne({
+    where: { id: req.params.reviewId },
+    include: [{ model: ReviewImage }],
+  });
   if (!reviewData) {
     const err = new Error("Review couldn't be found");
     err.hideTitle = true;
@@ -113,9 +114,15 @@ const confirmReview = async (req, _res, next) => {
     err.hideTitle = true;
     err.status = 403;
     return next(err);
-  } else {
-    return next();
+  } else if (req.route.path === "/:reviewId/images") {
+    if (reviewData.dataValues.ReviewImages.length >= 10) {
+      const err = new Error("Maximum number of images for this resource was reached");
+      err.hideTitle = true;
+      err.status = 403;
+      return next(err)
+    }
   }
+  return next();
 };
 
 // If current user doesn't own the Booking, return an error
@@ -132,14 +139,13 @@ const confirmBooking = async (req, _res, next) => {
     const err = new Error("Booking couldn't be found");
     err.hideTitle = true;
     err.status = 404;
-    next(err);
+    return next(err);
   } else {
     req.bookData = bookData;
   }
   if (req.notOwner) {
     return next();
-  }
-  if (req.route.methods.delete) {
+  } else if (req.route.methods.delete) {
     if (
       bookData.userId === req.user.id ||
       bookData.Spot.ownerId === req.user.id

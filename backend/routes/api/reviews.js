@@ -58,20 +58,11 @@ router.post(
   requireAuth,
   confirmReview,
   async (req, res) => {
-    const { reviewId } = req.params;
-    const { url } = req.body;
-    const reviewData = await Review.findOne({
-      where: { id: reviewId },
-      include: [{ model: ReviewImage }],
-    });
-
-    if (reviewData.dataValues.ReviewImages.length >= 10)
-      return res.status(403).json({
-        message: "Maximum number of images for this resource was reached",
-      });
-
+    const {
+      params: { reviewId },
+      body: { url },
+    } = req;
     const newImage = await ReviewImage.create({ reviewId, url });
-
     return res.json({ id: newImage.id, url });
   }
 );
