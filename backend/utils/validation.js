@@ -195,7 +195,10 @@ const validateDates = async (req, _res, next) => {
     const currEnd = booking.dataValues.endDate.toISOString().split("T")[0];
 
     // skip booking if it's the one we want to edit
-    if(Number(req.params.bookingId) === booking.id) continue;
+    if(Number(req.params.bookingId) === booking.id){
+      console.log(req)
+      continue;
+    }
 
     const errors = compareDates(startDate, endDate, currStart, currEnd);
     if (errors.startDate || errors.endDate) {

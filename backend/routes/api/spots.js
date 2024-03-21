@@ -306,11 +306,8 @@ router.post(
     let { spotId } = req.params;
     spotId = Number(spotId);
     const { startDate, endDate } = req.body;
-    const currUser = req.user.dataValues;
-    const spotData = await Spot.findOne({
-      where: { id: spotId },
-      include: [{ model: Booking }],
-    });
+    const currUser = req.user;
+    const spotData = req.spotData;
 
     //spot cannot belong to user!
     if (currUser.id === spotData.ownerId)
