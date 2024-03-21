@@ -82,7 +82,6 @@ const confirmSpot = async (req, _res, next) => {
   } else {
     req.spotData = spotData;
   }
-
   if (req.notOwner) {
     return next();
   } else if (req.user.id !== spotData.ownerId) {
@@ -105,18 +104,17 @@ const confirmBooking = async (req, _res, next) => {
     err.status = 404;
     next(err);
   } else {
-    if (req.notOwner) {
-      req.bookData = bookData;
-      return next();
-    } else if (req.user.id !== bookData.userId) {
-      const err = new Error("Forbidden");
-      err.hideTitle = true;
-      err.status = 403;
-      return next(err);
-    } else {
-      req.bookData = bookData;
-      return next();
-    }
+    req.bookData = bookData;
+  }
+  if (req.notOwner) {
+    return next();
+  } else if (req.user.id !== bookData.userId) {
+    const err = new Error("Forbidden");
+    err.hideTitle = true;
+    err.status = 403;
+    return next(err);
+  } else {
+    return next();
   }
 };
 
@@ -132,7 +130,6 @@ const confirmReview = async (req, _res, next) => {
   } else {
     req.reviewData = reviewData;
   }
-
   if (req.notOwner) {
     return next();
   } else if (req.user.id !== reviewData.userId) {
