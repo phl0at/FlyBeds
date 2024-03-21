@@ -75,7 +75,7 @@ router.put(
       body: { review, stars },
       reviewData,
     } = req;
-    delete reviewData.ReviewImages
+    delete reviewData.dataValues.ReviewImages;
     await reviewData.update({ review, stars });
     return res.json(reviewData);
   }
