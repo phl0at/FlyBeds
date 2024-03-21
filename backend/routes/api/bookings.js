@@ -1,14 +1,12 @@
 const { Spot, SpotImage, Booking } = require("../../db/models");
-const { requireAuth, notOwner, confirmBooking } = require("../../utils/auth");
+const { requireAuth, confirmBooking } = require("../../utils/auth");
 const { validateBooking, validateDates } = require("../../utils/validation");
 const currDate = new Date().toISOString().split("T")[0];
 const express = require("express");
 const router = express.Router();
-
 // ------------------------------------ //
 // ------ GET CURR USER BOOKINGS ------ //
 // ------------------------------------ //
-
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user;
   const spotData = await Spot.findAll({
@@ -18,11 +16,9 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
   const bookData = [];
-
   for (const spot of spotData) {
     const bookings = spot.Bookings;
     spot.dataValues.previewImage = spot.SpotImages[0].url;
-
     for (const booking of bookings) {
       booking.dataValues.Spot = {
         id: spot.id,
@@ -51,11 +47,9 @@ router.get("/current", requireAuth, async (req, res) => {
   }
   return res.json({ Bookings: bookData });
 });
-
 // ---------------------------- //
 // ------ EDIT A BOOKING ------ //
 // ---------------------------- //
-
 router.put(
   "/:bookingId",
   requireAuth,
@@ -78,18 +72,15 @@ router.put(
     }
   }
 );
-
 // ------------------------------ //
 // ------ DELETE A BOOKING ------ //
 // ------------------------------ //
-
 router.delete(
   "/:bookingId",
   requireAuth,
   confirmBooking,
   async (req, res, next) => {
     const { bookData } = req;
-
     if (bookData.startDate < currDate) {
       const err = new Error("Bookings that have been started can't be deleted");
       err.hideTitle = true;
@@ -101,5 +92,4 @@ router.delete(
     }
   }
 );
-
 module.exports = router;

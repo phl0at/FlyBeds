@@ -9,11 +9,9 @@ const { requireAuth, confirmReview } = require("../../utils/auth");
 const { validateReview } = require("../../utils/validation");
 const express = require("express");
 const router = express.Router();
-
 // ----------------------------------------- //
 // ------ GET REVIEWS OF CURRENT USER ------ //
 // ----------------------------------------- //
-
 router.get("/current", requireAuth, async (req, res) => {
   const currUser = req.user;
   const reviewData = await Review.findAll({
@@ -48,11 +46,9 @@ router.get("/current", requireAuth, async (req, res) => {
   }
   return res.json({ Reviews: reviewData });
 });
-
 // ---------------------------------------------- //
 // ------ ADD IMAGE TO REVIEW BY REVIEW ID ------ //
 // ---------------------------------------------- //
-
 router.post(
   "/:reviewId/images",
   requireAuth,
@@ -66,11 +62,9 @@ router.post(
     return res.json({ id: newImage.id, url });
   }
 );
-
 // --------------------------- //
 // ------ EDIT A REVIEW ------ //
 // --------------------------- //
-
 router.put(
   "/:reviewId",
   requireAuth,
@@ -88,15 +82,12 @@ router.put(
     return res.json(reviewData);
   }
 );
-
 // ----------------------------- //
 // ------ DELETE A REVIEW ------ //
 // ----------------------------- //
-
 router.delete("/:reviewId", requireAuth, confirmReview, async (req, res) => {
   const { reviewData } = req;
   await reviewData.destroy();
   return res.json({ message: "Successfully deleted" });
 });
-
 module.exports = router;
