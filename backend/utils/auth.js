@@ -1,7 +1,6 @@
 const { User, Spot, Booking, Review, ReviewImage } = require("../db/models");
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
-const e = require("express");
 const { secret, expiresIn } = jwtConfig;
 
 // ----------------------------- //

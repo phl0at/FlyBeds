@@ -75,9 +75,11 @@ router.get("/current", requireAuth, async (req, res) => {
 
   return res.json({ Spots: formattedSpots });
 });
+
 // ------------------------------ //
 // ------ GET A SPOT BY ID ------ //
 // ------------------------------ //
+
 router.get("/:spotId", spotExists, async (req, res) => {
   const { spotId } = req.params;
 
@@ -353,4 +355,5 @@ router.post(
     return res.json(newBooking);
   }
 );
+
 module.exports = router;
