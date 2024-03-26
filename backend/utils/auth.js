@@ -65,13 +65,14 @@ const restoreUser = (req, res, next) => {
 
 const requireAuth = function (req, _res, next) {
   // If there is no current user, return an error
-  if (req.user) return next();
-
-  const err = new Error("Authentication required");
-  err.hideTitle = true;
-  err.status = 401;
-
-  return next(err);
+  if (!req.user) {
+    const err = new Error("Authentication required");
+    err.hideTitle = true;
+    err.status = 401;
+    return next(err);
+  } else {
+    return next();
+  }
 };
 
 // ----------------------------- //
@@ -96,7 +97,6 @@ const spotExists = async (req, _res, next) => {
 
 const spotOwner = async (req, _res, next) => {
   // If current user doesn't own the Spot, return an error
-
   if (req.user.id !== req.spotData.ownerId) {
     const err = new Error("Forbidden");
     err.hideTitle = true;
@@ -223,5 +223,5 @@ module.exports = {
   reviewOwner,
   reviewImageNum,
   bookExists,
-  bookOwner
+  bookOwner,
 };
