@@ -1,9 +1,12 @@
 const { Op } = require("sequelize");
+
 // --------------------------------- //
 // ------ SET UP QUERY PARAMS ------ //
 // --------------------------------- //
+
 const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
   const where = {};
+
   if (minLat && maxLat) {
     where.lat = { [Op.gte]: minLat, [Op.lte]: maxLat };
   } else if (minLat) {
@@ -11,6 +14,7 @@ const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
   } else if (maxLat) {
     where.lat = { [Op.lte]: maxLat };
   }
+
   if (minLng && maxLng) {
     where.lng = { [Op.gte]: minLng, [Op.lte]: maxLng };
   } else if (minLng) {
@@ -18,6 +22,7 @@ const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
   } else if (maxLng) {
     where.lng = { [Op.lte]: maxLng };
   }
+
   if (minPrice && maxPrice) {
     where.price = { [Op.gte]: minPrice, [Op.lte]: maxPrice };
   } else if (minPrice) {
@@ -25,14 +30,18 @@ const setQueries = (minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
   } else if (maxPrice) {
     where.price = { [Op.lte]: maxPrice };
   }
+
   return where;
 };
+
 // ----------------------------- //
 // ------ FORMAT ONE SPOT ------ //
 // ----------------------------- //
+
 const formatOneSpot = (spotData) => {
   spotData.dataValues.numReviews = 0;
   let starSum = 0;
+
   for (const review of spotData.dataValues.Reviews) {
     const currReview = review.dataValues;
     spotData.dataValues.numReviews++;
@@ -41,11 +50,14 @@ const formatOneSpot = (spotData) => {
     spotData.dataValues.avgRating = Number(avg.toFixed(1));
   }
   delete spotData.dataValues.Reviews;
+
   return spotData;
 };
+
 // ----------------------------------- //
 // ------ FORMAT ARRAY OF SPOTS ------ //
 // ----------------------------------- //
+
 const formatSpotsArray = (spotData) => {
   //iterate each spot and set up default values for image and rating
   for (const spot of spotData) {
@@ -54,9 +66,11 @@ const formatSpotsArray = (spotData) => {
     const currSpot = spot.dataValues;
     currSpot.previewImage = null;
     currSpot.avgRating = null;
+
     //iterate all reviews and add the avgRating to each one's spot
     for (const review of currSpot.Reviews) {
       const currReview = review.dataValues;
+
       if (currSpot.id === currReview.spotId) {
         starSum += currReview.stars;
         starNum++;
@@ -67,6 +81,7 @@ const formatSpotsArray = (spotData) => {
     //iterate all spot images and add a previewImage to each one's spot
     for (const image of currSpot.SpotImages) {
       const currImage = image.dataValues;
+
       if (currSpot.id === currImage.spotId && currImage.preview === true) {
         currSpot.previewImage = currImage.url;
       }
@@ -76,6 +91,7 @@ const formatSpotsArray = (spotData) => {
   }
   return spotData;
 };
+
 module.exports = {
   setQueries,
   formatSpotsArray,

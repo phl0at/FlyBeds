@@ -1,24 +1,30 @@
 const { Spot, SpotImage, Booking } = require("../../db/models");
-const { requireAuth, confirmBooking } = require("../../utils/auth");
+const { requireAuth, bookExists, bookOwner } = require("../../utils/auth");
 const { validateBooking, validateDates } = require("../../utils/validation");
 const currDate = new Date().toISOString().split("T")[0];
 const express = require("express");
 const router = express.Router();
+
 // ------------------------------------ //
 // ------ GET CURR USER BOOKINGS ------ //
 // ------------------------------------ //
+
 router.get("/current", requireAuth, async (req, res) => {
-  const currUser = req.user;
+  const { user } = req;
+
   const spotData = await Spot.findAll({
     include: [
       { model: SpotImage, where: { preview: true } },
-      { model: Booking, where: { userId: currUser.id } },
+      { model: Booking, where: { userId: user.id } },
     ],
   });
+
   const bookData = [];
+
   for (const spot of spotData) {
     const bookings = spot.Bookings;
     spot.dataValues.previewImage = spot.SpotImages[0].url;
+
     for (const booking of bookings) {
       booking.dataValues.Spot = {
         id: spot.id,
@@ -33,6 +39,7 @@ router.get("/current", requireAuth, async (req, res) => {
         price: spot.price,
         previewImage: spot.dataValues.previewImage,
       };
+
       bookData.push({
         id: booking.id,
         spotId: booking.spotId,
@@ -45,22 +52,27 @@ router.get("/current", requireAuth, async (req, res) => {
       });
     }
   }
+
   return res.json({ Bookings: bookData });
 });
+
 // ---------------------------- //
 // ------ EDIT A BOOKING ------ //
 // ---------------------------- //
+
 router.put(
   "/:bookingId",
   requireAuth,
   validateBooking,
-  confirmBooking,
+  bookExists,
+  bookOwner,
   validateDates,
   async (req, res, next) => {
     const {
       body: { startDate, endDate },
       bookData,
     } = req;
+
     if (bookData.endDate < currDate) {
       const err = new Error("Past bookings can't be modified");
       err.hideTitle = true;
@@ -72,15 +84,19 @@ router.put(
     }
   }
 );
+
 // ------------------------------ //
 // ------ DELETE A BOOKING ------ //
 // ------------------------------ //
+
 router.delete(
   "/:bookingId",
   requireAuth,
-  confirmBooking,
+  bookExists,
+  bookOwner,
   async (req, res, next) => {
     const { bookData } = req;
+
     if (bookData.startDate < currDate) {
       const err = new Error("Bookings that have been started can't be deleted");
       err.hideTitle = true;
@@ -92,4 +108,5 @@ router.delete(
     }
   }
 );
+
 module.exports = router;

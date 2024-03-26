@@ -8,6 +8,7 @@ const handleValidationErrors = (req, _res, next) => {
 
   if (!validationErrors.isEmpty()) {
     const errors = {};
+
     validationErrors
       .array()
       .forEach((error) => (errors[error.path] = error.msg));
@@ -20,6 +21,7 @@ const handleValidationErrors = (req, _res, next) => {
   }
   next();
 };
+
 const validateLogin = [
   check("credential")
     .exists({ checkFalsy: true })
@@ -30,6 +32,7 @@ const validateLogin = [
     .withMessage("Password is required"),
   handleValidationErrors,
 ];
+
 const validateSignup = [
   check("email")
     .exists({ checkFalsy: true })
@@ -54,6 +57,7 @@ const validateSignup = [
     .withMessage("Password must be 6 characters or more."),
   handleValidationErrors,
 ];
+
 const validateQuery = [
   check("page")
     .optional({ nullable: true, checkFalsy: true })
@@ -89,6 +93,7 @@ const validateQuery = [
     .withMessage("Maximum price must be greater than or equal to 0"),
   handleValidationErrors,
 ];
+
 const validateBooking = [
   check("startDate")
     .isAfter(currDate)
@@ -102,6 +107,7 @@ const validateBooking = [
     .withMessage("endDate cannot be on or before startDate"),
   handleValidationErrors,
 ];
+
 const validateReview = [
   check("review")
     .exists({ checkFalsy: true })
@@ -114,6 +120,7 @@ const validateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
+
 const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
@@ -158,8 +165,10 @@ const validateSpot = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
+
 const compareDates = (startDate, endDate, currStart, currEnd) => {
   const errors = {};
+
   // start date falls within an existing booking
   if (startDate >= currStart && startDate <= currEnd) {
     errors.startDate = "Start date conflicts with an existing booking";
@@ -180,6 +189,7 @@ const compareDates = (startDate, endDate, currStart, currEnd) => {
   }
   return errors;
 };
+
 const validateDates = async (req, _res, next) => {
   const { startDate, endDate } = req.body;
   const allBookings = await Booking.findAll();
@@ -189,9 +199,10 @@ const validateDates = async (req, _res, next) => {
     const currEnd = booking.dataValues.endDate.toISOString().split("T")[0];
 
     // skip booking if it's the one we want to edit
-    if(Number(req.params.bookingId) === booking.id) continue;
+    if (Number(req.params.bookingId) === booking.id) continue;
 
     const errors = compareDates(startDate, endDate, currStart, currEnd);
+
     if (errors.startDate || errors.endDate) {
       const err = new Error(
         "Sorry, this spot is already booked for the specified dates"
@@ -203,6 +214,7 @@ const validateDates = async (req, _res, next) => {
   }
   return next();
 };
+
 module.exports = {
   handleValidationErrors,
   validateSpot,
