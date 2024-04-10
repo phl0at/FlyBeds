@@ -28,7 +28,6 @@ export const getAllSpotsThunk = () => async (dispatch) => {
 
   if (res.ok) {
     const spotData = await res.json();
-    console.log('SPOT DATA', spotData)
     dispatch(getAllSpots(spotData));
     return spotData;
   } else {
@@ -56,7 +55,7 @@ const spotReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_SPOTS: {
       const newState = {};
-      action.payload.forEach((spot) => (newState[spot.id] = spot));
+      action.payload.Spots.forEach((spot) => (newState[spot.id] = spot));
       return newState;
     }
     default:
