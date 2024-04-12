@@ -74,7 +74,8 @@ const OneSpot = () => {
         <div className="price">{`$${price} night`}</div>
         <div className="rating-review">
           <IoStar />
-          {avgRating ? avgRating : "New"} * {`${numReviews} reviews`}
+          {avgRating ? avgRating : "New"} •{" "}
+          {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </div>
         <button onClick={() => alert("Feature coming soon!")}>Reserve</button>
       </div>

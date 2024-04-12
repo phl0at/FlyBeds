@@ -6,22 +6,38 @@ import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
 
 const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const dispatch = useDispatch();
+  const currUser = useSelector((state) => state.session.user);
+  const currSpot = useSelector((state) => state.spots[spotId]);
+  const reviewData = useSelector(getReviewArray);
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
 
-  const reviewData = useSelector(getReviewArray);
+
   if (!reviewData.length) return <h2>Loading...</h2>;
 
   return (
-    <section>
-      <div>
-        <IoStar /> {avgRating} *{" "}
-        {numReviews === 1 ? `${numReviews} review` : `${numReviews} reviews`}
-      </div>
-      {reviewData.map(({ User, review, id, updatedAt }) => {
-        const date = new Date(updatedAt).toLocaleDateString("en-us", {
+    <>
+      <header>
+        {numReviews === 0 && currUser.id !== currSpot.ownerId
+          ? "Be the first to post a review!"
+          : null}
+        {numReviews === 0 ? (
+          <h3>
+            <IoStar /> {avgRating ? avgRating : "New"}
+          </h3>
+        ) : (
+          <h3>
+            <IoStar /> {avgRating ? avgRating : "New"} •{" "}
+            {numReviews === 1
+              ? `${numReviews} Review`
+              : `${numReviews} Reviews`}
+          </h3>
+        )}
+      </header>
+      {reviewData.map(({ User, review, id, createdAt }) => {
+        const date = new Date(createdAt).toLocaleDateString("en-us", {
           year: "numeric",
           month: "long",
         });
@@ -36,7 +52,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
           </>
         );
       })}
-    </section>
+    </>
   );
 };
 
