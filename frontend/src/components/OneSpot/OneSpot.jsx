@@ -8,30 +8,39 @@ import { getOneSpotThunk } from "../../store/spots";
 const OneSpot = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
+  const spotData = useSelector((state) => state.spots);
+  let {
+    [Number(spotId)]: {
+      name,
+      city,
+      state,
+      country,
+      price,
+      numReviews,
+      SpotImages,
+      Owner,
+      avgRating,
+      description,
+    },
+  } = spotData;
+  avgRating = avgRating.toString();
+  if (avgRating.split(".").length < 2) {
+    avgRating += ".0";
+  }
   useEffect(() => {
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
-  let hasImages = false;
-  let mainImg = "";
-  const otherImg = [];
-  const spotData = useSelector((state) => state.spots);
-  const {
-    name,
-    city,
-    state,
-    country,
-    price,
-    numReviews,
-    SpotImages,
-    Owner,
-    avgRating,
-    description,
-  } = spotData;
 
-  console.log("\n ================", spotData);
+  if (!SpotImages) {
+    return <h2>Loading...</h2>;
+  }
 
   // if SpotImages has length, set a boolean to true, iterate over each one, find the previewImage
   // and set it to its own variable, then put the rest of the images into an array
+  let hasImages = false;
+  let mainImg = "";
+  const otherImg = [];
+
   if (SpotImages.length) {
     hasImages = true;
     SpotImages.forEach((img) => {
@@ -48,6 +57,7 @@ const OneSpot = () => {
       <h1>{name}</h1>
       <h2>{`${city}, ${state}, ${country}`}</h2>
       <div className="images">
+        {!hasImages && <div>No images</div>}
         <div className="main-image">{hasImages && <img src={mainImg} />}</div>
         <div className="other-images">
           {hasImages && otherImg.map((img, i) => <img key={i} src={img} />)}

@@ -46,7 +46,7 @@ const formatOneSpot = (spotData) => {
     const currReview = review.dataValues;
     spotData.dataValues.numReviews++;
     starSum += currReview.stars;
-    const avg = Math.round((starSum / spotData.dataValues.numReviews) * 10) / 10
+    const avg = starSum / spotData.dataValues.numReviews
     spotData.dataValues.avgRating = Number(avg.toFixed(1));
   }
   delete spotData.dataValues.Reviews;

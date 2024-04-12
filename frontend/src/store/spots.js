@@ -79,7 +79,7 @@ const spotReducer = (state = initialState, action) => {
       return newState;
     }
     case GET_ONE_SPOT: {
-      const newState = {...state, ...action.payload}
+      const newState = {...state, [action.payload.id]: action.payload}
       return newState;
     }
     default:
