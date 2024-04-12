@@ -25,7 +25,7 @@ const AllSpots = () => {
             }
 
             return (
-              <NavLink to={`/${id}`} key={id} className="spot-list tooltip">
+              <NavLink to={`/spot/${id}`} key={id} className="spot-list tooltip">
                 <span className="tooltiptext">{name}</span>
                 <img src={previewImage} />
                 <div className="spot-info">

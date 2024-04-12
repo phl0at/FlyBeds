@@ -4,11 +4,19 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneSpotThunk } from "../../store/spots";
+import SpotReviews from "../SpotReviews/SpotReviews";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const spotData = useSelector((state) => state.spots);
+
+  useEffect(() => {
+    dispatch(getOneSpotThunk(spotId));
+  }, [dispatch, spotId]);
+
+  if (!Object.values(spotData).length) return <h2>Loading...</h2>;
+
   let {
     [Number(spotId)]: {
       name,
@@ -23,20 +31,15 @@ const OneSpot = () => {
       description,
     },
   } = spotData;
+
   avgRating = avgRating.toString();
   if (avgRating.split(".").length < 2) {
     avgRating += ".0";
   }
-  useEffect(() => {
-    dispatch(getOneSpotThunk(spotId));
-  }, [dispatch, spotId]);
-
-  if (!SpotImages) {
-    return <h2>Loading...</h2>;
-  }
 
   // if SpotImages has length, set a boolean to true, iterate over each one, find the previewImage
   // and set it to its own variable, then put the rest of the images into an array
+
   let hasImages = false;
   let mainImg = "";
   const otherImg = [];
@@ -67,12 +70,18 @@ const OneSpot = () => {
       <p>{description}</p>
       <div className="info-box">
         <div className="price">{`$${price} night`}</div>
-        <div className="avg-rating">
+        <div className="rating-review">
           <IoStar />
-          {avgRating ? avgRating : "New"}
+          {avgRating ? avgRating : "New"} * {`${numReviews} reviews`}
         </div>
-        <div className="num-reviews">{`${numReviews} reviews`}</div>
         <button onClick={() => alert("Feature coming soon!")}>Reserve</button>
+      </div>
+      <div className="reviews">
+        <SpotReviews
+          spotId={spotId}
+          avgRating={avgRating}
+          numReviews={numReviews}
+        />
       </div>
     </>
   );
