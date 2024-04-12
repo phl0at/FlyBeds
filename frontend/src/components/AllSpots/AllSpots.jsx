@@ -23,7 +23,7 @@ const AllSpots = () => {
             if (avgRating.split(".").length < 2) {
               avgRating += ".0";
             }
-            
+
             return (
               <NavLink to={`/${id}`} key={id} className="spot-list tooltip">
                 <span className="tooltiptext">{name}</span>
