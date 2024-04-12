@@ -15,7 +15,7 @@ const OneSpot = () => {
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!Object.values(spotData).length) return <h2>Loading...</h2>;
+  if (!spotData[spotId]) return <h2>Loading...</h2>;
 
   let {
     [Number(spotId)]: {
@@ -31,6 +31,8 @@ const OneSpot = () => {
       description,
     },
   } = spotData;
+
+  if (!SpotImages) return <h2>Loading...</h2>;
 
   avgRating = avgRating.toString();
   if (avgRating.split(".").length < 2) {
