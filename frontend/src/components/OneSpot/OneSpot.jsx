@@ -33,8 +33,8 @@ const OneSpot = () => {
   } = spotData;
 
   if (!SpotImages) return <h2>Loading...</h2>;
+  if (avgRating) avgRating = avgRating.toString();
 
-  avgRating = avgRating.toString();
   if (avgRating.split(".").length < 2) {
     avgRating += ".0";
   }

@@ -7,7 +7,7 @@ import { csrfFetch } from "./csrf";
 const GET_ALL_SPOTS = "spot/getAllSpots";
 const GET_ONE_SPOT = "spot/getOneSpot";
 const CREATE_SPOT = "spot/createSpot";
-const ADD_IMAGE = "spot/addImage"
+const ADD_IMAGE = "spot/addImage";
 
 //! --------------------------------------------------------------------
 //*                         Action Creator
@@ -37,9 +37,9 @@ const createSpot = (payload) => {
 const addImage = (payload) => {
   return {
     type: ADD_IMAGE,
-    payload
-  }
-}
+    payload,
+  };
+};
 
 //! --------------------------------------------------------------------
 //*                       Thunk Action Creator
@@ -73,43 +73,49 @@ export const getOneSpotThunk = (spotId) => async (dispatch) => {
 
 export const createSpotThunk = (payload) => async (dispatch) => {
 
-  const res = await csrfFetch("/api/spots", {
-    method: "POST",
-    header: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const res = await csrfFetch("/api/spots", {
+      method: "POST",
+      header: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (res.ok) {
-    const spotData = await res.json();
-    dispatch(createSpot(spotData));
-    return spotData;
-  } else {
-    const err = await res.json();
+    if (res.ok) {
+      const spotData = await res.json();
+      dispatch(createSpot(spotData));
+      return spotData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  } catch (e) {
+    const err = await e.json();
     return err;
   }
 };
 
-export const addImageThunk = ({readyImg, spotId}) => async (dispatch) => {
+export const addImageThunk =
+  ({ readyImg, spotId }) =>
+  async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: "POST",
+      header: {
+        "Content-Type": "application/json",
+      },
+      body: readyImg,
+    });
 
-  const res = await csrfFetch(`/api/spots/${spotId}/images`, {
-    method: "POST",
-    header: {
-      "Content-Type": "application/json"
-    },
-    body: readyImg
-  })
-
-  if(res.ok){
-    const imageData = await res.json()
-    dispatch(addImage({imageData, spotId}))
-    return imageData
-  } else {
-    const err = await res.json()
-    return err
-  }
-}
+    if (res.ok) {
+      const imageData = await res.json();
+      dispatch(addImage({ imageData, spotId }));
+      return imageData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  };
 
 //! --------------------------------------------------------------------
 //*                            Selectors
@@ -138,7 +144,15 @@ const spotReducer = (state = initialState, action) => {
       return newState;
     }
     case CREATE_SPOT: {
-      const newState = { ...state, [action.payload.id]: action.payload};
+      const newState = { ...state, [action.payload.id]: action.payload };
+      return newState;
+    }
+    case ADD_IMAGE: {
+      const newState = { ...state };
+      newState[action.payload.spotId] = {
+        ...newState[action.payload.spotId],
+        previewImage: action.payload.imageData.url,
+      };
       return newState;
     }
     default:

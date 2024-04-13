@@ -28,9 +28,10 @@ export const checkForErrors = (
 
   if (!lat) {
     err.lat = "Latitude is required";
-  } else if (lat < -90 || lat > 90) {
-    err.lat = "Latitude must be within -90 and 90";
   }
+  // } else if (lat < -90 || lat > 90) {
+  //   err.lat = "Latitude must be within -90 and 90";
+  // }
 
   if (!lng) {
     err.lng = "Longitude is required";

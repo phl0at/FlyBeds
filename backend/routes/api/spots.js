@@ -142,6 +142,8 @@ router.post(
   spotExists,
   spotOwner,
   async (req, res) => {
+
+    // REFACTOR TO TAKE AN ARRAY, ITERATE IT AND .CREATE FOR EACH ELEMENT
     const {
       params: { spotId },
       body: { url, preview },
