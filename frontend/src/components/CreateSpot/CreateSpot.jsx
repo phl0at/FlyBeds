@@ -87,7 +87,7 @@ const CreateSpot = () => {
           preview: true,
         };
         const readyImg = JSON.stringify(prevImg);
-        const sentImg = await dispatch(addImageThunk({readyImg, spotId: newSpot.id}));
+        dispatch(addImageThunk({readyImg, spotId: newSpot.id}));
       }
     }
   };
