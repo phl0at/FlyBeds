@@ -39,9 +39,6 @@ const OneSpot = () => {
     avgRating += ".0";
   }
 
-  // if SpotImages has length, set a boolean to true, iterate over each one, find the previewImage
-  // and set it to its own variable, then put the rest of the images into an array
-
   let hasImages = false;
   let mainImg = "";
   const otherImg = [];

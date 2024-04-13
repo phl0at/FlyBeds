@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import AllSpots from "./components/AllSpots";
 import OneSpot from "./components/OneSpot";
+import CreateSpot from "./components/CreateSpot";
 import * as sessionActions from "./store/session";
 
 function Layout() {
@@ -33,9 +34,18 @@ const router = createBrowserRouter([
         element: <AllSpots />,
       },
       {
-        path: "/spot/:spotId",
-        element: <OneSpot />
-      }
+        path: "/spot",
+        children: [
+          {
+            path: ":spotId",
+            element: <OneSpot />,
+          },
+          {
+            path: "new",
+            element: <CreateSpot />,
+          },
+        ],
+      },
     ],
   },
 ]);
