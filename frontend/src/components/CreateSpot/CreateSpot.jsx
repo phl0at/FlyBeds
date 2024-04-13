@@ -3,14 +3,16 @@ import "./CreateSpot.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { checkForErrors } from "./formValidation";
+import { addImageThunk, createSpotThunk } from "../../store/spots";
 
 const CreateSpot = () => {
   const dispatch = useDispatch();
-  //   const currUser = useSelector((state) => state.session.user);
   const [country, setCountry] = useState("");
-  const [street, setStreet] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -21,30 +23,34 @@ const CreateSpot = () => {
   const [image4, setImage4] = useState("");
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    setCountry("");
-    setStreet("");
-    setCity("");
-    setState("");
-    setDescription("");
-    setName("");
-    setPrice("");
-    setPreviewImage("");
-    setImage1("");
-    setImage2("");
-    setImage3("");
-    setImage4("");
-    setErrors({});
-  }, []);
+  //   useEffect(() => {
+  //     setCountry("");
+  //     setAddress("");
+  //     setCity("");
+  //     setState("");
+  //     setLat("");
+  //     setLng("");
+  //     setDescription("");
+  //     setName("");
+  //     setPrice("");
+  //     setPreviewImage("");
+  //     setImage1("");
+  //     setImage2("");
+  //     setImage3("");
+  //     setImage4("");
+  //     setErrors({});
+  //   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const err = checkForErrors(
       country,
-      street,
+      address,
       city,
       state,
+      lat,
+      lng,
       description,
       name,
       price,
@@ -55,10 +61,34 @@ const CreateSpot = () => {
       image4
     );
 
-    setErrors(err);
+    if (Object.values(err).length) {
+      setErrors(err);
+    }
+
+    console.log(Object.values(errors).length);
 
     if (Object.values(errors).length < 1) {
-      dispatch(createSpotThunk(spotData));
+      const spotData = {
+        country,
+        address,
+        city,
+        lat: Number(lat),
+        lng: Number(lng),
+        state,
+        description,
+        name,
+        price: Number(price),
+      };
+      const newSpot = await dispatch(createSpotThunk(spotData));
+
+      if (newSpot) {
+        const prevImg = {
+          url: previewImage,
+          preview: true,
+        };
+        const readyImg = JSON.stringify(prevImg);
+        const sentImg = await dispatch(addImageThunk({readyImg, spotId: newSpot.id}));
+      }
     }
   };
   return (
@@ -92,9 +122,9 @@ const CreateSpot = () => {
           <input
             name="street"
             type="text"
-            value={street}
+            value={address}
             placeholder="Street Address"
-            onChange={(e) => setStreet(e.target.value)}
+            onChange={(e) => setAddress(e.target.value)}
           />
           <label htmlFor="city">City</label>
           {errors.city && (
@@ -122,12 +152,39 @@ const CreateSpot = () => {
             placeholder="State"
             onChange={(e) => setState(e.target.value)}
           />
+          <label htmlFor="lat">Latitude</label>
+          {errors.lat && (
+            <div color="red" className="errors">
+              {errors.lat}
+            </div>
+          )}
+          <input
+            name="lat"
+            type="text"
+            value={lat}
+            placeholder="Latitude"
+            onChange={(e) => setLat(e.target.value)}
+          />
+          <label htmlFor="lng">Longitude</label>
+          {errors.lng && (
+            <div color="red" className="errors">
+              {errors.lng}
+            </div>
+          )}
+          <input
+            name="lng"
+            type="text"
+            value={lng}
+            placeholder="Longitude"
+            onChange={(e) => setLng(e.target.value)}
+          />
         </div>
         <div className="spot-description">
           <label htmlFor="description">Describe your place to guests</label>
           <h5>
-            Mention the best features of your space, and any special amenities
-            like fast wifi or parking and what you love about the neighborhood.
+            lng Mention the best features of your space, and any special
+            amenities like fast wifi or parking and what you love about the
+            neighborhood.
           </h5>
           <textarea
             name="spot-description"
