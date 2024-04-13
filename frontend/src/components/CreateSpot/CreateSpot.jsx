@@ -1,9 +1,11 @@
 // import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import "./CreateSpot.css";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { checkForErrors } from "./formValidation";
 
 const CreateSpot = () => {
+  const dispatch = useDispatch();
   //   const currUser = useSelector((state) => state.session.user);
   const [country, setCountry] = useState("");
   const [street, setStreet] = useState("");
@@ -11,7 +13,7 @@ const CreateSpot = () => {
   const [state, setState] = useState("");
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
@@ -54,6 +56,10 @@ const CreateSpot = () => {
     );
 
     setErrors(err);
+
+    if (Object.values(errors).length < 1) {
+      dispatch(createSpotThunk(spotData));
+    }
   };
   return (
     <div className="create-form">

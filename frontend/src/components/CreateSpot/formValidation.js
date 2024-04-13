@@ -35,45 +35,52 @@ export const checkForErrors = (
 
   if (image1) {
     const urlSplit = image1.split(".");
-
-    if (urlSplit[urlSplit.length - 1] !== ".png") {
-      err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpg") {
-      err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpeg") {
+    if (
+      urlSplit[urlSplit.length - 1] == "png" ||
+      urlSplit[urlSplit.length - 1] == "jpg" ||
+      urlSplit[urlSplit.length - 1] == "jpeg"
+    ) {
+      err.image1 = null;
+    } else {
       err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
     }
   }
+
   if (image2) {
     const urlSplit = image2.split(".");
-
-    if (urlSplit[urlSplit.length - 1] !== ".png") {
-      err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpg") {
-      err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpeg") {
+    if (
+      urlSplit[urlSplit.length - 1] == "png" ||
+      urlSplit[urlSplit.length - 1] == "jpg" ||
+      urlSplit[urlSplit.length - 1] == "jpeg"
+    ) {
+      err.image2 = null;
+    } else {
       err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
     }
   }
+
   if (image3) {
     const urlSplit = image3.split(".");
-
-    if (urlSplit[urlSplit.length - 1] !== ".png") {
-      err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpg") {
-      err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpeg") {
+    if (
+      urlSplit[urlSplit.length - 1] == "png" ||
+      urlSplit[urlSplit.length - 1] == "jpg" ||
+      urlSplit[urlSplit.length - 1] == "jpeg"
+    ) {
+      err.image3 = null;
+    } else {
       err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
     }
   }
+
   if (image4) {
     const urlSplit = image4.split(".");
-
-    if (urlSplit[urlSplit.length - 1] !== ".png") {
-      err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpg") {
-      err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
-    } else if (urlSplit[urlSplit.length - 1] !== ".jpeg") {
+    if (
+      urlSplit[urlSplit.length - 1] == "png" ||
+      urlSplit[urlSplit.length - 1] == "jpg" ||
+      urlSplit[urlSplit.length - 1] == "jpeg"
+    ) {
+      err.image4 = null;
+    } else {
       err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
     }
   }
