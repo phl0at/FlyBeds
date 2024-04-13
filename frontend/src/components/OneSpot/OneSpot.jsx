@@ -15,7 +15,7 @@ const OneSpot = () => {
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!Object.values(spotData).length) return <h2>Loading...</h2>;
+  if (!spotData[spotId]) return <h2>Loading...</h2>;
 
   let {
     [Number(spotId)]: {
@@ -32,13 +32,12 @@ const OneSpot = () => {
     },
   } = spotData;
 
+  if (!SpotImages) return <h2>Loading...</h2>;
+
   avgRating = avgRating.toString();
   if (avgRating.split(".").length < 2) {
     avgRating += ".0";
   }
-
-  // if SpotImages has length, set a boolean to true, iterate over each one, find the previewImage
-  // and set it to its own variable, then put the rest of the images into an array
 
   let hasImages = false;
   let mainImg = "";
@@ -72,7 +71,8 @@ const OneSpot = () => {
         <div className="price">{`$${price} night`}</div>
         <div className="rating-review">
           <IoStar />
-          {avgRating ? avgRating : "New"} * {`${numReviews} reviews`}
+          {avgRating ? avgRating : "New"} •{" "}
+          {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </div>
         <button onClick={() => alert("Feature coming soon!")}>Reserve</button>
       </div>
