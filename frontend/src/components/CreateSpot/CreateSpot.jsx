@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { checkForErrors } from "./formValidation";
 import { createSpotThunk } from "../../store/spots";
+import { useNavigate } from "react-router-dom";
 
 const CreateSpot = () => {
+  const navi = useNavigate()
   const dispatch = useDispatch();
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -23,26 +25,27 @@ const CreateSpot = () => {
   const [image4, setImage4] = useState("");
   const [errors, setErrors] = useState({});
 
-  // useEffect(() => {
-  //   errors.country ? setCountry("") : setCountry(country)
-  //   setAddress("");
-  //   setCity("");
-  //   setState("");
-  //   setLat("");
-  //   setLng("");
-  //   setDescription("");
-  //   setName("");
-  //   setPrice("");
-  //   setPreviewImage("");
-  //   setImage1("");
-  //   setImage2("");
-  //   setImage3("");
-  //   setImage4("");
-  //   setErrors({});
-  // }, []);
+  useEffect(() => {
+    setCountry("");
+    setAddress("");
+    setCity("");
+    setState("");
+    setLat("");
+    setLng("");
+    setDescription("");
+    setName("");
+    setPrice("");
+    setPreviewImage("");
+    setImage1("");
+    setImage2("");
+    setImage3("");
+    setImage4("");
+    setErrors({});
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     const err = checkForErrors(
       country,
       address,
@@ -59,9 +62,9 @@ const CreateSpot = () => {
       image3,
       image4
     );
-    if (Object.values(err).length) {
-      setErrors(err);
-    }
+
+    if (Object.values(err).length) setErrors(err);
+
     if (Object.values(errors).length < 1) {
       const spotData = {
         country,
@@ -75,9 +78,17 @@ const CreateSpot = () => {
         price: Number(price),
       };
 
-      const spotImages = [previewImage, image1, image2, image3, image4];
+      const spotImages = [
+        { url: previewImage, preview: true },
+        { url: image1, preview: false },
+        { url: image2, preview: false },
+        { url: image3, preview: false },
+        { url: image4, preview: false },
+      ];
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
+      console.log(newSpot)
+      navi(`/spot/${newSpot.id}`)
     }
   };
 
@@ -172,7 +183,7 @@ const CreateSpot = () => {
         <div className="spot-description">
           <label htmlFor="description">Describe your place to guests</label>
           <h5>
-            lng Mention the best features of your space, and any special
+            Mention the best features of your space, and any special
             amenities like fast wifi or parking and what you love about the
             neighborhood.
           </h5>

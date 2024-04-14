@@ -142,37 +142,23 @@ router.post(
   spotExists,
   spotOwner,
   async (req, res) => {
-    // REFACTOR TO TAKE AN ARRAY, ITERATE IT AND .CREATE FOR EACH ELEMENT
-    // const {
-    //   params: { spotId },
-    //   body: { url, preview },
-    // } = req;
     const {
       params: { spotId },
-      body: imageArr,
+      body,
     } = req;
+
     const resArr = [];
-    imageArr.forEach(async (img, i) => {
-      if (img) {
-        // await SpotImage.create({
-        //   spotId: Number(spotId),
-        //   url: img.url,
-        //   preview: (i = 0 ? true : false),
-        // });
-        resArr.push({
-          spotId: Number(spotId),
+
+    for (const img of body) {
+      if (img.url) {
+        const newImg = await SpotImage.create({
+          spotId,
           url: img.url,
-          preview: (i = 0 ? true : false),
+          preview: img.preview,
         });
+        resArr.push(newImg);
       }
-    });
-
-    // const newSpotImage = await SpotImage.create({
-    //   spotId,
-    //   url,
-    //   preview,
-    // });
-
+    }
     return res.json(resArr);
   }
 );
