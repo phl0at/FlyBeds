@@ -3,8 +3,7 @@ import "./CreateSpot.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { checkForErrors } from "./formValidation";
-import { addImageThunk, createSpotThunk } from "../../store/spots";
-import { isRouteErrorResponse } from "react-router-dom";
+import { createSpotThunk } from "../../store/spots";
 
 const CreateSpot = () => {
   const dispatch = useDispatch();
@@ -24,59 +23,26 @@ const CreateSpot = () => {
   const [image4, setImage4] = useState("");
   const [errors, setErrors] = useState({});
 
-  //   useEffect(() => {
-  //     setCountry("");
-  //     setAddress("");
-  //     setCity("");
-  //     setState("");
-  //     setLat("");
-  //     setLng("");
-  //     setDescription("");
-  //     setName("");
-  //     setPrice("");
-  //     setPreviewImage("");
-  //     setImage1("");
-  //     setImage2("");
-  //     setImage3("");
-  //     setImage4("");
-  //     setErrors({});
-  //   }, []);
-
-  useEffect(() => {
-    if (Object.values(errors).length < 1) {
-      const spotData = {
-        country,
-        address,
-        city,
-        lat: Number(lat),
-        lng: Number(lng),
-        state,
-        description,
-        name,
-        price: Number(price),
-      };
-
-
-
-
-      const dispatchReq = async () => {
-        const newSpot = await dispatch(createSpotThunk(spotData));
-
-        if (newSpot) {
-          const prevImg = {
-            url: previewImage,
-            preview: true,
-          };
-          const readyImg = JSON.stringify(prevImg);
-          dispatch(addImageThunk({ readyImg, spotId: newSpot.id }));
-        }
-      }
-    };
-  }, [errors]);
+  // useEffect(() => {
+  //   errors.country ? setCountry("") : setCountry(country)
+  //   setAddress("");
+  //   setCity("");
+  //   setState("");
+  //   setLat("");
+  //   setLng("");
+  //   setDescription("");
+  //   setName("");
+  //   setPrice("");
+  //   setPreviewImage("");
+  //   setImage1("");
+  //   setImage2("");
+  //   setImage3("");
+  //   setImage4("");
+  //   setErrors({});
+  // }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     const err = checkForErrors(
       country,
       address,
@@ -93,14 +59,9 @@ const CreateSpot = () => {
       image3,
       image4
     );
-
     if (Object.values(err).length) {
       setErrors(err);
     }
-    // REFACTOR TO SEND THIS ARRAY TO THE DB TO BE ITERATED AND CREATE SPOT IMAGES
-    const SpotImages = [previewImage, image1, image2, image3, image4];
-    console.log(Object.values(errors).length);
-
     if (Object.values(errors).length < 1) {
       const spotData = {
         country,
@@ -113,18 +74,13 @@ const CreateSpot = () => {
         name,
         price: Number(price),
       };
-      const newSpot = await dispatch(createSpotThunk(spotData));
 
-      if (newSpot) {
-        const prevImg = {
-          url: previewImage,
-          preview: true,
-        };
-        const readyImg = JSON.stringify(prevImg);
-        dispatch(addImageThunk({ readyImg, spotId: newSpot.id }));
-      }
+      const spotImages = [previewImage, image1, image2, image3, image4];
+
+      const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
     }
   };
+
   return (
     <div className="create-form">
       <h1>Create a new Spot</h1>

@@ -7,7 +7,7 @@ import { csrfFetch } from "./csrf";
 const GET_ALL_SPOTS = "spot/getAllSpots";
 const GET_ONE_SPOT = "spot/getOneSpot";
 const CREATE_SPOT = "spot/createSpot";
-const ADD_IMAGE = "spot/addImage";
+// const ADD_IMAGE = "spot/addImage";
 
 //! --------------------------------------------------------------------
 //*                         Action Creator
@@ -34,12 +34,12 @@ const createSpot = (payload) => {
   };
 };
 
-const addImage = (payload) => {
-  return {
-    type: ADD_IMAGE,
-    payload,
-  };
-};
+// const addImage = (payload) => {
+//   return {
+//     type: ADD_IMAGE,
+//     payload,
+//   };
+// };
 
 //! --------------------------------------------------------------------
 //*                       Thunk Action Creator
@@ -71,23 +71,34 @@ export const getOneSpotThunk = (spotId) => async (dispatch) => {
   }
 };
 
-export const createSpotThunk = (payload) => async (dispatch) => {
-
+export const createSpotThunk = (spotData, spotImages) => async (dispatch) => {
   try {
-    const res = await csrfFetch("/api/spots", {
+    const spotRes = await csrfFetch("/api/spots", {
       method: "POST",
       header: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(spotData),
     });
 
-    if (res.ok) {
-      const spotData = await res.json();
-      dispatch(createSpot(spotData));
-      return spotData;
+    if (spotRes.ok) {
+      const imgRes = await csrfFetch(`/api/spots/${spotRes.id}/images`, {
+        method: "POST",
+        header: {
+          "Content-Type": "application/json",
+        },
+        body: spotImages,
+      });
+      if (imgRes.ok) {
+        const spotData = await spotRes.json();
+        const imgData = await imgRes.json();
+        dispatch(createSpot({ spotData, imgData }));
+      } else {
+        const err = await imgRes.json();
+        return err;
+      }
     } else {
-      const err = await res.json();
+      const err = await spotRes.json();
       return err;
     }
   } catch (e) {
@@ -147,14 +158,14 @@ const spotReducer = (state = initialState, action) => {
       const newState = { ...state, [action.payload.id]: action.payload };
       return newState;
     }
-    case ADD_IMAGE: {
-      const newState = { ...state };
-      newState[action.payload.spotId] = {
-        ...newState[action.payload.spotId],
-        previewImage: action.payload.imageData.url,
-      };
-      return newState;
-    }
+    // case ADD_IMAGE: {
+    //   const newState = { ...state };
+    //   newState[action.payload.spotId] = {
+    //     ...newState[action.payload.spotId],
+    //     previewImage: action.payload.imageData.url,
+    //   };
+    //   return newState;
+    // }
     default:
       return state;
   }

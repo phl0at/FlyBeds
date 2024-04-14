@@ -26,18 +26,9 @@ export const checkForErrors = (
 
   if (!street) err.street = "Address is required";
 
-  if (!lat) {
-    err.lat = "Latitude is required";
-  }
-  // } else if (lat < -90 || lat > 90) {
-  //   err.lat = "Latitude must be within -90 and 90";
-  // }
+  if (!lat) err.lat = "Latitude is required";
 
-  if (!lng) {
-    err.lng = "Longitude is required";
-  } else if (lng < -180 || lng > 180) {
-    err.lng = "Longitude must be within -180 and 180";
-  }
+  if (!lng) err.lng = "Longitude is required";
 
   if (description.length < 30)
     err.description = "Description needs a minimum of 30 characters";
