@@ -1,4 +1,4 @@
-export const checkForErrors = (
+export const checkFrontEndErrors = (
   country,
   street,
   city,
@@ -92,4 +92,16 @@ export const checkForErrors = (
   }
 
   return err;
+};
+
+export const checkBackEndErrors = async (spot) => {
+  let err = {};
+  
+  if (spot.createdAt) {
+    return err;
+  } else {
+    const spotData = await spot.json();
+    err = { ...spotData.errors };
+    return err;
+  }
 };

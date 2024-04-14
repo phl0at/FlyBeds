@@ -14,29 +14,23 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
 
-
-  if (!reviewData.length) return <h2>Loading...</h2>;
-
   return (
     <>
       <header>
-        {numReviews === 0 && currUser.id !== currSpot.ownerId
-          ? "Be the first to post a review!"
-          : null}
-        {numReviews === 0 ? (
-          <h3>
-            <IoStar /> {avgRating ? avgRating : "New"}
-          </h3>
-        ) : (
-          <h3>
-            <IoStar /> {avgRating ? avgRating : "New"} •{" "}
-            {numReviews === 1
-              ? `${numReviews} Review`
-              : `${numReviews} Reviews`}
-          </h3>
-        )}
+        <h3>
+          <IoStar /> {avgRating ? avgRating : "New"} •{" "}
+          {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
+        </h3>
       </header>
+      
+      <div className="no-reviews">
+        {numReviews === 0 && currUser && currUser.id === currSpot.ownerId
+          ? "Nobody has reviewed your spot yet!"
+          : "Be the first to post a review!"}
+      </div>
+
       {reviewData.map(({ User, review, id, createdAt }) => {
+
         const date = new Date(createdAt).toLocaleDateString("en-us", {
           year: "numeric",
           month: "long",
@@ -45,9 +39,9 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
         return (
           <>
             <section key={id}>
-              <p>{User.firstName}</p>
-              <p>{date}</p>
-              <p>{review}</p>
+              <p key={User}>{User.firstName}</p>
+              <p key={date}>{date}</p>
+              <p key={review}>{review}</p>
             </section>
           </>
         );

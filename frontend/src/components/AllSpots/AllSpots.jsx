@@ -40,7 +40,7 @@ const AllSpots = () => {
                     <IoStar />
                     {avgRating ? avgRating : "New"}
                   </p>
-                  <p>{`${price} night`}</p>
+                  <p>{`$${price} / night`}</p>
                 </div>
               </NavLink>
             );

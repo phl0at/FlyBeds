@@ -69,7 +69,7 @@ const OneSpot = () => {
       <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>
       <p>{description}</p>
       <div className="info-box">
-        <div className="price">{`$${price} night`}</div>
+        <div className="price">{`$${price} / night`}</div>
         <div className="rating-review">
           <IoStar />
           {avgRating ? avgRating : "New"} •{" "}

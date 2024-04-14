@@ -2,12 +2,12 @@
 import "./CreateSpot.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { checkForErrors } from "./formValidation";
+import { checkBackEndErrors, checkFrontEndErrors } from "./formValidation";
 import { createSpotThunk } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 
 const CreateSpot = () => {
-  const navigateTo = useNavigate()
+  const navigateTo = useNavigate();
   const dispatch = useDispatch();
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -46,7 +46,7 @@ const CreateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const err = checkForErrors(
+    const frontEndErrors = checkFrontEndErrors(
       country,
       address,
       city,
@@ -63,9 +63,9 @@ const CreateSpot = () => {
       image4
     );
 
-    if (Object.values(err).length) setErrors(err);
-
-    if (Object.values(errors).length < 1) {
+    if (Object.values(frontEndErrors).length) {
+      setErrors(frontEndErrors);
+    } else {
       const spotData = {
         country,
         address,
@@ -87,7 +87,14 @@ const CreateSpot = () => {
       ];
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
-      if(newSpot) navigateTo(`/spot/${newSpot.id}`)
+
+      const backEndErrors = await checkBackEndErrors(newSpot);
+
+      if (Object.values(backEndErrors).length) {
+        setErrors(backEndErrors);
+      } else {
+        navigateTo(`/spot/${newSpot.id}`);
+      }
     }
   };
 
@@ -182,9 +189,8 @@ const CreateSpot = () => {
         <div className="spot-description">
           <label htmlFor="description">Describe your place to guests</label>
           <h5>
-            Mention the best features of your space, and any special
-            amenities like fast wifi or parking and what you love about the
-            neighborhood.
+            Mention the best features of your space, and any special amenities
+            like fast wifi or parking and what you love about the neighborhood.
           </h5>
           <textarea
             name="spot-description"
