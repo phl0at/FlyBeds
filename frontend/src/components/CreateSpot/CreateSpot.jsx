@@ -7,7 +7,7 @@ import { createSpotThunk } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 
 const CreateSpot = () => {
-  const navi = useNavigate()
+  const navigateTo = useNavigate()
   const dispatch = useDispatch();
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -87,8 +87,7 @@ const CreateSpot = () => {
       ];
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
-      console.log(newSpot)
-      navi(`/spot/${newSpot.id}`)
+      if(newSpot) navigateTo(`/spot/${newSpot.id}`)
     }
   };
 
