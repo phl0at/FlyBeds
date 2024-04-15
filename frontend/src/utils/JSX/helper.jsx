@@ -22,5 +22,20 @@ export const noReviews = (currUser, currSpot) => {
   }
 };
 
+export const postReviewButton = (ownerId, userId, reviews) => {
+  if (ownerId === userId) return null;
+  let reviewed = false;
+  // const onClick = () => {
 
+  // }
 
+  for (const review of reviews) {
+    if (userId === review.userId) reviewed = true;
+  }
+
+  if (reviewed) {
+    return null;
+  } else {
+    return <button className="review-button">Post a review</button>;
+  }
+};

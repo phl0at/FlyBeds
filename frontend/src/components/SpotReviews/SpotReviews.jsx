@@ -1,6 +1,6 @@
 import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
 import { sortReviews } from "../../utils/JS/helper";
-import { noReviews } from "../../utils/JSX/helper";
+import { noReviews, postReviewButton } from "../../utils/JSX/helper";
 import { useDispatch, useSelector } from "react-redux";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
@@ -12,7 +12,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const currSpot = useSelector((state) => state.spots[spotId]);
   const reviewData = useSelector(getReviewArray);
   const sortByCreatedAt = sortReviews(reviewData);
-
+  console.log("SPOT", currSpot);
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
@@ -25,9 +25,14 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </h3>
       </header>
+      <div className="post-review">
+        {currUser
+          ? postReviewButton(currSpot.Owner.id, currUser.id, reviewData)
+          : null}
+      </div>
 
       <div className="no-reviews">
-        {numReviews === 0 ? noReviews(currUser, currSpot) : null}
+        {numReviews === 0 ? noReviews(currSpot) : null}
       </div>
 
       {sortByCreatedAt.map(({ User: { firstName }, review, id, createdAt }) => {
