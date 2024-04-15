@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getAllSpotsThunk, getSpotArray } from "../../store/spots";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
+import { useEffect } from "react";
 import "./AllSpots.css";
 const AllSpots = () => {
   const dispatch = useDispatch();

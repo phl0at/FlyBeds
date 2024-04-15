@@ -1,5 +1,5 @@
-import { createSelector } from "reselect";
 import { csrfFetch } from "./csrf";
+import { createSelector } from "reselect";
 
 //! --------------------------------------------------------------------
 //*                          Action Types

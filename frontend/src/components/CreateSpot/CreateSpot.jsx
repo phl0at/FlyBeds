@@ -1,9 +1,9 @@
-import { textInput } from "../../utils/JSX/helper";
 import { checkForErrors } from "../../utils/JS/helper";
 import { createSpotThunk } from "../../store/spots";
+import { textInput } from "../../utils/JSX/helper";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./CreateSpot.css";
 
 const CreateSpot = () => {

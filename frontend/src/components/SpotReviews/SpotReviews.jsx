@@ -1,10 +1,10 @@
-import "./SpotReviews.css";
+import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
+import { sortReviews } from "../../utils/JS/helper";
+import { noReviews } from "../../utils/JSX/helper";
+import { useDispatch, useSelector } from "react-redux";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
-import { noReviews } from "../../utils/JSX/helper";
-import { sortReviews } from "../../utils/JS/helper";
+import "./SpotReviews.css";
 
 const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
         {numReviews === 0 ? noReviews(currUser, currSpot) : null}
       </div>
 
-      {sortByCreatedAt.map(({ User, review, id, createdAt }) => {
+      {sortByCreatedAt.map(({ User: { firstName }, review, id, createdAt }) => {
         const date = new Date(createdAt).toLocaleDateString("en-us", {
           year: "numeric",
           month: "long",
@@ -39,7 +39,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
         return (
           <>
             <section key={id}>
-              <p key={User}>{User.firstName}</p>
+              <p key={firstName}>{firstName}</p>
               <p key={date}>{date}</p>
               <p key={review}>{review}</p>
             </section>

@@ -1,10 +1,10 @@
-import "./OneSpot.css";
-import { IoStar } from "react-icons/io5";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOneSpotThunk } from "../../store/spots";
 import SpotReviews from "../SpotReviews/SpotReviews";
+import { getOneSpotThunk } from "../../store/spots";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { IoStar } from "react-icons/io5";
+import { useEffect } from "react";
+import "./OneSpot.css";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
