@@ -5,8 +5,8 @@ import { csrfFetch } from "./csrf";
 //*                          Action Types
 //! --------------------------------------------------------------------
 
-const GET_ALL_REVIEWS = "spot/getAllReviews";
-// const GET_ONE_REVIEW = "spot/getOneReview";
+const GET_ALL_REVIEWS = "review/getAll";
+// const GET_ONE_REVIEW = "review/getOne";
 
 //! --------------------------------------------------------------------
 //*                         Action Creator
@@ -75,7 +75,9 @@ const reviewReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_REVIEWS: {
       const newState = {};
-      action.payload.Reviews.forEach((review) => (newState[review.id] = review));
+      action.payload.Reviews.forEach(
+        (review) => (newState[review.id] = review)
+      );
       return newState;
     }
     // case GET_ONE_REVIEW: {

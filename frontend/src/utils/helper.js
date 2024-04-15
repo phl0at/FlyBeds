@@ -1,6 +1,6 @@
-export const checkFrontEndErrors = (
+export const checkForErrors = async (
   country,
-  street,
+  address,
   city,
   state,
   lat,
@@ -12,19 +12,20 @@ export const checkFrontEndErrors = (
   image1,
   image2,
   image3,
-  image4
+  image4,
+  spot
 ) => {
-  const err = {};
+  let err = {};
+
+  if (spot.createdAt) return err;
 
   if (!country) err.country = "Country is required";
 
-  if (!street) err.street = "Address is required";
+  if (!address) err.address = "Address is required";
 
   if (!city) err.city = "City is required";
 
   if (!state) err.state = "State is required";
-
-  if (!street) err.street = "Address is required";
 
   if (!lat) err.lat = "Latitude is required";
 
@@ -91,17 +92,8 @@ export const checkFrontEndErrors = (
     }
   }
 
-  return err;
-};
+  const spotData = await spot.json();
+  err = { ...spotData.errors, ...err };
 
-export const checkBackEndErrors = async (spot) => {
-  let err = {};
-  
-  if (spot.createdAt) {
-    return err;
-  } else {
-    const spotData = await spot.json();
-    err = { ...spotData.errors };
-    return err;
-  }
+  return err;
 };

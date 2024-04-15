@@ -1,12 +1,13 @@
-// import { useSelector } from "react-redux";
-import "./CreateSpot.css";
+import { checkForErrors } from "../../utils/helper.js";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { checkBackEndErrors, checkFrontEndErrors } from "./formValidation";
 import { createSpotThunk } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
+import { textInput } from "../../utils/helper.jsx";
+import "./CreateSpot.css";
 
 const CreateSpot = () => {
+  const loggedIn = useSelector((state) => state.session.user);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
   const [country, setCountry] = useState("");
@@ -43,43 +44,11 @@ const CreateSpot = () => {
     setErrors({});
   }, []);
 
-  const textInput = (value, placeholder, setter) => {
-    return (
-      <input
-        type="text"
-        value={value}
-        name={placeholder}
-        placeholder={placeholder}
-        onChange={(e) => {
-          setter(e.target.value);
-        }}
-      />
-    );
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const frontEndErrors = checkFrontEndErrors(
-      country,
-      address,
-      city,
-      state,
-      lat,
-      lng,
-      description,
-      name,
-      price,
-      previewImage,
-      image1,
-      image2,
-      image3,
-      image4
-    );
+    if (loggedIn) {
 
-    if (Object.values(frontEndErrors).length) {
-      setErrors(frontEndErrors);
-    } else {
       const spotData = {
         country,
         address,
@@ -102,13 +71,29 @@ const CreateSpot = () => {
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
 
-      const backEndErrors = await checkBackEndErrors(newSpot);
+      const returnedErrors = await checkForErrors(
+        country,
+        address,
+        city,
+        state,
+        lat,
+        lng,
+        description,
+        name,
+        price,
+        previewImage,
+        image1,
+        image2,
+        image3,
+        image4,
+        newSpot
+      );
 
-      if (Object.values(backEndErrors).length) {
-        setErrors(backEndErrors);
-      } else {
-        navigateTo(`/spot/${newSpot.id}`);
-      }
+      Object.values(returnedErrors).length
+        ? setErrors(returnedErrors)
+        : navigateTo(`/spot/${newSpot.id}`);
+    } else {
+      return alert("You must be signed in to create a spot!");
     }
   };
 
@@ -137,9 +122,9 @@ const CreateSpot = () => {
           //!-------------------------------------------------------------------
           */}
           <label htmlFor="Address">Street Address</label>
-          {errors.street && (
+          {errors.address && (
             <div color="red" className="errors">
-              {errors.street}
+              {errors.address}
             </div>
           )}
           {textInput(address, "Address", setAddress)}

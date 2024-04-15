@@ -4,9 +4,10 @@ import { csrfFetch } from "./csrf";
 //! --------------------------------------------------------------------
 //*                          Action Types
 //! --------------------------------------------------------------------
-const GET_ALL_SPOTS = "spot/getAllSpots";
-const GET_ONE_SPOT = "spot/getOneSpot";
-const CREATE_SPOT = "spot/createSpot";
+
+const GET_ALL_SPOTS = "spot/getAll";
+const GET_ONE_SPOT = "spot/getOne";
+const CREATE_SPOT = "spot/create";
 
 //! --------------------------------------------------------------------
 //*                         Action Creator
