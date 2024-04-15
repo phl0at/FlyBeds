@@ -1,9 +1,9 @@
-import { checkForErrors } from "../../utils/helper.js";
+import { textInput } from "../../utils/JSX/helper";
+import { checkForErrors } from "../../utils/JS/helper";
+import { createSpotThunk } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { createSpotThunk } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
-import { textInput } from "../../utils/helper.jsx";
 import "./CreateSpot.css";
 
 const CreateSpot = () => {
@@ -48,7 +48,6 @@ const CreateSpot = () => {
     e.preventDefault();
 
     if (loggedIn) {
-
       const spotData = {
         country,
         address,

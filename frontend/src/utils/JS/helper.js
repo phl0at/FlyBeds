@@ -1,3 +1,17 @@
+export const sortReviews = (reviews) => {
+  if (reviews.length <= 1) return reviews;
+
+  const pivot = reviews[reviews.length - 1]
+  const left = []
+  const right = []
+
+  for(const review of reviews.slice(0, reviews.length - 1)){
+    review.createdAt > pivot.createdAt ? left.push(review) : right.push(review)
+  }
+
+  return [...sortReviews(left), pivot, ...sortReviews(right)]
+};
+
 export const checkForErrors = async (
   country,
   address,

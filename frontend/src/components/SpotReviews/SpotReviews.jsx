@@ -3,12 +3,15 @@ import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
+import { noReviews } from "../../utils/JSX/helper";
+import { sortReviews } from "../../utils/JS/helper";
 
 const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const dispatch = useDispatch();
   const currUser = useSelector((state) => state.session.user);
   const currSpot = useSelector((state) => state.spots[spotId]);
   const reviewData = useSelector(getReviewArray);
+  const sortByCreatedAt = sortReviews(reviewData);
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
@@ -22,15 +25,12 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </h3>
       </header>
-      
+
       <div className="no-reviews">
-        {numReviews === 0 && currUser && currUser.id === currSpot.ownerId
-          ? "Nobody has reviewed your spot yet!"
-          : "Be the first to post a review!"}
+        {numReviews === 0 ? noReviews(currUser, currSpot) : null}
       </div>
 
-      {reviewData.map(({ User, review, id, createdAt }) => {
-
+      {sortByCreatedAt.map(({ User, review, id, createdAt }) => {
         const date = new Date(createdAt).toLocaleDateString("en-us", {
           year: "numeric",
           month: "long",
