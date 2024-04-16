@@ -13,7 +13,7 @@ const OneSpot = () => {
 
   useEffect(() => {
     dispatch(getOneSpotThunk(spotId));
-  }, [dispatch, spotId]);
+  }, [dispatch, spotId, spotData]);
 
   if (!spotData[spotId]) return <h2>Loading...</h2>;
 
