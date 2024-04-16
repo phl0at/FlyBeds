@@ -13,7 +13,7 @@ const OneSpot = () => {
   const { spotId } = useParams();
   const spotReviews = useSelector(getReviewArray);
   const spotData = useSelector((state) => state.spots);
-  let { avgRating, numReviews } = calculateAvg(spotReviews);
+  const { avgRating, numReviews } = calculateAvg(spotReviews);
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
