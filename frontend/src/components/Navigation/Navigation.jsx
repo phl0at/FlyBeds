@@ -5,17 +5,22 @@ import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-
   return (
     <>
       <div className="home-button">
-        <NavLink to="/">Home</NavLink>
+        <button>
+          <NavLink to="/">Home</NavLink>
+        </button>
       </div>
       <div className="profile-button">
         {isLoaded && <ProfileButton user={sessionUser} />}
       </div>
       <div className="create-button">
-        {sessionUser && <NavLink to="/spot/new">Create a Spot</NavLink>}
+        {sessionUser && (
+          <button>
+            <NavLink to="/spot/new">Create a Spot</NavLink>
+          </button>
+        )}
       </div>
     </>
   );

@@ -12,7 +12,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const currSpot = useSelector((state) => state.spots[spotId]);
   const reviewData = useSelector(getReviewArray);
   const sortByCreatedAt = sortReviews(reviewData);
-
+  console.log(currSpot)
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
@@ -27,7 +27,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
       </header>
       <div className="post-review">
         {currUser
-          ? postReviewButton(currSpot.Owner.id, currUser.id, reviewData)
+          ? postReviewButton(spotId, currSpot.Owner.id, currUser.id, reviewData)
           : null}
       </div>
 
@@ -35,22 +35,24 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
         {numReviews === 0 ? noReviews(currSpot) : null}
       </div>
 
-      {sortByCreatedAt.map(({ User: { firstName }, review, id, createdAt }) => {
-        const date = new Date(createdAt).toLocaleDateString("en-us", {
-          year: "numeric",
-          month: "long",
-        });
+      {sortByCreatedAt?.map(
+        ({ User: { firstName }, review, id, createdAt }) => {
+          const date = new Date(createdAt).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "long",
+          });
 
-        return (
-          <>
-            <section key={id}>
-              <p key={firstName}>{firstName}</p>
-              <p key={date}>{date}</p>
-              <p key={review}>{review}</p>
-            </section>
-          </>
-        );
-      })}
+          return (
+            <>
+              <section key={id}>
+                <p key={firstName}>{firstName}</p>
+                <p key={date}>{date}</p>
+                <p key={review}>{review}</p>
+              </section>
+            </>
+          );
+        }
+      )}
     </>
   );
 };

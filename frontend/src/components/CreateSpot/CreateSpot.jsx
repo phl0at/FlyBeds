@@ -1,4 +1,4 @@
-import { checkForErrors } from "../../utils/JS/helper";
+import { checkSpotErrors } from "../../utils/JS/helper";
 import { createSpotThunk } from "../../store/spots";
 import { textInput } from "../../utils/JSX/helper";
 import { useDispatch, useSelector } from "react-redux";
@@ -70,7 +70,7 @@ const CreateSpot = () => {
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
 
-      const returnedErrors = await checkForErrors(
+      const err = await checkSpotErrors(
         country,
         address,
         city,
@@ -88,10 +88,12 @@ const CreateSpot = () => {
         newSpot
       );
 
-      Object.values(returnedErrors).length
-        ? setErrors(returnedErrors)
+      Object.values(err).length
+        ? setErrors(err)
         : navigateTo(`/spot/${newSpot.id}`);
+
     } else {
+
       return alert("You must be signed in to create a spot!");
     }
   };
