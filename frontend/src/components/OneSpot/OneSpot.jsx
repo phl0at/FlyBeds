@@ -5,18 +5,29 @@ import { useParams } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./OneSpot.css";
+import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const spotData = useSelector((state) => state.spots);
+  const spotReviews = useSelector(getReviewArray);
+  const numReviews = spotReviews.length;
 
   useEffect(() => {
+    dispatch(getAllReviewsThunk(spotId));
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!spotData[spotId]) return <h2>Loading...</h2>;
+  let sum = 0;
+  for (const review of spotReviews) {
+    sum += review.stars;
+  }
 
+  let avgRating = (sum / numReviews).toFixed(1).toString();
+  if (avgRating.split(".").length < 2) avgRating += ".0";
+  
+  if (!spotData[spotId]) return <h2>Loading...</h2>;
 
   let {
     [Number(spotId)]: {
@@ -25,21 +36,13 @@ const OneSpot = () => {
       state,
       country,
       price,
-      numReviews,
       SpotImages,
       Owner,
-      avgRating,
       description,
     },
   } = spotData;
 
   if (!SpotImages) return <h2>Loading...</h2>;
-  if (avgRating) {
-    avgRating = avgRating.toString();
-    if (avgRating.split(".").length < 2) {
-      avgRating += ".0";
-    }
-  }
 
   let hasImages = false;
   let mainImg = "";

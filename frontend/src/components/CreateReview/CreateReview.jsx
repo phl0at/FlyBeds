@@ -2,12 +2,13 @@ import { checkReviewErrors } from "../../utils/JS/helper";
 import { createReviewThunk } from "../../store/reviews";
 import { useModal } from "../../context/Modal";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { GiBed } from "react-icons/gi";
 import "./CreateReview.css";
 
 const CreateReview = ({ spotId }) => {
   const dispatch = useDispatch();
+  const currUser = useSelector((state) => state.session.user);
   const [review, setReview] = useState("");
   const [stars, setStars] = useState(0);
   const [enabled, setEnabled] = useState(true);
@@ -25,7 +26,7 @@ const CreateReview = ({ spotId }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(createReviewThunk(review, stars, spotId));
+    await dispatch(createReviewThunk(review, stars, spotId, currUser));
     closeModal();
   };
 

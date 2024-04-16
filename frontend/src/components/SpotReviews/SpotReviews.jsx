@@ -32,7 +32,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
       </div>
 
       <div className="no-reviews">
-        {numReviews === 0 ? noReviews(currSpot) : null}
+        {numReviews === 0 ? noReviews(currUser, currSpot) : null}
       </div>
 
       {sortByCreatedAt?.map(

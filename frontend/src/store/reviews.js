@@ -67,7 +67,7 @@ export const getOneReviewThunk = (userId, spotId) => async (dispatch) => {
 };
 
 export const createReviewThunk =
-  (review, stars, spotId) => async (dispatch) => {
+  (review, stars, spotId, currUser) => async (dispatch) => {
     try {
       const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: "POST",
@@ -79,21 +79,9 @@ export const createReviewThunk =
 
       if (res.ok) {
         const reviewData = await res.json();
-        const allReviews = await csrfFetch(`/api/spots/${spotId}/reviews`);
-
-        if (allReviews.ok) {
-          const reviewArr = await allReviews.json();
-
-          for (const review of reviewArr.Reviews) {
-            if (review.id === reviewData.id) {
-              dispatch(createReview(review));
-              return review;
-            }
-          }
-        } else {
-          const err = await allReviews.json();
-          return err;
-        }
+        reviewData.User = currUser;
+        dispatch(createReview(reviewData));
+        return reviewData
       } else {
         const err = await res.json();
         return err;
