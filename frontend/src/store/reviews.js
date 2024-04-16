@@ -7,7 +7,7 @@ import { createSelector } from "reselect";
 
 const GET_ALL_REVIEWS = "review/getAll";
 // const GET_ONE_REVIEW = "review/getOne";
-
+const CREATE_REVIEW = "review/create";
 //! --------------------------------------------------------------------
 //*                         Action Creator
 //! --------------------------------------------------------------------
@@ -25,6 +25,13 @@ const getAllReviews = (payload) => {
 //     payload,
 //   };
 // };
+
+const createReview = (payload) => {
+  return {
+    type: CREATE_REVIEW,
+    payload,
+  };
+};
 
 //! --------------------------------------------------------------------
 //*                       Thunk Action Creator
@@ -56,6 +63,30 @@ export const getAllReviewsThunk = (spotId) => async (dispatch) => {
 //   }
 // };
 
+export const createReviewThunk =
+  (review, stars, spotId) => async (dispatch) => {
+    try {
+      const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        header: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ review, stars }),
+      });
+
+      if (res.ok) {
+        const reviewData = await res.json();
+        dispatch(createReview(reviewData));
+        return reviewData;
+      } else {
+        const err = await res.json();
+        return err;
+      }
+    } catch (e) {
+      return e;
+    }
+  };
+
 //! --------------------------------------------------------------------
 //*                            Selectors
 //! --------------------------------------------------------------------
@@ -84,6 +115,10 @@ const reviewReducer = (state = initialState, action) => {
     //   const newState = {...state, [action.payload.id]: action.payload}
     //   return newState;
     // }
+    case CREATE_REVIEW: {
+      const newState = { ...state, [action.payload.id]: action.payload };
+      return newState;
+    }
     default:
       return state;
   }

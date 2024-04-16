@@ -1,3 +1,6 @@
+import CreateReview from "../../components/CreateReview/CreateReview";
+import OpenModalMenuItem from "../../components/Navigation/OpenModalMenuItem";
+
 export const textInput = (value, placeholder, setter) => {
   return (
     <input
@@ -22,20 +25,19 @@ export const noReviews = (currUser, currSpot) => {
   }
 };
 
-export const postReviewButton = (ownerId, userId, reviews) => {
-  if (ownerId === userId) return null;
-  let reviewed = false;
-  // const onClick = () => {
+export const postReviewButton = (spotId, ownerId, userId, reviews) => {
 
-  // }
+  if (ownerId === userId) return null;
+
 
   for (const review of reviews) {
-    if (userId === review.userId) reviewed = true;
+    if (userId === review.userId) return null;
   }
 
-  if (reviewed) {
-    return null;
-  } else {
-    return <button className="review-button">Post a review</button>;
-  }
+  return (
+    <OpenModalMenuItem
+      itemText="Post Your Review"
+      modalComponent={<CreateReview spotId={spotId} />}
+      />
+  );
 };
