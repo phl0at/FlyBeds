@@ -1,17 +1,19 @@
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import homeLogo from "../../../../images/Home_Logo.png";
 import "./Navigation.css";
-
+console.log(homeLogo);
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
   return (
     <>
-      <div className="home-button">
-        <button>
-          <NavLink to="/">Home</NavLink>
-        </button>
-      </div>
+
+        <NavLink to="/">
+          {<img className="home-logo" width="70px" src={homeLogo} />}
+        </NavLink>
+
+
       <div className="profile-button">
         {isLoaded && <ProfileButton user={sessionUser} />}
       </div>

@@ -1,3 +1,6 @@
 .hidden {
     display: none
 }
+.home-logo {
+    border-radius: 20px;
+}

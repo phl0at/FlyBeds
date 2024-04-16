@@ -20,9 +20,7 @@ const OneSpot = () => {
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!spotData[spotId]) return <h2>Loading...</h2>;
-
-  let {
+  const {
     [Number(spotId)]: {
       name,
       city,
@@ -35,7 +33,8 @@ const OneSpot = () => {
     },
   } = spotData;
 
-  if (!SpotImages) return <h2>Loading...</h2>;
+  if (!spotData[spotId] || !SpotImages)
+    return <h2>{`Loading details about Spot #${spotId}...`}</h2>;
 
   const { hasImages, mainImg, otherImg } = sortImages(SpotImages);
 
@@ -45,9 +44,12 @@ const OneSpot = () => {
       <h2>{`${city}, ${state}, ${country}`}</h2>
       <div className="images">
         {!hasImages && <div>No images</div>}
-        <div className="main-image">{hasImages && <img src={mainImg} />}</div>
-        <div className="other-images">
-          {hasImages && otherImg.map((img, i) => <img key={i} src={img} />)}
+        <div className="main-img">{hasImages && <img src={mainImg} />}</div>
+        <div className="other-img">
+          {hasImages &&
+            otherImg.map((img, i) => (
+              <img className="single-img" key={i} src={img} />
+            ))}
         </div>
       </div>
       <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>

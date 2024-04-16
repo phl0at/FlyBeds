@@ -22,7 +22,7 @@ export const calculateAvg = (arr) => {
   let sum = 0;
   let numReviews = arr.length;
 
-  for (const review of arr) {
+  for (let review of arr) {
     sum += review.stars;
   }
 

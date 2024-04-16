@@ -12,12 +12,14 @@ const CreateReview = ({ spotId }) => {
   const [review, setReview] = useState("");
   const [stars, setStars] = useState(0);
   const [enabled, setEnabled] = useState(true);
+  const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
   useEffect(() => {
     setReview("");
     setStars(0);
     setEnabled(true);
+    setErrors({});
   }, []);
 
   useEffect(() => {
@@ -26,13 +28,27 @@ const CreateReview = ({ spotId }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(createReviewThunk(review, stars, spotId, currUser));
-    closeModal();
+
+    const res = await dispatch(
+      createReviewThunk(review, stars, spotId, currUser)
+    );
+    
+    if (res.ok) {
+      closeModal();
+    } else {
+      const { errors } = await res.json();
+      setErrors(errors);
+    }
   };
 
   return (
     <div className="review-form">
       <h2>Post Your Review</h2>
+      <div color="red" className="errors">
+        {Object.values(errors).length && errors.stars
+          ? errors.stars
+          : errors.review}
+      </div>
       <form onSubmit={onSubmit}>
         <label htmlFor="Review">How was your stay?</label>
         <textarea
