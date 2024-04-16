@@ -1,3 +1,4 @@
+import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
 import SpotReviews from "../SpotReviews/SpotReviews";
 import { getOneSpotThunk } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./OneSpot.css";
-import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const OneSpot = () => {
 
   let avgRating = (sum / numReviews).toFixed(1).toString();
   if (avgRating.split(".").length < 2) avgRating += ".0";
-  
+
   if (!spotData[spotId]) return <h2>Loading...</h2>;
 
   let {
@@ -83,6 +83,7 @@ const OneSpot = () => {
       </div>
       <div className="reviews">
         <SpotReviews
+          reviewData={spotReviews}
           spotId={spotId}
           avgRating={avgRating}
           numReviews={numReviews}

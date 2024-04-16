@@ -34,7 +34,7 @@ const AllSpots = () => {
                 <img src={previewImage} />
                 <div className="spot-info">
                   <p>
-                    {city} {state}
+                    {city}, {state}
                   </p>
                   <p>
                     <IoStar />

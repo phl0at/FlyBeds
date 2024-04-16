@@ -20,16 +20,16 @@ section {
 }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
+.tooltiptext {
   position: absolute;
   visibility: hidden;
-  width: 120px;
-  height: 12px;
-  background-color: black;
-  color: white;
+  width: 100px;
+  height: 20px;
+  background-color: rgb(42, 79, 122);
+  color: rgb(96, 153, 164);
   text-align: center;
   padding: 5px;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
