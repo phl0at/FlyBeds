@@ -1,13 +1,13 @@
 /* TODO: Add sitewide styles */
 body {
     background-color: rgb(11, 11, 24);
-    color: rgb(96, 153, 164);
+    color: rgb(176, 199, 247);
     text-decoration: none;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 }
 a {
-    color: rgb(96, 153, 164);
+    color: rgb(176, 199, 247);
     text-decoration: none;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -18,7 +18,7 @@ button {
     border-radius: 20px;
 }
 ul {
-    color: rgb(96, 153, 164);
+    color: rgb(176, 199, 247);
     text-decoration: none;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }

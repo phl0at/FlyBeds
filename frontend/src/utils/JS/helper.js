@@ -12,6 +12,21 @@ export const sortReviews = (reviews) => {
   return [...sortReviews(left), pivot, ...sortReviews(right)];
 };
 
+export const calculateAvg = (arr) => {
+  let sum = 0;
+  let numReviews = arr.length;
+
+  for (const review of arr) {
+    sum += review.stars;
+  }
+
+  let avgRating = (sum / numReviews).toFixed(1).toString();
+  
+  if (avgRating.split(".").length < 2) avgRating += ".0";
+
+  return { avgRating, numReviews };
+};
+
 export const checkReviewErrors = (review, rating) => {
   if (review.length < 10 || rating < 1) {
     return false;

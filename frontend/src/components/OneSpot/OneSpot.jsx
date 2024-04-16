@@ -6,26 +6,19 @@ import { useParams } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./OneSpot.css";
+import { calculateAvg } from "../../utils/JS/helper";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const spotData = useSelector((state) => state.spots);
   const spotReviews = useSelector(getReviewArray);
-  const numReviews = spotReviews.length;
+  let { avgRating, numReviews } = calculateAvg(spotReviews);
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
-
-  let sum = 0;
-  for (const review of spotReviews) {
-    sum += review.stars;
-  }
-
-  let avgRating = (sum / numReviews).toFixed(1).toString();
-  if (avgRating.split(".").length < 2) avgRating += ".0";
 
   if (!spotData[spotId]) return <h2>Loading...</h2>;
 
