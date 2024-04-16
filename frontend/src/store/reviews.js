@@ -74,10 +74,13 @@ export const createReviewThunk =
         body: JSON.stringify({ review, stars }),
       });
 
+      const allReviews = await csrfFetch(`/api/spots/${spotId}/reviews`)
+
       if (res.ok) {
         const reviewData = await res.json();
-        dispatch(createReview(reviewData));
-        return reviewData;
+        const newReview = allReviews[allReviews.indexOf(reviewData)]
+        dispatch(createReview(newReview));
+        return allReviews;
       } else {
         const err = await res.json();
         return err;

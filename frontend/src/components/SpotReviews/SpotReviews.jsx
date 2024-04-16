@@ -12,9 +12,6 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const currSpot = useSelector((state) => state.spots[spotId]);
   const reviewData = useSelector(getReviewArray);
   const sortByCreatedAt = sortReviews(reviewData);
-useEffect(()=>{
-  dispatch(getAllReviewsThunk(spotId))
-}, [spotId, reviewData])
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
@@ -38,22 +35,24 @@ useEffect(()=>{
         {numReviews === 0 ? noReviews(currSpot) : null}
       </div>
 
-      {sortByCreatedAt?.map(({ User: { firstName }, review, id, createdAt }) => {
-        const date = new Date(createdAt).toLocaleDateString("en-us", {
-          year: "numeric",
-          month: "long",
-        });
+      {sortByCreatedAt?.map(
+        ({ User: { firstName }, review, id, createdAt }) => {
+          const date = new Date(createdAt).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "long",
+          });
 
-        return (
-          <>
-            <section key={id}>
-              <p key={firstName}>{firstName}</p>
-              <p key={date}>{date}</p>
-              <p key={review}>{review}</p>
-            </section>
-          </>
-        );
-      })}
+          return (
+            <>
+              <section key={id}>
+                <p key={firstName}>{firstName}</p>
+                <p key={date}>{date}</p>
+                <p key={review}>{review}</p>
+              </section>
+            </>
+          );
+        }
+      )}
     </>
   );
 };

@@ -26,6 +26,8 @@ const CreateReview = ({ spotId }) => {
     e.preventDefault();
 
     const reviewRes = await dispatch(createReviewThunk(review, stars, spotId));
+    const reviewsArr = await reviewRes.json()
+
   };
 
   return (
