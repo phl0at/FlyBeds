@@ -12,7 +12,7 @@ const SpotReviews = ({ spotId, avgRating, numReviews }) => {
   const currSpot = useSelector((state) => state.spots[spotId]);
   const reviewData = useSelector(getReviewArray);
   const sortByCreatedAt = sortReviews(reviewData);
-
+  console.log(currSpot)
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);

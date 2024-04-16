@@ -6,10 +6,11 @@ import { createSelector } from "reselect";
 //! --------------------------------------------------------------------
 
 const GET_ALL_REVIEWS = "review/getAll";
-// const GET_ONE_REVIEW = "review/getOne";
+const GET_ONE_REVIEW = "review/getOne";
 const CREATE_REVIEW = "review/create";
+
 //! --------------------------------------------------------------------
-//*                         Action Creator
+//*                           Action Creator
 //! --------------------------------------------------------------------
 
 const getAllReviews = (payload) => {
@@ -19,12 +20,12 @@ const getAllReviews = (payload) => {
   };
 };
 
-// const getOneReview = (payload) => {
-//   return {
-//     type: GET_ONE_REVIEW,
-//     payload,
-//   };
-// };
+const getOneReview = (payload) => {
+  return {
+    type: GET_ONE_REVIEW,
+    payload,
+  };
+};
 
 const createReview = (payload) => {
   return {
@@ -50,18 +51,20 @@ export const getAllReviewsThunk = (spotId) => async (dispatch) => {
   }
 };
 
-// export const getOneReviewThunk = (spotId) => async (dispatch) => {
-//   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+export const getOneReviewThunk = (userId, spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
-//   if (res.ok) {
-//     const reviewData = await res.json();
-//     dispatch(getOneReview(reviewData));
-//     return reviewData;
-//   } else {
-//     const err = await res.json();
-//     return err;
-//   }
-// };
+  if (res.ok) {
+    const reviewData = await res.json();
+    for (const review of reviewData.Reviews) {
+      if (userId === review.userId) dispatch(getOneReview(review));
+      return review;
+    }
+  } else {
+    const err = await res.json();
+    return err;
+  }
+};
 
 export const createReviewThunk =
   (review, stars, spotId) => async (dispatch) => {
@@ -74,13 +77,23 @@ export const createReviewThunk =
         body: JSON.stringify({ review, stars }),
       });
 
-      const allReviews = await csrfFetch(`/api/spots/${spotId}/reviews`)
-
       if (res.ok) {
         const reviewData = await res.json();
-        const newReview = allReviews[allReviews.indexOf(reviewData)]
-        dispatch(createReview(newReview));
-        return allReviews;
+        const allReviews = await csrfFetch(`/api/spots/${spotId}/reviews`);
+
+        if (allReviews.ok) {
+          const reviewArr = await allReviews.json();
+
+          for (const review of reviewArr.Reviews) {
+            if (review.id === reviewData.id) {
+              dispatch(createReview(review));
+              return review;
+            }
+          }
+        } else {
+          const err = await allReviews.json();
+          return err;
+        }
       } else {
         const err = await res.json();
         return err;
@@ -114,10 +127,12 @@ const reviewReducer = (state = initialState, action) => {
       );
       return newState;
     }
-    // case GET_ONE_REVIEW: {
-    //   const newState = {...state, [action.payload.id]: action.payload}
-    //   return newState;
-    // }
+
+    case GET_ONE_REVIEW: {
+      const newState = { ...state, [action.payload.id]: action.payload };
+      return newState;
+    }
+
     case CREATE_REVIEW: {
       const newState = { ...state, [action.payload.id]: action.payload };
       return newState;

@@ -17,6 +17,7 @@ const OneSpot = () => {
 
   if (!spotData[spotId]) return <h2>Loading...</h2>;
 
+
   let {
     [Number(spotId)]: {
       name,
