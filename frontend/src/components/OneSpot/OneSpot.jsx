@@ -1,4 +1,5 @@
 import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
+import { calculateAvg, sortImages } from "../../utils/JS/helper";
 import SpotReviews from "../SpotReviews/SpotReviews";
 import { getOneSpotThunk } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,13 +7,12 @@ import { useParams } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./OneSpot.css";
-import { calculateAvg } from "../../utils/JS/helper";
 
 const OneSpot = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
-  const spotData = useSelector((state) => state.spots);
   const spotReviews = useSelector(getReviewArray);
+  const spotData = useSelector((state) => state.spots);
   let { avgRating, numReviews } = calculateAvg(spotReviews);
 
   useEffect(() => {
@@ -37,20 +37,7 @@ const OneSpot = () => {
 
   if (!SpotImages) return <h2>Loading...</h2>;
 
-  let hasImages = false;
-  let mainImg = "";
-  const otherImg = [];
-
-  if (SpotImages.length) {
-    hasImages = true;
-    SpotImages.forEach((img) => {
-      if (img.preview) {
-        mainImg = img.url;
-      } else {
-        otherImg.push(img.url);
-      }
-    });
-  }
+  const { hasImages, mainImg, otherImg } = sortImages(SpotImages);
 
   return (
     <>
