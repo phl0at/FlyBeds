@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import homeLogo from "../../../../images/Home_Logo.png";
 import "./Navigation.css";
-console.log(homeLogo);
+
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
   return (
