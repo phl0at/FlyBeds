@@ -3,6 +3,7 @@ import Navigation from "./components/Navigation";
 import CreateSpot from "./components/CreateSpot";
 import AllSpots from "./components/AllSpots";
 import OneSpot from "./components/OneSpot";
+import ManageSpots from "./components/ManageSpots";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: "new",
             element: <CreateSpot />,
+          },
+          {
+            path: "user/:userId",
+            element: <ManageSpots />,
           },
         ],
       },

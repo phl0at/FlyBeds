@@ -22,6 +22,7 @@ button {
   border-radius: 20px;
   color: rgb(40, 50, 76);
   font-weight: bold;
+  margin: 5px;
 }
 
 ul {
@@ -38,8 +39,8 @@ img {
 .profile-dropdown {
   position: absolute;
   z-index: 7;
-  background-color: black;
-  padding: 20px;
+  background-color: rgb(13, 13, 13);
+  padding: 10px 20px 10px 20px;
   border-radius: 20px;
   box-shadow: 3px 3px 3px rgb(19, 21, 24);
 }

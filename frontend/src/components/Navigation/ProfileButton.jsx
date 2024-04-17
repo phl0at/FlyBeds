@@ -5,6 +5,7 @@ import LoginFormModal from "../LoginFormModal";
 import { useState, useEffect, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -45,15 +46,18 @@ function ProfileButton({ user }) {
       <button className="shadow" onClick={toggleMenu}>
         <HiMenu />
       </button>
-      <p className={ulClassName} ref={ulRef}>
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             <p>Hello, {user.firstName}</p>
             <p>{user.email}</p>
             <p>
-              <button onClick={logout}>
-                Log Out
+              <button>
+                <NavLink to={`/spot/user/${user.id}`}>Manage Spots</NavLink>
               </button>
+            </p>
+            <p>
+              <button onClick={logout}>Log Out</button>
             </p>
           </>
         ) : (
@@ -70,7 +74,7 @@ function ProfileButton({ user }) {
             />
           </>
         )}
-      </p>
+      </div>
     </>
   );
 }

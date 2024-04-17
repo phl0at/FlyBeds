@@ -20,6 +20,9 @@ const OneSpot = () => {
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
+  if (!spotData[spotId])
+    return <h2>{`Loading details about Spot #${spotId}...`}</h2>;
+
   const {
     [Number(spotId)]: {
       name,
@@ -33,9 +36,7 @@ const OneSpot = () => {
     },
   } = spotData;
 
-  if (!spotData[spotId] || !SpotImages)
-    return <h2>{`Loading details about Spot #${spotId}...`}</h2>;
-
+  if (!SpotImages) return <h2>{`Loading details about Spot #${spotId}...`}</h2>;
   const { hasImages, mainImg, otherImg } = sortImages(SpotImages);
 
   return (

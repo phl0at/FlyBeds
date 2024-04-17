@@ -29,14 +29,14 @@ const CreateReview = ({ spotId }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await dispatch(
+    const newReview = await dispatch(
       createReviewThunk(review, stars, spotId, currUser)
     );
-    
-    if (res.ok) {
+
+    if (newReview.createdAt) {
       closeModal();
     } else {
-      const { errors } = await res.json();
+      const { errors } = await newReview.json();
       setErrors(errors);
     }
   };
