@@ -96,10 +96,6 @@ export const checkSpotErrors = async (
 
   if (!state) err.state = "State is required";
 
-  if (!lat) err.lat = "Latitude is required";
-
-  if (!lng) err.lng = "Longitude is required";
-
   if (description.length < 30)
     err.description = "Description needs a minimum of 30 characters";
 

@@ -71,7 +71,11 @@ const CreateReview = ({ spotId }) => {
           }}
         />
         <label htmlFor="stars">Stars</label>
-        <button disabled={!enabled} type="submit">
+        <button
+          disabled={!enabled}
+          className={!enabled ? "grey" : null}
+          type="submit"
+        >
           Submit Your Review
         </button>
         {/* <div className="rating-input">

@@ -5,14 +5,23 @@ import { createSelector } from "reselect";
 //*                          Action Types
 //! --------------------------------------------------------------------
 
+const CLEAR_SPOTS = "spot/remove";
 const GET_ALL_SPOTS = "spot/getAll";
 const GET_OWNED_SPOTS = "spot/getOwned";
 const GET_ONE_SPOT = "spot/getOne";
 const CREATE_SPOT = "spot/create";
+const UPDATE_SPOT = "spot/update";
 
 //! --------------------------------------------------------------------
 //*                         Action Creator
 //! --------------------------------------------------------------------
+
+export const clearSpots = (payload) => {
+  return {
+    type: CLEAR_SPOTS,
+    payload,
+  };
+};
 
 const getAllSpots = (payload) => {
   return {
@@ -38,6 +47,13 @@ const getOneSpot = (payload) => {
 const createSpot = (payload) => {
   return {
     type: CREATE_SPOT,
+    payload,
+  };
+};
+
+const updateSpot = (payload) => {
+  return {
+    type: UPDATE_SPOT,
     payload,
   };
 };
@@ -142,6 +158,32 @@ export const createSpotThunk = (spot, imageArr) => async (dispatch) => {
 };
 
 //! --------------------------------------------------------------------
+
+export const updateSpotThunk = (spot) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/spots/${spot.id}`, {
+      method: "POST",
+      header: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(spot),
+    });
+
+    if (res.ok) {
+      const spotData = await res.json();
+      console.log('UPDATED???', spotData)
+      dispatch(updateSpot(spotData));
+      return spotData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  } catch (e) {
+    return e;
+  }
+};
+
+//! --------------------------------------------------------------------
 //*                            Selectors
 //! --------------------------------------------------------------------
 
@@ -158,6 +200,9 @@ const initialState = {};
 
 const spotReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CLEAR_SPOTS: {
+      return {};
+    }
     case GET_ALL_SPOTS: {
       const newState = {};
       action.payload.Spots.forEach((spot) => (newState[spot.id] = spot));
@@ -173,6 +218,10 @@ const spotReducer = (state = initialState, action) => {
       return newState;
     }
     case CREATE_SPOT: {
+      const newState = { ...state, [action.payload.id]: action.payload };
+      return newState;
+    }
+    case UPDATE_SPOT: {
       const newState = { ...state, [action.payload.id]: action.payload };
       return newState;
     }

@@ -25,7 +25,8 @@ button {
   margin: 5px;
 }
 
-button:hover {
+button:hover,
+button:focus {
   outline: thick solid rgb(40, 50, 76);
 }
 
@@ -42,7 +43,9 @@ img {
 
 img:hover {
   outline: thick solid rgb(40, 50, 76);
+
 }
+
 .profile-dropdown {
   position: absolute;
   z-index: 7;

@@ -1,13 +1,17 @@
-import { checkSpotErrors } from "../../../utils/JS/helper";
-import { createSpotThunk } from "../../../store/spots";
+import {
+  clearSpots,
+  getOneSpotThunk,
+  updateSpotThunk,
+} from "../../../store/spots";
 import { textInput } from "../../../utils/JSX/helper";
+import { checkSpotErrors } from "../../../utils/JS/helper";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "./CreateSpot.css";
+import "./UpdateSpot.css";
 
-const CreateSpot = () => {
-  const loggedIn = useSelector((state) => state.session.user);
+const UpdateSpot = () => {
+  const { spotId } = useParams();
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
   const [country, setCountry] = useState("");
@@ -24,9 +28,12 @@ const CreateSpot = () => {
   const [image2, setImage2] = useState("");
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
+  const spotData = useSelector((state) => state.spots);
+  const loggedIn = useSelector((state) => state.session.user);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    setErrors({});
     setCountry("");
     setAddress("");
     setCity("");
@@ -41,14 +48,17 @@ const CreateSpot = () => {
     setImage2("");
     setImage3("");
     setImage4("");
-    setErrors({});
-  }, []);
-
+    dispatch(clearSpots());
+    dispatch(getOneSpotThunk(spotId));
+  }, [dispatch, spotId]);
+  if (!spotData[spotId]) {
+    return <>Loading...</>;
+  }
   const onSubmit = async (e) => {
     e.preventDefault();
 
     if (loggedIn) {
-      const spotData = {
+      const updatedSpot = {
         country,
         address,
         city,
@@ -60,15 +70,9 @@ const CreateSpot = () => {
         price: Number(price),
       };
 
-      const spotImages = [
-        { url: previewImage, preview: true },
-        { url: image1, preview: false },
-        { url: image2, preview: false },
-        { url: image3, preview: false },
-        { url: image4, preview: false },
-      ];
+      console.log(updatedSpot);
 
-      const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
+      const newSpot = await dispatch(updateSpotThunk(updatedSpot));
 
       const err = await checkSpotErrors(
         country,
@@ -92,13 +96,13 @@ const CreateSpot = () => {
         ? setErrors(err)
         : navigateTo(`/spot/${newSpot.id}`);
     } else {
-      return alert("You must be signed in to create a spot!");
+      return alert("You must be signed in to edit a spot!");
     }
   };
 
   return (
     <div className="create-form">
-      <h1>Create a new Spot</h1>
+      <h1>Update your Spot</h1>
       <h3>{`Where's your place located?`}</h3>
       <h5>
         Guests will only get your exact address once they booked a reservation.
@@ -116,7 +120,7 @@ const CreateSpot = () => {
               {errors.country}
             </div>
           )}
-          {textInput(country, "Country", setCountry)}
+          {textInput(country, "Country", setCountry, spotData[spotId])}
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -126,7 +130,7 @@ const CreateSpot = () => {
               {errors.address}
             </div>
           )}
-          {textInput(address, "Address", setAddress)}
+          {textInput(address, "Address", setAddress, spotData[spotId])}
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -136,7 +140,7 @@ const CreateSpot = () => {
               {errors.city}
             </div>
           )}
-          {textInput(city, "City", setCity)}
+          {textInput(city, "City", setCity, spotData[spotId])}
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -146,7 +150,7 @@ const CreateSpot = () => {
               {errors.state}
             </div>
           )}
-          {textInput(state, "State", setState)}
+          {textInput(state, "State", setState, spotData[spotId])}
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -156,7 +160,7 @@ const CreateSpot = () => {
               {errors.lat}
             </div>
           )}
-          {textInput(lat, "Latitude", setLat)}
+          {textInput(lat, "Latitude", setLat, spotData[spotId])}
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -166,7 +170,7 @@ const CreateSpot = () => {
               {errors.lng}
             </div>
           )}
-          {textInput(lng, "Longitude", setLng)}
+          {textInput(lng, "Longitude", setLng, spotData[spotId])}
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -203,7 +207,7 @@ const CreateSpot = () => {
             {`Catch guests' attention with a spot title that highlights what makes
             your place special.`}
           </h5>
-          {textInput(name, "Name your Spot", setName)}
+          {textInput(name, "Name your Spot", setName, spotData[spotId])}
           {errors.name && (
             <div color="red" className="errors">
               {errors.name}
@@ -224,7 +228,12 @@ const CreateSpot = () => {
             in search results.
           </h5>
           <div id="$">$</div>
-          {textInput(price, "Price per night (USD)", setPrice)}
+          {textInput(
+            price,
+            "Price per night (USD)",
+            setPrice,
+            spotData[spotId]
+          )}
           {errors.price && (
             <div color="red" className="errors">
               {errors.price}
@@ -241,7 +250,12 @@ const CreateSpot = () => {
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
-          {textInput(previewImage, "Preview Image URL", setPreviewImage)}
+          {textInput(
+            previewImage,
+            "Preview Image URL",
+            setPreviewImage,
+            spotData
+          )}
           {errors.previewImage && (
             <div color="red" className="errors">
               {errors.previewImage}
@@ -250,7 +264,7 @@ const CreateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image1, "Image URL", setImage1)}
+          {textInput(image1, "Image URL", setImage1, spotData[spotId])}
           {errors.image1 && (
             <div color="red" className="errors">
               {errors.image1}
@@ -259,7 +273,7 @@ const CreateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image2, "Image URL", setImage2)}
+          {textInput(image2, "Image URL", setImage2, spotData[spotId])}
           {errors.image2 && (
             <div color="red" className="errors">
               {errors.image2}
@@ -268,7 +282,7 @@ const CreateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image3, "Image URL", setImage3)}
+          {textInput(image3, "Image URL", setImage3, spotData[spotId])}
           {errors.image3 && (
             <div color="red" className="errors">
               {errors.image3}
@@ -277,7 +291,7 @@ const CreateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image4, "Image URL", setImage4)}
+          {textInput(image4, "Image URL", setImage4, spotData[spotId])}
           {errors.image4 && (
             <div color="red" className="errors">
               {errors.image4}
@@ -295,4 +309,4 @@ const CreateSpot = () => {
   );
 };
 
-export default CreateSpot;
+export default UpdateSpot;

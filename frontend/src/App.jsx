@@ -4,6 +4,7 @@ import CreateSpot from "./components/SpotComponents/CreateSpot";
 import AllSpots from "./components/SpotComponents/AllSpots";
 import OneSpot from "./components/SpotComponents/OneSpot";
 import ManageSpots from "./components/SpotComponents/ManageSpots";
+import UpdateSpot from "./components/SpotComponents/UpdateSpotModal/UpdateSpot";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             path: "user/:userId",
             element: <ManageSpots />,
           },
+          {
+            path: ":spotId/update",
+            element: <UpdateSpot />,
+          }
         ],
       },
     ],
