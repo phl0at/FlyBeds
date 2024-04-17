@@ -15,13 +15,12 @@ const UpdateSpot = () => {
   const spotData = useSelector((state) => state.spots[spotId]);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ ...spotData });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setFormData({ ...spotData });
     setErrors({});
-  }, [spotData]);
+  }, []);
 
   useEffect(() => {
     dispatch(clearSpots());
