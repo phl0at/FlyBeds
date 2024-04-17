@@ -1,7 +1,7 @@
 import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
-import SignupFormModal from "../LoginSignupComponents/SignupFormModal";
-import LoginFormModal from "../LoginSignupComponents/LoginFormModal";
+import SignupFormModal from "../ModalComponents/SignupFormModal";
+import LoginFormModal from "../ModalComponents/LoginFormModal";
 import { useState, useEffect, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
