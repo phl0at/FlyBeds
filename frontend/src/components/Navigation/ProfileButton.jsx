@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import "./Navigation.css"
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ function ProfileButton({ user }) {
             <p>{user.email}</p>
             <p>
               <button>
-                <NavLink to={`/spot/user/${user.id}`}>Manage Spots</NavLink>
+                <NavLink className="manage-spot" to={`/spot/user/${user.id}`}>Manage Spots</NavLink>
               </button>
             </p>
             <p>

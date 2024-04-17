@@ -6,6 +6,7 @@ import { createSelector } from "reselect";
 //! --------------------------------------------------------------------
 
 const GET_ALL_SPOTS = "spot/getAll";
+const GET_OWNED_SPOTS = "spot/getOwned";
 const GET_ONE_SPOT = "spot/getOne";
 const CREATE_SPOT = "spot/create";
 
@@ -16,6 +17,13 @@ const CREATE_SPOT = "spot/create";
 const getAllSpots = (payload) => {
   return {
     type: GET_ALL_SPOTS,
+    payload,
+  };
+};
+
+const getOwnedSpots = (payload) => {
+  return {
+    type: GET_OWNED_SPOTS,
     payload,
   };
 };
@@ -39,30 +47,61 @@ const createSpot = (payload) => {
 //! --------------------------------------------------------------------
 
 export const getAllSpotsThunk = () => async (dispatch) => {
-  const res = await csrfFetch("/api/spots");
+  try {
+    const res = await csrfFetch("/api/spots");
 
-  if (res.ok) {
-    const spotData = await res.json();
-    dispatch(getAllSpots(spotData));
-    return spotData;
-  } else {
-    const err = await res.json();
-    return err;
+    if (res.ok) {
+      const spotData = await res.json();
+      dispatch(getAllSpots(spotData));
+      return spotData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  } catch (e) {
+    return e;
   }
 };
+
+//! --------------------------------------------------------------------
+
+export const getOwnedSpotsThunk = () => async (dispatch) => {
+  try {
+    const res = await csrfFetch("/api/spots/current");
+
+    if (res.ok) {
+      const spotData = await res.json();
+      dispatch(getOwnedSpots(spotData));
+      return spotData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  } catch (e) {
+    return e;
+  }
+};
+
+//! --------------------------------------------------------------------
 
 export const getOneSpotThunk = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}`);
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}`);
 
-  if (res.ok) {
-    const spotData = await res.json();
-    dispatch(getOneSpot(spotData));
-    return spotData;
-  } else {
-    const err = await res.json();
-    return err;
+    if (res.ok) {
+      const spotData = await res.json();
+      dispatch(getOneSpot(spotData));
+      return spotData;
+    } else {
+      const err = await res.json();
+      return err;
+    }
+  } catch (e) {
+    return e;
   }
 };
+
+//! --------------------------------------------------------------------
 
 export const createSpotThunk = (spot, imageArr) => async (dispatch) => {
   try {
@@ -120,6 +159,11 @@ const initialState = {};
 const spotReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_SPOTS: {
+      const newState = {};
+      action.payload.Spots.forEach((spot) => (newState[spot.id] = spot));
+      return newState;
+    }
+    case GET_OWNED_SPOTS: {
       const newState = {};
       action.payload.Spots.forEach((spot) => (newState[spot.id] = spot));
       return newState;

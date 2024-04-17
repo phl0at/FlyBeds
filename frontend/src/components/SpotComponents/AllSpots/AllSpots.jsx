@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./AllSpots.css";
+
 const AllSpots = () => {
   const dispatch = useDispatch();
 

@@ -25,6 +25,10 @@ button {
   margin: 5px;
 }
 
+button:hover {
+  outline: thick solid rgb(40, 50, 76);
+}
+
 ul {
   color: rgb(247, 240, 219);
   text-decoration: none;
@@ -36,6 +40,9 @@ img {
   box-shadow: 8px 6px 6px rgb(19, 21, 24);
 }
 
+img:hover {
+  outline: thick solid rgb(40, 50, 76);
+}
 .profile-dropdown {
   position: absolute;
   z-index: 7;
