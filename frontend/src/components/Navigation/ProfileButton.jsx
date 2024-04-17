@@ -3,7 +3,7 @@ import OpenModalMenuItem from "./OpenModalMenuItem";
 import SignupFormModal from "../SignupFormModal";
 import LoginFormModal from "../LoginFormModal";
 import { useState, useEffect, useRef } from "react";
-import { FaUserCircle } from "react-icons/fa";
+import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 
 function ProfileButton({ user }) {
@@ -42,20 +42,19 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={toggleMenu}>
-        <FaUserCircle />
+      <button className="shadow" onClick={toggleMenu}>
+        <HiMenu />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <p className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>
-              {user.firstName} {user.lastName}
-            </li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
+            <p>Hello, {user.firstName}</p>
+            <p>{user.email}</p>
+            <p>
+              <button onClick={logout}>
+                Log Out
+              </button>
+            </p>
           </>
         ) : (
           <>
@@ -71,7 +70,7 @@ function ProfileButton({ user }) {
             />
           </>
         )}
-      </ul>
+      </p>
     </>
   );
 }

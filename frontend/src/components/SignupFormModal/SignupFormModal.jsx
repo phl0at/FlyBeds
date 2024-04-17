@@ -1,22 +1,34 @@
 import * as sessionActions from "../../store/session";
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./SignupForm.css";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
+  const { closeModal } = useModal();
+  const [errors, setErrors] = useState({});
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const { closeModal } = useModal();
+  const disabled =
+    !email.length ||
+    !username.length ||
+    !firstName.length ||
+    !lastName.length ||
+    password.length < 6 ||
+    confirmPassword.length < 6;
+
+  useEffect(() => {
+    setErrors({});
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (password === confirmPassword) {
       setErrors({});
       return dispatch(
@@ -51,62 +63,88 @@ function SignupFormModal() {
           <input
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className="errors">{errors.email}</p>}
         <label>
           Username
           <input
             type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className="errors">{errors.username}</p>}
         <label>
           First Name
           <input
             type="text"
             value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Fist Name"
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p className="errors">{errors.firstName}</p>}
         <label>
           Last Name
           <input
             type="text"
             value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Last Name"
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p className="errors">{errors.lastName}</p>}
         <label>
           Password
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className="errors">{errors.password}</p>}
         <label>
           Confirm Password
           <input
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
             required
           />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        {errors.confirmPassword && (
+          <p className="errors">{errors.confirmPassword}</p>
+        )}
+        <button
+          className={disabled ? "grey" : null}
+          disabled={disabled}
+          type="submit"
+        >
+          Sign Up
+        </button>
       </form>
     </>
   );

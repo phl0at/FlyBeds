@@ -1,6 +1,10 @@
 .hidden {
-    display: none
+  display: none;
 }
 .home-logo {
-    border-radius: 20px;
+  border-radius: 20px;
+}
+
+.create-spot {
+  color: rgb(40, 50, 76);
 }

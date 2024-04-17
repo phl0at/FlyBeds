@@ -1,24 +1,49 @@
 /* TODO: Add sitewide styles */
 body {
-    background-color: rgb(29, 29, 31);
-    color: rgb(247, 240, 219);
-    text-decoration: none;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgb(29, 29, 31);
+  color: rgb(247, 240, 219);
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
-}
 a {
-    color: rgb(247, 240, 219);
-    text-decoration: none;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: rgb(247, 240, 219);
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 button {
-    background-color: rgb(42, 79, 122);
-    border: none;
-    padding: 7px;
-    border-radius: 20px;
+  background-color: rgb(53, 157, 253);
+  border: none;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 20px;
+  color: rgb(40, 50, 76);
+  font-weight: bold;
 }
+
 ul {
-    color: rgb(247, 240, 219);
-    text-decoration: none;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+  color: rgb(247, 240, 219);
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+img {
+  border-radius: 20px;
+  box-shadow: 8px 6px 6px rgb(19, 21, 24);
+}
+
+.profile-dropdown {
+  position: absolute;
+  z-index: 7;
+  background-color: black;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 3px 3px 3px rgb(19, 21, 24);
+}
+
+.shadow {
+  box-shadow: 6px 6px 6px rgb(19, 21, 24);
 }

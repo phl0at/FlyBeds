@@ -25,11 +25,15 @@ section {
   visibility: hidden;
   width: 100px;
   height: 20px;
-  background-color: rgb(42, 79, 122);
-  color: rgb(96, 153, 164);
+  background-color: rgb(53, 157, 253);
+  color: rgb(40, 50, 76);
   text-align: center;
   padding: 5px;
   border-radius: 20px;
+  margin-top: 5px;
+  margin-left: 5px;
+  font-weight: bold;
+  box-shadow: 3px 3px 3px rgb(19, 21, 24);
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
