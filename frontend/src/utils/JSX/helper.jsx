@@ -1,4 +1,4 @@
-import CreateReview from "../../components/CreateReview/CreateReview";
+import CreateReview from "../../components/ReviewComponents/CreateReview/CreateReview";
 import OpenModalMenuItem from "../../components/Navigation/OpenModalMenuItem";
 
 export const textInput = (value, placeholder, setter) => {

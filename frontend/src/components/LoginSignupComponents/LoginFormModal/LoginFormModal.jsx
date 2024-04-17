@@ -1,5 +1,5 @@
-import * as sessionActions from "../../store/session";
-import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../../store/session";
+import { useModal } from "../../../context/Modal";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import "./LoginForm.css";

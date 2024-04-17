@@ -1,4 +1,4 @@
-import { getAllSpotsThunk, getSpotArray } from "../../store/spots";
+import { getAllSpotsThunk, getSpotArray } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { IoStar } from "react-icons/io5";

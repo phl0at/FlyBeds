@@ -1,9 +1,9 @@
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import CreateSpot from "./components/CreateSpot";
-import AllSpots from "./components/AllSpots";
-import OneSpot from "./components/OneSpot";
-import ManageSpots from "./components/ManageSpots";
+import CreateSpot from "./components/SpotComponents/CreateSpot";
+import AllSpots from "./components/SpotComponents/AllSpots";
+import OneSpot from "./components/SpotComponents/OneSpot";
+import ManageSpots from "./components/SpotComponents/ManageSpots";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";

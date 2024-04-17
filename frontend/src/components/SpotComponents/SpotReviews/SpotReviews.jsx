@@ -1,6 +1,6 @@
-import { getAllReviewsThunk } from "../../store/reviews";
-import { sortReviews } from "../../utils/JS/helper";
-import { noReviews, postReviewButton } from "../../utils/JSX/helper";
+import { getAllReviewsThunk } from "../../../store/reviews";
+import { sortReviews } from "../../../utils/JS/helper";
+import { noReviews, postReviewButton } from "../../../utils/JSX/helper";
 import { useDispatch, useSelector } from "react-redux";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";

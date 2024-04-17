@@ -1,7 +1,7 @@
-import { getAllReviewsThunk, getReviewArray } from "../../store/reviews";
-import { calculateAvg, sortImages } from "../../utils/JS/helper";
+import { getAllReviewsThunk, getReviewArray } from "../../../store/reviews";
+import { calculateAvg, sortImages } from "../../../utils/JS/helper";
 import SpotReviews from "../SpotReviews/SpotReviews";
-import { getOneSpotThunk } from "../../store/spots";
+import { getOneSpotThunk } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
