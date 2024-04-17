@@ -1,6 +1,6 @@
 import { checkSpotErrors } from "../../../utils/JS/helper";
+import { textInput } from "./helper";
 import { createSpotThunk } from "../../../store/spots";
-import { textInput } from "../../../utils/JSX/helper";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";

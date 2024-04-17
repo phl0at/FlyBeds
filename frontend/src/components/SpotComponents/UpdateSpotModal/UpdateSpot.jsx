@@ -3,14 +3,16 @@ import {
   getOneSpotThunk,
   updateSpotThunk,
 } from "../../../store/spots";
-import { textInput } from "../../../utils/JSX/helper";
 import { checkSpotErrors } from "../../../utils/JS/helper";
+import { textInput } from "./helper";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import "./UpdateSpot.css";
 
 const UpdateSpot = () => {
+  const loggedIn = useSelector((state) => state.session.user);
+  const spotData = useSelector((state) => state.spots);
   const { spotId } = useParams();
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
@@ -28,8 +30,6 @@ const UpdateSpot = () => {
   const [image2, setImage2] = useState("");
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
-  const spotData = useSelector((state) => state.spots);
-  const loggedIn = useSelector((state) => state.session.user);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -51,9 +51,9 @@ const UpdateSpot = () => {
     dispatch(clearSpots());
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
-  if (!spotData[spotId]) {
-    return <>Loading...</>;
-  }
+
+  if (!spotData[spotId]) return <>Loading...</>;
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -69,8 +69,6 @@ const UpdateSpot = () => {
         name,
         price: Number(price),
       };
-
-      console.log(updatedSpot);
 
       const newSpot = await dispatch(updateSpotThunk(updatedSpot));
 

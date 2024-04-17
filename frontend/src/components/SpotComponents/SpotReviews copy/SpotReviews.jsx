@@ -1,20 +1,10 @@
 import { getAllReviewsThunk } from "../../../store/reviews";
 import { sortReviews } from "../../../utils/JS/helper";
-import { noReviews, postReviewButton } from "./helper";
+import { noReviews, postReviewButton } from "../ManageSpots/helper";
 import { useDispatch, useSelector } from "react-redux";
 import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./SpotReviews.css";
-
-const SpotReviewInfo = ({ firstName, date, review }) => (
-  <>
-    <section>
-      <p>{firstName}</p>
-      <p>{date}</p>
-      <p>{review}</p>
-    </section>
-  </>
-);
 
 const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
   const dispatch = useDispatch();
@@ -52,12 +42,13 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
           });
 
           return (
-            <SpotReviewInfo
-              key={id}
-              review={review}
-              date={date}
-              firstName={firstName}
-            />
+            <>
+              <section key={id}>
+                <p key={firstName}>{firstName}</p>
+                <p key={date}>{date}</p>
+                <p key={review}>{review}</p>
+              </section>
+            </>
           );
         }
       )}

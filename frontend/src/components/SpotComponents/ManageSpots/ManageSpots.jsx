@@ -1,5 +1,5 @@
 import { getOwnedSpotsThunk, getSpotArray } from "../../../store/spots";
-import { UserSpots } from "../../../utils/JSX/helper";
+import { UserSpots } from "./helper";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
