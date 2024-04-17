@@ -161,8 +161,9 @@ export const createSpotThunk = (spot, imageArr) => async (dispatch) => {
 
 export const updateSpotThunk = (spot) => async (dispatch) => {
   try {
+    console.log('?????????????', spot)
     const res = await csrfFetch(`/api/spots/${spot.id}`, {
-      method: "POST",
+      method: "PUT",
       header: {
         "Content-Type": "application/json",
       },
@@ -171,7 +172,6 @@ export const updateSpotThunk = (spot) => async (dispatch) => {
 
     if (res.ok) {
       const spotData = await res.json();
-      console.log('UPDATED???', spotData)
       dispatch(updateSpot(spotData));
       return spotData;
     } else {

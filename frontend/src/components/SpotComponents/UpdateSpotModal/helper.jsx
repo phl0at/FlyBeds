@@ -1,10 +1,9 @@
-
-export const textInput = (value, placeholder, setter, spot) => {
+export const textInput = (value, placeholder, setter) => {
   return (
     <>
       <input
         type="text"
-        value={value ? value : spot[placeholder.toLowerCase()]}
+        value={value}
         name={placeholder}
         placeholder={placeholder}
         onChange={(e) => {

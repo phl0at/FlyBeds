@@ -1,5 +1,6 @@
 
 export const textInput = (value, placeholder, setter, spot) => {
+  if(!value) return <>{"Loading...."}</>
   return (
     <>
       <input

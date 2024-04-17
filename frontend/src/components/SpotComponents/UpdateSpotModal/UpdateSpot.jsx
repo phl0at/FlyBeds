@@ -4,61 +4,57 @@ import {
   updateSpotThunk,
 } from "../../../store/spots";
 import { checkSpotErrors } from "../../../utils/JS/helper";
-import { textInput } from "./helper";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import "./UpdateSpot.css";
 
 const UpdateSpot = () => {
-  const loggedIn = useSelector((state) => state.session.user);
-  const spotData = useSelector((state) => state.spots);
   const { spotId } = useParams();
+  const loggedIn = useSelector((state) => state.session.user);
+  const spotData = useSelector((state) => state.spots[spotId]);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [description, setDescription] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const [image1, setImage1] = useState("");
-  const [image2, setImage2] = useState("");
-  const [image3, setImage3] = useState("");
-  const [image4, setImage4] = useState("");
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    setFormData({ ...spotData });
     setErrors({});
-    setCountry("");
-    setAddress("");
-    setCity("");
-    setState("");
-    setLat("");
-    setLng("");
-    setDescription("");
-    setName("");
-    setPrice("");
-    setPreviewImage("");
-    setImage1("");
-    setImage2("");
-    setImage3("");
-    setImage4("");
+  }, [spotData]);
+
+  useEffect(() => {
     dispatch(clearSpots());
     dispatch(getOneSpotThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!spotData[spotId]) return <>Loading...</>;
+  if (!spotData) {
+    return <>Loading...</>;
+  }
+
+  const {
+    address,
+    city,
+    state,
+    country,
+    name,
+    price,
+    description,
+    lat,
+    lng,
+    previewImage,
+    image1,
+    image2,
+    image3,
+    image4,
+  } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
     if (loggedIn) {
       const updatedSpot = {
+        id: spotData.id,
         country,
         address,
         city,
@@ -118,7 +114,16 @@ const UpdateSpot = () => {
               {errors.country}
             </div>
           )}
-          {textInput(country, "Country", setCountry, spotData[spotId])}
+          <input
+            type="text"
+            value={country}
+            name="Country"
+            placeholder="Country"
+            onChange={(e) => {
+              setFormData({ ...formData, country: e.target.value });
+              console.log(formData);
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -128,7 +133,15 @@ const UpdateSpot = () => {
               {errors.address}
             </div>
           )}
-          {textInput(address, "Address", setAddress, spotData[spotId])}
+          <input
+            type="text"
+            value={address}
+            name="Address"
+            placeholder="Address"
+            onChange={(e) => {
+              setFormData({ ...formData, address: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -138,7 +151,15 @@ const UpdateSpot = () => {
               {errors.city}
             </div>
           )}
-          {textInput(city, "City", setCity, spotData[spotId])}
+          <input
+            type="text"
+            value={city}
+            name="City"
+            placeholder="City"
+            onChange={(e) => {
+              setFormData({ ...formData, city: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -148,7 +169,15 @@ const UpdateSpot = () => {
               {errors.state}
             </div>
           )}
-          {textInput(state, "State", setState, spotData[spotId])}
+          <input
+            type="text"
+            value={state}
+            name="State"
+            placeholder="State"
+            onChange={(e) => {
+              setFormData({ ...formData, state: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -158,7 +187,15 @@ const UpdateSpot = () => {
               {errors.lat}
             </div>
           )}
-          {textInput(lat, "Latitude", setLat, spotData[spotId])}
+          <input
+            type="text"
+            value={lat}
+            name="Latitude"
+            placeholder="Latitude"
+            onChange={(e) => {
+              setFormData({ ...formData, lat: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -168,7 +205,15 @@ const UpdateSpot = () => {
               {errors.lng}
             </div>
           )}
-          {textInput(lng, "Longitude", setLng, spotData[spotId])}
+          <input
+            type="text"
+            value={lng}
+            name="Longitude"
+            placeholder="Longitude"
+            onChange={(e) => {
+              setFormData({ ...formData, lng: e.target.value });
+            }}
+          />
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -186,7 +231,9 @@ const UpdateSpot = () => {
             value={description}
             placeholder="Please write at least 30 characters"
             rows="10"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
           />
           {errors.description && (
             <div color="red" className="errors">
@@ -205,7 +252,15 @@ const UpdateSpot = () => {
             {`Catch guests' attention with a spot title that highlights what makes
             your place special.`}
           </h5>
-          {textInput(name, "Name your Spot", setName, spotData[spotId])}
+          <input
+            type="text"
+            value={name}
+            name="Name"
+            placeholder="Name"
+            onChange={(e) => {
+              setFormData({ ...formData, name: e.target.value });
+            }}
+          />
           {errors.name && (
             <div color="red" className="errors">
               {errors.name}
@@ -226,12 +281,15 @@ const UpdateSpot = () => {
             in search results.
           </h5>
           <div id="$">$</div>
-          {textInput(
-            price,
-            "Price per night (USD)",
-            setPrice,
-            spotData[spotId]
-          )}
+          <input
+            type="text"
+            value={price}
+            name="Price"
+            placeholder="Price"
+            onChange={(e) => {
+              setFormData({ ...formData, price: e.target.value });
+            }}
+          />
           {errors.price && (
             <div color="red" className="errors">
               {errors.price}
@@ -243,65 +301,78 @@ const UpdateSpot = () => {
         //?-------------------------- IMAGES ---------------------------------
         //!-------------------------------------------------------------------
         */}
-        <div className="spot-images">
+
+        {/* <div className="spot-images">
           <label htmlFor="Preview Image URL">
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
-          {textInput(
-            previewImage,
-            "Preview Image URL",
-            setPreviewImage,
-            spotData
-          )}
+          <input
+            type="text"
+            value={previewImage ? previewImage : spotData.previewImage}
+            name="Preview Image URL"
+            placeholder="Preview Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, previewImage: e.target.value });
+            }}
+          />
           {errors.previewImage && (
             <div color="red" className="errors">
               {errors.previewImage}
             </div>
-          )}
-          {/*
+          )} */}
+        {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image1, "Image URL", setImage1, spotData[spotId])}
+        {/* <input
+            type="text"
+            value={lat ? lat : spotData.lat}
+            name="Latitude"
+            placeholder="Latitude"
+            onChange={(e) => {
+              setFormData({ ...formData, lat: e.target.value });
+            }}
+          />
           {errors.image1 && (
             <div color="red" className="errors">
               {errors.image1}
             </div>
-          )}
-          {/*
+          )} */}
+        {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image2, "Image URL", setImage2, spotData[spotId])}
+        {/* {textInput(image2, "Image URL", setFormData, spotData[spotId])}
           {errors.image2 && (
             <div color="red" className="errors">
               {errors.image2}
             </div>
-          )}
-          {/*
+          )} */}
+        {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image3, "Image URL", setImage3, spotData[spotId])}
+        {/* {textInput(image3, "Image URL", setFormData, spotData[spotId])}
           {errors.image3 && (
             <div color="red" className="errors">
               {errors.image3}
             </div>
-          )}
-          {/*
+          )} */}
+        {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image4, "Image URL", setImage4, spotData[spotId])}
+        {/* {textInput(image4, "Image URL", setFormData, spotData[spotId])}
           {errors.image4 && (
             <div color="red" className="errors">
               {errors.image4}
             </div>
           )}
-        </div>
+        </div> */}
+
         {/*
         //!-------------------------------------------------------------------
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
         */}
-        <button type="submit">Create Spot</button>
+        <button type="submit">Update Your Spot</button>
       </form>
     </div>
   );

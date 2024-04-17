@@ -44,6 +44,8 @@ const CreateSpot = () => {
     setErrors({});
   }, []);
 
+  
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
