@@ -1,5 +1,5 @@
-import { checkSpotErrors } from "../../../utils/JS/helper";
-import { createSpotThunk } from "../../../store/spots";
+import { checkSpotErrors, checkImageErrors } from "../../../utils/JS/helper";
+import { createSpotThunk, addImagesThunk } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -37,6 +37,9 @@ const CreateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    let errorObj = {};
+    let newSpot = {};
+    let spotErrors = {};
     if (loggedIn) {
       const spotData = {
         country,
@@ -58,12 +61,22 @@ const CreateSpot = () => {
         { url: image4, preview: false },
       ];
 
-      const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
+      const imgErrors = checkImageErrors(spotImages);
 
-      const err = await checkSpotErrors(newSpot, spotImages, price);
+      if (!Object.values(imgErrors).length) {
+        newSpot = {
+          ...(await dispatch(createSpotThunk(spotData, spotImages, loggedIn))),
+        };
+        spotErrors = { ...(await checkSpotErrors(newSpot, price)) };
+        if (!Object.values(spotErrors).length) {
+          await dispatch(addImagesThunk(newSpot, spotImages));
+        }
+      }
 
-      Object.values(err).length
-        ? setErrors(err)
+      errorObj = { ...spotErrors, ...imgErrors };
+
+      Object.values(errorObj).length
+        ? setErrors(errorObj)
         : navigateTo(`/spot/${newSpot.id}`);
     } else {
       return alert("You must be signed in to create a spot!");

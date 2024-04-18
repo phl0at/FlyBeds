@@ -67,126 +67,98 @@ export const checkReviewErrors = (review, rating) => {
 
 export const checkImageErrors = (spotImages) => {
   const err = {};
-  if (!spotImages[0].url.length) {
+
+  if (spotImages[0].url) {
+    if (spotImages[0].url.split(".").length) {
+      const fileType = spotImages[0].url.split(".");
+
+      if (
+        fileType[fileType.length - 1] == "png" ||
+        fileType[fileType.length - 1] == "jpg" ||
+        fileType[fileType.length - 1] == "jpeg"
+      ) {
+        delete err.previewImage;
+      } else {
+        err.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    }
+  } else {
     err.previewImage = "Preview image is required";
-    return err;
   }
-  const preview = spotImages[0].url.split(".");
-  const image1 = spotImages[1].url.split(".");
-  const image2 = spotImages[2].url.split(".");
-  const image3 = spotImages[3].url.split(".");
-  const image4 = spotImages[4].url.split(".");
-  if (preview) {
-    if (
-      preview[preview.length - 1] !== "png" ||
-      preview[preview.length - 1] !== "jpg" ||
-      preview[preview.length - 1] !== "jpeg"
-    ) {
-      err.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+
+  if (spotImages[1].url) {
+    if (spotImages[1].url.split(".").length) {
+      const fileType = spotImages[1].url.split(".");
+
+      if (
+        fileType[fileType.length - 1] == "png" ||
+        fileType[fileType.length - 1] == "jpg" ||
+        fileType[fileType.length - 1] == "jpeg"
+      ) {
+        delete err.image1;
+      } else {
+        err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
+      }
     }
   }
-  if (
-    image1[image1.length - 1] !== "png" ||
-    image1[image1.length - 1] !== "jpg" ||
-    image1[image1.length - 1] !== "jpeg"
-  ) {
-    err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
+
+  if (spotImages[2].url) {
+    if (spotImages[2].url.split(".").length) {
+      const fileType = spotImages[2].url.split(".");
+
+      if (
+        fileType[fileType.length - 1] == "png" ||
+        fileType[fileType.length - 1] == "jpg" ||
+        fileType[fileType.length - 1] == "jpeg"
+      ) {
+        delete err.image2;
+      } else {
+        err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    }
   }
-  if (
-    image1[image2.length - 1] !== "png" ||
-    image1[image2.length - 1] !== "jpg" ||
-    image1[image2.length - 1] !== "jpeg"
-  ) {
-    err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
+
+  if (spotImages[3].url) {
+    if (spotImages[3].url.split(".").length) {
+      const fileType = spotImages[3].url.split(".");
+
+      if (
+        fileType[fileType.length - 1] == "png" ||
+        fileType[fileType.length - 1] == "jpg" ||
+        fileType[fileType.length - 1] == "jpeg"
+      ) {
+        delete err.image3;
+      } else {
+        err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    }
   }
-  if (
-    image1[image3.length - 1] !== "png" ||
-    image1[image3.length - 1] !== "jpg" ||
-    image1[image3.length - 1] !== "jpeg"
-  ) {
-    err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
-  }
-  if (
-    image1[image4.length - 1] !== "png" ||
-    image1[image4.length - 1] !== "jpg" ||
-    image1[image4.length - 1] !== "jpeg"
-  ) {
-    err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
+  if (spotImages[4].url) {
+    if (spotImages[4].url.split(".").length) {
+      const fileType = spotImages[4].url.split(".");
+
+      if (
+        fileType[fileType.length - 1] == "png" ||
+        fileType[fileType.length - 1] == "jpg" ||
+        fileType[fileType.length - 1] == "jpeg"
+      ) {
+        delete err.image4;
+      } else {
+        err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    }
   }
   return err;
 };
 
 //! --------------------------------------------------------------------
 
-export const checkSpotErrors = async (spot, spotImages, price) => {
-  // My backend does not have any errors to check for what previewImage is
-  // so when I bad url is submitted but all other data is ok,
-  // no errors are thrown and the spot is updated with a broken
-  // image. refactor to check previewImages before we check
-  // if the spot was created
+export const checkSpotErrors = async (spot, price) => {
   if (spot.createdAt) return {};
 
   let err = { ...spot.errors };
 
-  if (spot.errors.description) {
-    err.description = "Description needs a minimum of 30 characters";
-  }
-
   if (!price) err.price = "Price is required";
-
-  // if (!spotImages[0].url) err.previewImage = "Preview image is required";
-
-  if (spotImages[1].url) {
-    const urlSplit = spotImages[1].url.split(".");
-    if (
-      urlSplit[urlSplit.length - 1] == "png" ||
-      urlSplit[urlSplit.length - 1] == "jpg" ||
-      urlSplit[urlSplit.length - 1] == "jpeg"
-    ) {
-      err.image1 = null;
-    } else {
-      err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-  }
-
-  if (spotImages[2].url) {
-    const urlSplit = spotImages[2].url.split(".");
-    if (
-      urlSplit[urlSplit.length - 1] == "png" ||
-      urlSplit[urlSplit.length - 1] == "jpg" ||
-      urlSplit[urlSplit.length - 1] == "jpeg"
-    ) {
-      err.image2 = null;
-    } else {
-      err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-  }
-
-  if (spotImages[3].url) {
-    const urlSplit = spotImages[3].url.split(".");
-    if (
-      urlSplit[urlSplit.length - 1] == "png" ||
-      urlSplit[urlSplit.length - 1] == "jpg" ||
-      urlSplit[urlSplit.length - 1] == "jpeg"
-    ) {
-      err.image3 = null;
-    } else {
-      err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-  }
-
-  if (spotImages[4].url) {
-    const urlSplit = spotImages[4].url.split(".");
-    if (
-      urlSplit[urlSplit.length - 1] == "png" ||
-      urlSplit[urlSplit.length - 1] == "jpg" ||
-      urlSplit[urlSplit.length - 1] == "jpeg"
-    ) {
-      err.image4 = null;
-    } else {
-      err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-  }
 
   return err;
 };

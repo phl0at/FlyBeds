@@ -1,4 +1,5 @@
 import {
+  addImagesThunk,
   clearSpots,
   getOneSpotThunk,
   updateSpotThunk,
@@ -51,6 +52,8 @@ const UpdateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    let errorObj = {};
+
     if (loggedIn) {
       const updatedSpot = {
         id: spotData.id,
@@ -74,23 +77,19 @@ const UpdateSpot = () => {
       ];
 
       const imgErrors = checkImageErrors(spotImages);
-      if (Object.values(imgErrors).length) {
-        setErrors(imgErrors);
-      } else {
-        console.log(imgErrors);
-
-        const newSpot = await dispatch(
-          updateSpotThunk(updatedSpot, spotImages)
-        );
-
-        const spotErrors = await checkSpotErrors(newSpot, spotImages, price);
-
-        const err = { ...spotErrors, ...imgErrors };
-
-        Object.values(err).length
-          ? setErrors(err)
-          : navigateTo(`/spot/${newSpot.id}`);
+      
+      if (!Object.values(imgErrors).length) {
+        await dispatch(addImagesThunk(updatedSpot, spotImages));
       }
+      const newSpot = await dispatch(updateSpotThunk(updatedSpot, spotImages));
+
+      const spotErrors = await checkSpotErrors(newSpot, price);
+
+      errorObj = { ...spotErrors, ...imgErrors };
+
+      Object.values(errorObj).length
+        ? setErrors(errorObj)
+        : navigateTo(`/spot/${newSpot.id}`);
     } else {
       return alert("You must be signed in to edit a spot!");
     }
