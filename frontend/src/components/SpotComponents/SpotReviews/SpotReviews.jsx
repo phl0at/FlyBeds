@@ -9,9 +9,9 @@ import { useEffect } from "react";
 import "./SpotReviews.css";
 
 const SpotReviewInfo = ({
+  currUser,
   reviewId,
   userId,
-  currUser,
   firstName,
   date,
   review,
@@ -35,7 +35,7 @@ const SpotReviewInfo = ({
   );
 };
 
-const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
+const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
   const dispatch = useDispatch();
   const currUser = useSelector((state) => state.session.user);
   const currSpot = useSelector((state) => state.spots[spotId]);
@@ -45,11 +45,15 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
 
+  if (!currUser) {
+    return <h1>Sign in to see reviews!</h1>;
+  }
+
   return (
     <>
       <header>
         <h3>
-          <IoStar /> {typeof Number(avgRating) === "number" ? avgRating : "New"} •{" "}
+          <IoStar /> {notNum ? "New" : avgRating} •{" "}
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </h3>
       </header>

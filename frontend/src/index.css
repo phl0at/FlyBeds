@@ -23,6 +23,7 @@ button {
   color: rgb(40, 50, 76);
   font-weight: bold;
   margin: 5px;
+  cursor: pointer;
 }
 
 button:hover,

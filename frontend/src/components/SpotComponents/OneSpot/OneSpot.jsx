@@ -13,7 +13,8 @@ const OneSpot = () => {
   const { spotId } = useParams();
   const spotReviews = useSelector(getReviewArray);
   const spotData = useSelector((state) => state.spots);
-  const { avgRating, numReviews } = calculateAvg(spotReviews);
+  let { avgRating, numReviews } = calculateAvg(spotReviews);
+  const notNum = avgRating.split(".")[0] === "NaN"
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
@@ -59,13 +60,14 @@ const OneSpot = () => {
         <div className="price">{`$${price} / night`}</div>
         <div className="rating-review">
           <IoStar />
-          {typeof Number(avgRating) === "number" ? avgRating : "New"} •{" "}
+          {notNum ? "New" : avgRating} •{" "}
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </div>
         <button onClick={() => alert("Feature coming soon!")}>Reserve</button>
       </div>
       <div className="reviews">
         <SpotReviews
+          notNum={notNum}
           reviewData={spotReviews}
           spotId={spotId}
           avgRating={avgRating}
