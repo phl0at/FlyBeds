@@ -159,11 +159,8 @@ export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
     });
 
     if (res.ok) {
-      //   const spotData = await res.json();
-      //   dispatch(updateSpot(spotData));
-      //   return spotData;
-      // }
       const spotData = await res.json();
+
       const imgRes = await csrfFetch(`/api/spots/${spotData.id}/images`, {
         method: "POST",
         header: {
@@ -180,7 +177,7 @@ export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
       }
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
     const err = await e.json();
     return err;
   }

@@ -3,7 +3,7 @@ import {
   getOneSpotThunk,
   updateSpotThunk,
 } from "../../../store/spots";
-import { checkSpotErrors } from "../../../utils/JS/helper";
+import { checkSpotErrors, checkImageErrors } from "../../../utils/JS/helper";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -73,13 +73,24 @@ const UpdateSpot = () => {
         { url: image4, preview: false },
       ];
 
-      const newSpot = await dispatch(updateSpotThunk(updatedSpot, spotImages));
+      const imgErrors = checkImageErrors(spotImages);
+      if (Object.values(imgErrors).length) {
+        setErrors(imgErrors);
+      } else {
+        console.log(imgErrors);
 
-      const err = await checkSpotErrors(newSpot, spotImages, price);
+        const newSpot = await dispatch(
+          updateSpotThunk(updatedSpot, spotImages)
+        );
 
-      Object.values(err).length
-        ? setErrors(err)
-        : navigateTo(`/spot/${newSpot.id}`);
+        const spotErrors = await checkSpotErrors(newSpot, spotImages, price);
+
+        const err = { ...spotErrors, ...imgErrors };
+
+        Object.values(err).length
+          ? setErrors(err)
+          : navigateTo(`/spot/${newSpot.id}`);
+      }
     } else {
       return alert("You must be signed in to edit a spot!");
     }
