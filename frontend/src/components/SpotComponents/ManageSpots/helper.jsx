@@ -1,4 +1,5 @@
 import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
+import DeleteSpot from "../../ModalComponents/DeleteSpotModal/DeleteSpot";
 import { IoStar } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 
@@ -24,11 +25,11 @@ export const UserSpots = ({ spot }) => {
           <button>
             <NavLink to={`/spot/${spot.id}/update`}>Update</NavLink>
           </button>
-          <OpenModalMenuItem
-            itemText="Delete"
-            //   modalComponent={<DeleteSpot spotId={spot.id}/>}
-          />
         </div>
+        <OpenModalMenuItem
+          itemText="Delete"
+          modalComponent={<DeleteSpot spotId={spot.id} />}
+        />
       </section>
     </>
   );

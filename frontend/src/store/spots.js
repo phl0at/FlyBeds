@@ -11,6 +11,7 @@ const GET_OWNED_SPOTS = "spot/getOwned";
 const GET_ONE_SPOT = "spot/getOne";
 const CREATE_SPOT = "spot/create";
 const UPDATE_SPOT = "spot/update";
+const DELETE_SPOT = "spot/delete";
 const ADD_IMAGES = "spot/addImages";
 
 //! --------------------------------------------------------------------
@@ -59,6 +60,13 @@ const updateSpot = (payload) => {
   };
 };
 
+const deleteSpot = (payload) => {
+  return {
+    type: DELETE_SPOT,
+    payload,
+  };
+};
+
 const addImages = (payload, id) => {
   return {
     type: ADD_IMAGES,
@@ -82,7 +90,7 @@ export const getAllSpotsThunk = () => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
   }
 };
 
@@ -99,7 +107,7 @@ export const getOwnedSpotsThunk = () => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
   }
 };
 
@@ -116,7 +124,7 @@ export const getOneSpotThunk = (spotId) => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
   }
 };
 
@@ -141,7 +149,7 @@ export const createSpotThunk = (spot, imageArr, user) => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
   }
 };
 
@@ -165,7 +173,27 @@ export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
+  }
+};
+
+//! --------------------------------------------------------------------
+
+export const deleteSpotThunk = (spotId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+      method: "DELETE",
+      header: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      dispatch(deleteSpot(spotId));
+    }
+  } catch (e) {
+    const err = await e.json();
+    return err ? err : e;
   }
 };
 
@@ -188,7 +216,7 @@ export const addImagesThunk = (spotData, imageArr) => async (dispatch) => {
     }
   } catch (e) {
     const err = await e.json();
-    return err;
+    return err ? err : e;
   }
 };
 
@@ -234,12 +262,17 @@ const spotReducer = (state = initialState, action) => {
       const newState = { ...state, [action.payload.id]: action.payload };
       return newState;
     }
+    case DELETE_SPOT: {
+      const newState = { ...state };
+      delete newState[action.payload];
+      return newState;
+    }
     case ADD_IMAGES: {
       const newState = {
         ...state,
         [action.id]: {
           ...state[action.id],
-          SpotImages: action.payload
+          SpotImages: action.payload,
         },
       };
       return newState;
