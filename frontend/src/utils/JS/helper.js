@@ -65,6 +65,78 @@ export const checkReviewErrors = (review, rating) => {
   }
 };
 
+export const checkFormErrors = (
+  { country, address, city, lat, lng, state, description, name, price },
+  [previewImage, image1, image2, image3, image4]
+) => {
+  const err = {};
+  if (!country) err.country = "Country is required";
+  if (!address) err.address = "Address is required";
+  if (!city) err.city = "City is required";
+  if (!state) err.state = "State is required";
+
+  if (!description || description.length < 30)
+    err.description = "Description needs a minimum 30 characters";
+
+  if (!name) err.name = "Name is required";
+  if (!price) err.price = "Price is required";
+
+  if (lat < -90 || lat > 90) err.lat = "Latitude must be within -90 and 90";
+
+  if (lng < -180 || lng > 180) err.lng = "Longitude muse be within -180 and 180";
+
+  if (previewImage.url == undefined) {
+    err.previewImage = "Preview Image is required";
+  } else {
+    const fileType =
+      previewImage.url.split(".")[previewImage.url.split(".").length - 1];
+
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      delete err.previewImage;
+    } else {
+      err.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+  }
+  if (image1.url) {
+    const fileType = image1.url.split(".")[image1.url.split(".").length - 1];
+
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      delete err.image1;
+    } else {
+      err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+  }
+  if (image2.url) {
+    const fileType = image2.url.split(".")[image2.url.split(".").length - 1];
+
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      delete err.image2;
+    } else {
+      err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+  }
+  if (image3.url) {
+    const fileType = image3.url.split(".")[image3.url.split(".").length - 1];
+
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      delete err.image3;
+    } else {
+      err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+  }
+  if (image4.url) {
+    const fileType = image4.url.split(".")[image4.url.split(".").length - 1];
+
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      delete err.image4;
+    } else {
+      err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+  }
+
+  return err;
+};
+
 export const checkImageErrors = (spotImages) => {
   const err = {};
 

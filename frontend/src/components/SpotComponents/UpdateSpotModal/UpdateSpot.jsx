@@ -4,7 +4,7 @@ import {
   getOneSpotThunk,
   updateSpotThunk,
 } from "../../../store/spots";
-import { checkSpotErrors, checkImageErrors } from "../../../utils/JS/helper";
+import { checkFormErrors } from "../../../utils/JS/helper";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ import "./UpdateSpot.css";
 
 const UpdateSpot = () => {
   const { spotId } = useParams();
-  const loggedIn = useSelector((state) => state.session.user);
+  const currUser = useSelector((state) => state.session.user);
   const spotData = useSelector((state) => state.spots[spotId]);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
@@ -52,9 +52,7 @@ const UpdateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    let errorObj = {};
-
-    if (loggedIn) {
+    if (currUser) {
       const updatedSpot = {
         id: spotData.id,
         country,
@@ -76,20 +74,21 @@ const UpdateSpot = () => {
         { url: image4, preview: false },
       ];
 
-      const imgErrors = checkImageErrors(spotImages);
-      
-      if (!Object.values(imgErrors).length) {
-        await dispatch(addImagesThunk(updatedSpot, spotImages));
+      const err = checkFormErrors(updatedSpot, spotImages);
+
+      if (Object.values(err).length) {
+        setErrors(err);
+      } else {
+        const newSpot = await dispatch(
+          updateSpotThunk(updatedSpot, spotImages, currUser)
+        );
+        if (newSpot.errors) {
+          setErrors(newSpot.errors);
+        } else {
+          await dispatch(addImagesThunk(newSpot, spotImages));
+          navigateTo(`/spot/${newSpot.id}`);
+        }
       }
-      const newSpot = await dispatch(updateSpotThunk(updatedSpot, spotImages));
-
-      const spotErrors = await checkSpotErrors(newSpot, price);
-
-      errorObj = { ...spotErrors, ...imgErrors };
-
-      Object.values(errorObj).length
-        ? setErrors(errorObj)
-        : navigateTo(`/spot/${newSpot.id}`);
     } else {
       return alert("You must be signed in to edit a spot!");
     }

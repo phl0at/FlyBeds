@@ -155,7 +155,7 @@ export const createSpotThunk = (spot, imageArr, user) => async (dispatch) => {
 
 //! --------------------------------------------------------------------
 
-export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
+export const updateSpotThunk = (spot, imageArr, user) => async (dispatch) => {
   try {
     const res = await csrfFetch(`/api/spots/${spot.id}`, {
       method: "PUT",
@@ -168,6 +168,7 @@ export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
     if (res.ok) {
       const spotData = await res.json();
       spotData.previewImage = imageArr[0].url;
+      spotData.Owner = user;
       dispatch(updateSpot(spotData));
       return spotData;
     }
