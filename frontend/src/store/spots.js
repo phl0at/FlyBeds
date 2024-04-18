@@ -164,7 +164,6 @@ export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
       return spotData;
     }
   } catch (e) {
-    console.log(e);
     const err = await e.json();
     return err;
   }
@@ -240,7 +239,7 @@ const spotReducer = (state = initialState, action) => {
         ...state,
         [action.id]: {
           ...state[action.id],
-          SpotImages: [...action.payload],
+          SpotImages: action.payload
         },
       };
       return newState;
