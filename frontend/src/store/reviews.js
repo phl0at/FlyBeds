@@ -8,6 +8,7 @@ import { createSelector } from "reselect";
 const GET_ALL_REVIEWS = "review/getAll";
 const GET_ONE_REVIEW = "review/getOne";
 const CREATE_REVIEW = "review/create";
+const DELETE_REVIEW = "review/delete";
 
 //! --------------------------------------------------------------------
 //*                           Action Creator
@@ -34,37 +35,52 @@ const createReview = (payload) => {
   };
 };
 
+const deleteReview = (payload) => {
+  return {
+    type: DELETE_REVIEW,
+    payload,
+  };
+};
+
 //! --------------------------------------------------------------------
 //*                       Thunk Action Creator
 //! --------------------------------------------------------------------
 
 export const getAllReviewsThunk = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
-  if (res.ok) {
-    const reviewData = await res.json();
-    dispatch(getAllReviews(reviewData));
-    return reviewData;
-  } else {
-    const err = await res.json();
-    return err;
+    if (res.ok) {
+      const reviewData = await res.json();
+      dispatch(getAllReviews(reviewData));
+      return reviewData;
+    }
+  } catch (e) {
+    const err = await e.json();
+    return err ? err : e;
   }
 };
+
+//! --------------------------------------------------------------------
 
 export const getOneReviewThunk = (userId, spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  try {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
-  if (res.ok) {
-    const reviewData = await res.json();
-    for (const review of reviewData.Reviews) {
-      if (userId === review.userId) dispatch(getOneReview(review));
-      return review;
+    if (res.ok) {
+      const reviewData = await res.json();
+      for (const review of reviewData.Reviews) {
+        if (userId === review.userId) dispatch(getOneReview(review));
+        return review;
+      }
     }
-  } else {
-    const err = await res.json();
-    return err;
+  } catch (e) {
+    const err = await e.json();
+    return err ? err : e;
   }
 };
+
+//! --------------------------------------------------------------------
 
 export const createReviewThunk =
   (review, stars, spotId, currUser) => async (dispatch) => {
@@ -81,15 +97,33 @@ export const createReviewThunk =
         const reviewData = await res.json();
         reviewData.User = currUser;
         dispatch(createReview(reviewData));
-        return reviewData
-      } else {
-        const err = await res.json();
-        return err;
+        return reviewData;
       }
     } catch (e) {
-      return e;
+      const err = await e.json();
+      return err ? err : e;
     }
   };
+
+//! --------------------------------------------------------------------
+
+export const deleteReviewThunk = (reviewId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+      method: "DELETE",
+      header: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      dispatch(deleteReview(reviewId));
+    }
+  } catch (e) {
+    const err = await e.json();
+    return err ? err : e;
+  }
+};
 
 //! --------------------------------------------------------------------
 //*                            Selectors
@@ -123,6 +157,11 @@ const reviewReducer = (state = initialState, action) => {
 
     case CREATE_REVIEW: {
       const newState = { ...state, [action.payload.id]: action.payload };
+      return newState;
+    }
+    case DELETE_REVIEW: {
+      const newState = { ...state };
+      delete newState[action.payload];
       return newState;
     }
     default:

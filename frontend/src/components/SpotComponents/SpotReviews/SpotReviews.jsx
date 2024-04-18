@@ -1,3 +1,5 @@
+import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
+import DeleteReview from "../../ModalComponents/DeleteReviewModal";
 import { getAllReviewsThunk } from "../../../store/reviews";
 import { sortReviews } from "../../../utils/JS/helper";
 import { noReviews, postReviewButton } from "./helper";
@@ -6,15 +8,32 @@ import { IoStar } from "react-icons/io5";
 import { useEffect } from "react";
 import "./SpotReviews.css";
 
-const SpotReviewInfo = ({ firstName, date, review }) => (
-  <>
-    <section>
-      <p>{firstName}</p>
-      <p>{date}</p>
-      <p>{review}</p>
-    </section>
-  </>
-);
+const SpotReviewInfo = ({
+  reviewId,
+  userId,
+  currUser,
+  firstName,
+  date,
+  review,
+}) => {
+  return (
+    <>
+      <section>
+        <p>{firstName}</p>
+        <p>{date}</p>
+        <p>{review}</p>
+        {userId === currUser.id && (
+          <>
+            <OpenModalMenuItem
+              itemText="Delete"
+              modalComponent={<DeleteReview reviewId={reviewId} />}
+            />
+          </>
+        )}
+      </section>
+    </>
+  );
+};
 
 const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
   const dispatch = useDispatch();
@@ -44,23 +63,25 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
         {numReviews === 0 ? noReviews(currUser, currSpot) : null}
       </div>
 
-      {sortByCreatedAt?.map(
-        ({ User: { firstName }, review, id, createdAt }) => {
-          const date = new Date(createdAt).toLocaleDateString("en-us", {
-            year: "numeric",
-            month: "long",
-          });
+      {sortByCreatedAt?.map((review) => {
+        const user = review.User;
+        const date = new Date(review.createdAt).toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "long",
+        });
 
-          return (
-            <SpotReviewInfo
-              key={id}
-              review={review}
-              date={date}
-              firstName={firstName}
-            />
-          );
-        }
-      )}
+        return (
+          <SpotReviewInfo
+            reviewId={review.id}
+            key={review.id}
+            review={review.review}
+            date={date}
+            firstName={user.firstName}
+            userId={user.id}
+            currUser={currUser}
+          />
+        );
+      })}
     </>
   );
 };
