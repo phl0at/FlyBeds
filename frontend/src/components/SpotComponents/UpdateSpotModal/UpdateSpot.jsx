@@ -62,28 +62,20 @@ const UpdateSpot = () => {
         state,
         description,
         name,
-        price: Number(price),
+        price,
       };
 
-      const newSpot = await dispatch(updateSpotThunk(updatedSpot));
+      const spotImages = [
+        { url: previewImage, preview: true },
+        { url: image1, preview: false },
+        { url: image2, preview: false },
+        { url: image3, preview: false },
+        { url: image4, preview: false },
+      ];
 
-      const err = await checkSpotErrors(
-        country,
-        address,
-        city,
-        state,
-        lat,
-        lng,
-        description,
-        name,
-        price,
-        previewImage,
-        image1,
-        image2,
-        image3,
-        image4,
-        newSpot
-      );
+      const newSpot = await dispatch(updateSpotThunk(updatedSpot, spotImages));
+
+      const err = await checkSpotErrors(newSpot, spotImages, price);
 
       Object.values(err).length
         ? setErrors(err)
@@ -94,7 +86,7 @@ const UpdateSpot = () => {
   };
 
   return (
-    <div className="create-form">
+    <div className="update-form">
       <h1>Update your Spot</h1>
       <h3>{`Where's your place located?`}</h3>
       <h5>
@@ -118,10 +110,9 @@ const UpdateSpot = () => {
             value={country}
             name="Country"
             placeholder="Country"
-            onChange={(e) => {
-              setFormData({ ...formData, country: e.target.value });
-              console.log(formData);
-            }}
+            onChange={(e) =>
+              setFormData({ ...formData, country: e.target.value })
+            }
           />
           {/*
           //!-------------------------------------------------------------------
@@ -301,14 +292,14 @@ const UpdateSpot = () => {
         //!-------------------------------------------------------------------
         */}
 
-        {/* <div className="spot-images">
+        <div className="spot-images">
           <label htmlFor="Preview Image URL">
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
           <input
             type="text"
-            value={previewImage ? previewImage : spotData.previewImage}
+            value={previewImage}
             name="Preview Image URL"
             placeholder="Preview Image URL"
             onChange={(e) => {
@@ -319,53 +310,84 @@ const UpdateSpot = () => {
             <div color="red" className="errors">
               {errors.previewImage}
             </div>
-          )} */}
-        {/*
+          )}
+
+          {/*
           //!-------------------------------------------------------------------
           */}
-        {/* <input
+
+          <input
             type="text"
-            value={lat ? lat : spotData.lat}
-            name="Latitude"
-            placeholder="Latitude"
+            value={image1}
+            name="Image URL"
+            placeholder="Image URL"
             onChange={(e) => {
-              setFormData({ ...formData, lat: e.target.value });
+              setFormData({ ...formData, image1: e.target.value });
             }}
           />
           {errors.image1 && (
             <div color="red" className="errors">
               {errors.image1}
             </div>
-          )} */}
-        {/*
+          )}
+
+          {/*
           //!-------------------------------------------------------------------
           */}
-        {/* {textInput(image2, "Image URL", setFormData, spotData[spotId])}
+
+          <input
+            type="text"
+            value={image2}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image2: e.target.value });
+            }}
+          />
           {errors.image2 && (
             <div color="red" className="errors">
               {errors.image2}
             </div>
-          )} */}
-        {/*
+          )}
+
+          {/*
           //!-------------------------------------------------------------------
           */}
-        {/* {textInput(image3, "Image URL", setFormData, spotData[spotId])}
+
+          <input
+            type="text"
+            value={image3}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image3: e.target.value });
+            }}
+          />
           {errors.image3 && (
             <div color="red" className="errors">
               {errors.image3}
             </div>
-          )} */}
-        {/*
+          )}
+
+          {/*
           //!-------------------------------------------------------------------
           */}
-        {/* {textInput(image4, "Image URL", setFormData, spotData[spotId])}
+
+          <input
+            type="text"
+            value={image4}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image4: e.target.value });
+            }}
+          />
           {errors.image4 && (
             <div color="red" className="errors">
               {errors.image4}
             </div>
           )}
-        </div> */}
-
+        </div>
         {/*
         //!-------------------------------------------------------------------
         //?----------------------- SUBMIT BUTTON -----------------------------

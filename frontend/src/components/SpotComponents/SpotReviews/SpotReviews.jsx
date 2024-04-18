@@ -30,7 +30,7 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews }) => {
     <>
       <header>
         <h3>
-          <IoStar /> {avgRating ? avgRating : "New"} •{" "}
+          <IoStar /> {typeof avgRating === Number ? avgRating : "New"} •{" "}
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </h3>
       </header>

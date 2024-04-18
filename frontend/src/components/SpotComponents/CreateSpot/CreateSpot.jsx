@@ -1,5 +1,4 @@
 import { checkSpotErrors } from "../../../utils/JS/helper";
-import { textInput } from "./helper";
 import { createSpotThunk } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,41 +9,30 @@ const CreateSpot = () => {
   const loggedIn = useSelector((state) => state.session.user);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [description, setDescription] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const [image1, setImage1] = useState("");
-  const [image2, setImage2] = useState("");
-  const [image3, setImage3] = useState("");
-  const [image4, setImage4] = useState("");
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setCountry("");
-    setAddress("");
-    setCity("");
-    setState("");
-    setLat("");
-    setLng("");
-    setDescription("");
-    setName("");
-    setPrice("");
-    setPreviewImage("");
-    setImage1("");
-    setImage2("");
-    setImage3("");
-    setImage4("");
+    setFormData({});
     setErrors({});
   }, []);
 
-  
+  const {
+    country,
+    address,
+    city,
+    lat,
+    lng,
+    state,
+    description,
+    name,
+    price,
+    previewImage,
+    image1,
+    image2,
+    image3,
+    image4,
+  } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -72,23 +60,7 @@ const CreateSpot = () => {
 
       const newSpot = await dispatch(createSpotThunk(spotData, spotImages));
 
-      const err = await checkSpotErrors(
-        country,
-        address,
-        city,
-        state,
-        lat,
-        lng,
-        description,
-        name,
-        price,
-        previewImage,
-        image1,
-        image2,
-        image3,
-        image4,
-        newSpot
-      );
+      const err = await checkSpotErrors(newSpot, spotImages, price);
 
       Object.values(err).length
         ? setErrors(err)
@@ -118,7 +90,15 @@ const CreateSpot = () => {
               {errors.country}
             </div>
           )}
-          {textInput(country, "Country", setCountry)}
+          <input
+            type="text"
+            value={country}
+            name="Country"
+            placeholder="Country"
+            onChange={(e) =>
+              setFormData({ ...formData, country: e.target.value })
+            }
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -128,7 +108,15 @@ const CreateSpot = () => {
               {errors.address}
             </div>
           )}
-          {textInput(address, "Address", setAddress)}
+          <input
+            type="text"
+            value={address}
+            name="Address"
+            placeholder="Address"
+            onChange={(e) => {
+              setFormData({ ...formData, address: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -138,7 +126,15 @@ const CreateSpot = () => {
               {errors.city}
             </div>
           )}
-          {textInput(city, "City", setCity)}
+          <input
+            type="text"
+            value={city}
+            name="City"
+            placeholder="City"
+            onChange={(e) => {
+              setFormData({ ...formData, city: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -148,7 +144,15 @@ const CreateSpot = () => {
               {errors.state}
             </div>
           )}
-          {textInput(state, "State", setState)}
+          <input
+            type="text"
+            value={state}
+            name="State"
+            placeholder="State"
+            onChange={(e) => {
+              setFormData({ ...formData, state: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -158,7 +162,15 @@ const CreateSpot = () => {
               {errors.lat}
             </div>
           )}
-          {textInput(lat, "Latitude", setLat)}
+          <input
+            type="text"
+            value={lat}
+            name="Latitude"
+            placeholder="Latitude"
+            onChange={(e) => {
+              setFormData({ ...formData, lat: e.target.value });
+            }}
+          />
           {/*
           //!-------------------------------------------------------------------
           */}
@@ -168,7 +180,15 @@ const CreateSpot = () => {
               {errors.lng}
             </div>
           )}
-          {textInput(lng, "Longitude", setLng)}
+          <input
+            type="text"
+            value={lng}
+            name="Longitude"
+            placeholder="Longitude"
+            onChange={(e) => {
+              setFormData({ ...formData, lng: e.target.value });
+            }}
+          />
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -186,7 +206,9 @@ const CreateSpot = () => {
             value={description}
             placeholder="Please write at least 30 characters"
             rows="10"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
           />
           {errors.description && (
             <div color="red" className="errors">
@@ -205,7 +227,15 @@ const CreateSpot = () => {
             {`Catch guests' attention with a spot title that highlights what makes
             your place special.`}
           </h5>
-          {textInput(name, "Name your Spot", setName)}
+          <input
+            type="text"
+            value={name}
+            name="Name"
+            placeholder="Name"
+            onChange={(e) => {
+              setFormData({ ...formData, name: e.target.value });
+            }}
+          />
           {errors.name && (
             <div color="red" className="errors">
               {errors.name}
@@ -226,51 +256,98 @@ const CreateSpot = () => {
             in search results.
           </h5>
           <div id="$">$</div>
-          {textInput(price, "Price per night (USD)", setPrice)}
+          <input
+            type="text"
+            value={price}
+            name="Price"
+            placeholder="Price"
+            onChange={(e) => {
+              setFormData({ ...formData, price: e.target.value });
+            }}
+          />
           {errors.price && (
             <div color="red" className="errors">
               {errors.price}
             </div>
           )}
         </div>
+
         {/*
         //!-------------------------------------------------------------------
         //?-------------------------- IMAGES ---------------------------------
         //!-------------------------------------------------------------------
         */}
+
         <div className="spot-images">
           <label htmlFor="Preview Image URL">
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
-          {textInput(previewImage, "Preview Image URL", setPreviewImage)}
+          <input
+            type="text"
+            value={previewImage}
+            name="Preview Image URL"
+            placeholder="Preview Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, previewImage: e.target.value });
+            }}
+          />
           {errors.previewImage && (
             <div color="red" className="errors">
               {errors.previewImage}
             </div>
           )}
+
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image1, "Image URL", setImage1)}
+
+          <input
+            type="text"
+            value={image1}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image1: e.target.value });
+            }}
+          />
           {errors.image1 && (
             <div color="red" className="errors">
               {errors.image1}
             </div>
           )}
+
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image2, "Image URL", setImage2)}
+
+          <input
+            type="text"
+            value={image2}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image2: e.target.value });
+            }}
+          />
           {errors.image2 && (
             <div color="red" className="errors">
               {errors.image2}
             </div>
           )}
+
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image3, "Image URL", setImage3)}
+          <input
+            type="text"
+            value={image3}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image3: e.target.value });
+            }}
+          />
           {errors.image3 && (
             <div color="red" className="errors">
               {errors.image3}
@@ -279,7 +356,15 @@ const CreateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          {textInput(image4, "Image URL", setImage4)}
+          <input
+            type="text"
+            value={image4}
+            name="Image URL"
+            placeholder="Image URL"
+            onChange={(e) => {
+              setFormData({ ...formData, image4: e.target.value });
+            }}
+          />
           {errors.image4 && (
             <div color="red" className="errors">
               {errors.image4}

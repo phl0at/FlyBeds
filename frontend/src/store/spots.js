@@ -70,12 +70,10 @@ export const getAllSpotsThunk = () => async (dispatch) => {
       const spotData = await res.json();
       dispatch(getAllSpots(spotData));
       return spotData;
-    } else {
-      const err = await res.json();
-      return err;
     }
   } catch (e) {
-    return e;
+    const err = await e.json();
+    return err;
   }
 };
 
@@ -89,12 +87,10 @@ export const getOwnedSpotsThunk = () => async (dispatch) => {
       const spotData = await res.json();
       dispatch(getOwnedSpots(spotData));
       return spotData;
-    } else {
-      const err = await res.json();
-      return err;
     }
   } catch (e) {
-    return e;
+    const err = await e.json();
+    return err;
   }
 };
 
@@ -108,12 +104,10 @@ export const getOneSpotThunk = (spotId) => async (dispatch) => {
       const spotData = await res.json();
       dispatch(getOneSpot(spotData));
       return spotData;
-    } else {
-      const err = await res.json();
-      return err;
     }
   } catch (e) {
-    return e;
+    const err = await e.json();
+    return err;
   }
 };
 
@@ -144,24 +138,18 @@ export const createSpotThunk = (spot, imageArr) => async (dispatch) => {
         spotData.previewImage = imgData[0].url;
         dispatch(createSpot(spotData));
         return spotData;
-      } else {
-        const err = await imgRes.json();
-        return err;
       }
-    } else {
-      const err = await spotRes.json();
-      return err;
     }
   } catch (e) {
-    return e;
+    const err = await e.json();
+    return err;
   }
 };
 
 //! --------------------------------------------------------------------
 
-export const updateSpotThunk = (spot) => async (dispatch) => {
+export const updateSpotThunk = (spot, imageArr) => async (dispatch) => {
   try {
-    console.log('?????????????', spot)
     const res = await csrfFetch(`/api/spots/${spot.id}`, {
       method: "PUT",
       header: {
@@ -171,15 +159,30 @@ export const updateSpotThunk = (spot) => async (dispatch) => {
     });
 
     if (res.ok) {
+      //   const spotData = await res.json();
+      //   dispatch(updateSpot(spotData));
+      //   return spotData;
+      // }
       const spotData = await res.json();
-      dispatch(updateSpot(spotData));
-      return spotData;
-    } else {
-      const err = await res.json();
-      return err;
+      const imgRes = await csrfFetch(`/api/spots/${spotData.id}/images`, {
+        method: "POST",
+        header: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(imageArr),
+      });
+
+      if (imgRes.ok) {
+        const imgData = await imgRes.json();
+        spotData.previewImage = imgData[0].url;
+        dispatch(updateSpot(spotData));
+        return spotData;
+      }
     }
   } catch (e) {
-    return e;
+    console.log(e)
+    const err = await e.json();
+    return err;
   }
 };
 
