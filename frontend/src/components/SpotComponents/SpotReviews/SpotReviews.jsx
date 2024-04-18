@@ -22,7 +22,7 @@ const SpotReviewInfo = ({
         <p>{firstName}</p>
         <p>{date}</p>
         <p>{review}</p>
-        {userId === currUser.id && (
+        {currUser && userId === currUser.id && (
           <>
             <OpenModalMenuItem
               itemText="Delete"
@@ -45,9 +45,6 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
 
-  if (!currUser) {
-    return <h1>Sign in to see reviews!</h1>;
-  }
 
   return (
     <>

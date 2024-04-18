@@ -5,11 +5,12 @@ import LoginFormModal from "../ModalComponents/LoginFormModal";
 import { useState, useEffect, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Navigation.css"
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigateTo = useNavigate()
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -38,6 +39,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    navigateTo("/")
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
