@@ -67,7 +67,8 @@ export const checkReviewErrors = (review, rating) => {
 
 export const checkFormErrors = (
   { country, address, city, lat, lng, state, description, name, price },
-  [previewImage, image1, image2, image3, image4]
+  [previewImage, image1, image2, image3, image4],
+  update
 ) => {
   const err = {};
   if (!country) err.country = "Country is required";
@@ -83,10 +84,16 @@ export const checkFormErrors = (
 
   if (lat < -90 || lat > 90) err.lat = "Latitude must be within -90 and 90";
 
-  if (lng < -180 || lng > 180) err.lng = "Longitude muse be within -180 and 180";
+  if (lng < -180 || lng > 180)
+    err.lng = "Longitude muse be within -180 and 180";
 
-  if (previewImage.url == undefined) {
-    err.previewImage = "Preview Image is required";
+  //!----------- IF IN CREATE FORM AND PREVIEW IS REQUIRED -----
+  if (!update) {
+    if (previewImage.url == undefined) {
+      err.previewImage = "Preview Image is required";
+    } else {
+      delete err.previewImage;
+    }
   } else {
     const fileType =
       previewImage.url.split(".")[previewImage.url.split(".").length - 1];
