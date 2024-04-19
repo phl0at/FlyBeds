@@ -1,0 +1,26 @@
+header {
+  margin-top: 5em;
+  padding: 1em;
+  border-top: solid 1px black;
+}
+.review {
+  border-radius: 20px;
+  box-shadow: -8px 6px 6px rgb(19, 21, 24);
+  margin-left: 2em;
+  margin-bottom: 3em;
+  display: grid;
+  grid-template-rows: 20% 20% 60%;
+}
+.first-name {
+  font-weight: lighter;
+  margin-top: 0.7em;
+  margin-left: 1em;
+}
+.date {
+  margin-top: 0.7em;
+  margin-left: 1.1em;
+}
+.text {
+  font-weight: lighter;
+  margin-left: 1.5em;
+}

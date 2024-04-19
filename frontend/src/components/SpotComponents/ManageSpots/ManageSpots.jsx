@@ -28,9 +28,8 @@ const ManageSpots = () => {
     <>
       <h1>Manage Spots</h1>
       <section>
-        {spotData.map(
-          (spot) => {
-
+        <main className="spots-grid">
+          {spotData.map((spot) => {
             if (spot.avgRating) {
               spot.avgRating = spot.avgRating.toString();
               if (spot.avgRating.split(".").length < 2) {
@@ -38,9 +37,9 @@ const ManageSpots = () => {
               }
             }
 
-            return <UserSpots key={spot.id} spot={spot} />
-          }
-        )}
+            return <UserSpots key={spot.id} spot={spot} />;
+          })}
+        </main>
       </section>
     </>
   );

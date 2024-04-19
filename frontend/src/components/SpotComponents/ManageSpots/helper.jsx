@@ -22,7 +22,7 @@ export const UserSpots = ({ spot }) => {
           </div>
         </NavLink>
         <div>
-          <button>
+          <button className="shadow">
             <NavLink to={`/spot/${spot.id}/update`}>Update</NavLink>
           </button>
         </div>

@@ -14,7 +14,7 @@ const OneSpot = () => {
   const spotReviews = useSelector(getReviewArray);
   const spotData = useSelector((state) => state.spots);
   let { avgRating, numReviews } = calculateAvg(spotReviews);
-  const notNum = avgRating.split(".")[0] === "NaN"
+  const notNum = avgRating.split(".")[0] === "NaN";
 
   useEffect(() => {
     dispatch(getAllReviewsThunk(spotId));
@@ -42,38 +42,58 @@ const OneSpot = () => {
 
   return (
     <>
-      <h1>{name}</h1>
-      <h2>{`${city}, ${state}, ${country}`}</h2>
-      <div className="images">
-        {!hasImages && <div>No images</div>}
-        <div className="main-img">{hasImages && <img src={mainImg} />}</div>
-        <div className="other-img">
-          {hasImages &&
-            otherImg.map((img, i) => (
-              <img className="single-img" key={i} src={img} />
-            ))}
+      <main className="one-spot-page">
+        <div className="heading">
+          <h1 className="title">{name}</h1>
+          <h3 className="location">{`${city}, ${state}, ${country}`}</h3>
         </div>
-      </div>
-      <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>
-      <p>{description}</p>
-      <div className="info-box">
-        <div className="price">{`$${price} / night`}</div>
-        <div className="rating-review">
-          <IoStar />
-          {notNum ? "New" : avgRating} •{" "}
-          {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
+        <div className="all-images">
+          {!hasImages && <div>No images</div>}
+          <div className="preview-box">
+            {hasImages && <img className="preview-image" src={mainImg} />}
+          </div>
+          <div className="other-box">
+            {hasImages &&
+              otherImg.map((img, i) => (
+                <img className="other-image" key={i} src={img} />
+              ))}
+          </div>
         </div>
-        <button onClick={() => alert("Feature coming soon!")}>Reserve</button>
-      </div>
-      <div className="reviews">
-        <SpotReviews
-          notNum={notNum}
-          reviewData={spotReviews}
-          spotId={spotId}
-          avgRating={avgRating}
-          numReviews={numReviews}
-        />
-      </div>
+        <div className="info-box">
+          <div className="price">
+            <h4>{`$${price} / night`}</h4>
+          </div>
+          <div className="rating-review">
+            <h6>
+              <IoStar className="blue" />{" "}
+              {notNum ? "New" : avgRating} •{" "}
+              {numReviews === 1
+                ? `${numReviews} Review`
+                : `${numReviews} Reviews`}
+            </h6>
+          </div>
+          <button
+            className="shadow"
+            onClick={() => alert("Feature coming soon!")}
+          >
+            Reserve
+          </button>
+        </div>
+        <div className="description-box">
+          <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>
+          <h5 className="description">{description}</h5>
+        </div>
+
+        <div className="reviews">
+          <SpotReviews
+            notNum={notNum}
+            reviewData={spotReviews}
+            spotId={spotId}
+            avgRating={avgRating}
+            numReviews={numReviews}
+          />
+        </div>
+      </main>
     </>
   );
 };

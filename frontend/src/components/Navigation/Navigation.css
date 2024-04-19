@@ -25,7 +25,7 @@
 
 .create-button {
   border-radius: 20px;
-  box-shadow: 8px 6px 6px rgb(19, 21, 24);
+  box-shadow:-8px 6px 6px rgb(19, 21, 24);
   padding: 11px 10px 11px 10px;
 }
 

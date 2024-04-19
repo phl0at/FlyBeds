@@ -7,9 +7,12 @@ body {
 }
 
 a {
-  color: rgb(247, 240, 219);
+  color: rgb(214, 208, 181);
   text-decoration: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.blue{
+ color: rgb(53, 157, 253)
 }
 
 button {
@@ -45,7 +48,7 @@ img {
   border-radius: 20px;
   max-width: 300px;
   max-height: 210px;
-  box-shadow: 8px 6px 6px rgb(19, 21, 24);
+  box-shadow: -8px 6px 6px rgb(19, 21, 24);
 }
 
 img:hover {
@@ -55,5 +58,5 @@ img:hover {
 
 
 .shadow {
-  box-shadow: 6px 6px 6px rgb(19, 21, 24);
+  box-shadow: -6px 6px 6px rgb(19, 21, 24);
 }

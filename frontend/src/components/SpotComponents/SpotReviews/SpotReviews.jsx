@@ -18,18 +18,20 @@ const SpotReviewInfo = ({
 }) => {
   return (
     <>
-      <section>
-        <p>{firstName}</p>
-        <p>{date}</p>
-        <p>{review}</p>
-        {currUser && userId === currUser.id && (
-          <>
-            <OpenModalMenuItem
-              itemText="Delete"
-              modalComponent={<DeleteReview reviewId={reviewId} />}
-            />
-          </>
-        )}
+      <section className="review">
+        <h3 className="first-name">{firstName}</h3>
+        <h5 className="date">{date}</h5>
+        <h6 className="text">{review}</h6>
+        <div>
+          {currUser && userId === currUser.id && (
+            <>
+              <OpenModalMenuItem
+                itemText="Delete"
+                modalComponent={<DeleteReview reviewId={reviewId} />}
+              />
+            </>
+          )}
+        </div>
       </section>
     </>
   );
@@ -45,12 +47,11 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
     dispatch(getAllReviewsThunk(spotId));
   }, [dispatch, spotId]);
 
-
   return (
     <>
       <header>
         <h3>
-          <IoStar /> {notNum ? "New" : avgRating} •{" "}
+          <IoStar className="blue" /> {notNum ? "New" : avgRating} •{" "}
           {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
         </h3>
       </header>

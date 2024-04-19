@@ -21,11 +21,10 @@ export const postReviewButton = (spotId, ownerId, userId, reviews) => {
   }
 
   return (
+
     <OpenModalMenuItem
       itemText="Post Your Review"
       modalComponent={<CreateReview spotId={spotId} />}
     />
   );
 };
-
-

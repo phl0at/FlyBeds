@@ -16,7 +16,7 @@ function OpenModalMenuItem({
 
   return (
     <div>
-      <button onClick={onClick}>{itemText}</button>
+      <button className="shadow" onClick={onClick}>{itemText}</button>
     </div>
   );
 }
