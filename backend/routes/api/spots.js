@@ -20,6 +20,7 @@ const {
 } = require("../../utils/helper");
 const { requireAuth, spotExists, spotOwner } = require("../../utils/auth");
 const express = require("express");
+const { RiContactsBookLine } = require("react-icons/ri");
 const router = express.Router();
 
 // --------------------------- //
@@ -143,22 +144,40 @@ router.post(
   spotOwner,
   async (req, res) => {
     const {
+      spotImages,
       params: { spotId },
       body,
     } = req;
 
-    //!-----FEATURE NOT WORKING MAKE SURE TO IMPLEMENT FUNCTIONALITY TO
-    //!-----TAKE A 5 IMAGE ARRAY AND REPLACE ANY EXISTING IMAGES
-    
     const newImages = [...body];
+    let numImages = 0;
 
-    const existingImages = await SpotImage.findAll({
-      where: {
-        spotId,
-      },
-    });
+    for (const newImage of newImages.slice(1, 5)) {
+      if (newImage.url) numImages++;
+    }
 
+    if (spotImages.length) {
+      for (let i = 0; i < spotImages.length; i++) {
+        existingImage = spotImages[i].dataValues;
+        if (existingImage.preview) {
+          await SpotImage.destroy({ where: { id: existingImage.id } });
+        } else if (numImages > 0) {
+          await SpotImage.destroy({ where: { id: existingImage.id } });
+          numImages--;
+        }
+      }
+    }
+    await SpotImage.create({ spotId, url: newImages[0].url, preview: true });
 
+    for (const newImage of newImages.slice(1, 5)) {
+      if (newImage.url) {
+        await SpotImage.create({ spotId, url: newImage.url, preview: false });
+      }
+    }
+
+    const createdImages = await SpotImage.findAll({ where: { spotId } });
+
+    return res.json(createdImages)
   }
 );
 

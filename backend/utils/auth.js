@@ -1,4 +1,4 @@
-const { User, Spot, Booking, Review, ReviewImage } = require("../db/models");
+const { User, Spot, Booking, Review, ReviewImage, SpotImage } = require("../db/models");
 const jwt = require("jsonwebtoken");
 const { jwtConfig } = require("../config");
 const { secret, expiresIn } = jwtConfig;
@@ -80,7 +80,12 @@ const requireAuth = function (req, _res, next) {
 
 const spotExists = async (req, _res, next) => {
   // If the spot doesn't exist, return an error
-  const spotData = await Spot.findByPk(req.params.spotId);
+  const spotData = await Spot.findOne({
+    where: {
+      id: req.params.spotId,
+    },
+    include: [{ model: SpotImage }],
+  });
 
   if (!spotData) {
     const err = new Error("Spot couldn't be found");
@@ -90,6 +95,7 @@ const spotExists = async (req, _res, next) => {
   } else {
     // If it does exist, attach the queried data to the request
     req.spotData = spotData;
+    req.spotImages = spotData.SpotImages
     return next();
   }
 };
