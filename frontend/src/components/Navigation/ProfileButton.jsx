@@ -46,8 +46,8 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className="shadow" onClick={toggleMenu}>
-        <HiMenu />
+      <button className="shadow menu-button" onClick={toggleMenu}>
+        <HiMenu className="menu-icon" />
       </button>
       <div className={ulClassName} ref={ulRef}>
         {user ? (

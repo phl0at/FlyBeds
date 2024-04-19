@@ -147,6 +147,9 @@ router.post(
       body,
     } = req;
 
+    //!-----FEATURE NOT WORKING MAKE SURE TO IMPLEMENT FUNCTIONALITY TO
+    //!-----TAKE A 5 IMAGE ARRAY AND REPLACE ANY EXISTING IMAGES
+    
     const newImages = [...body];
 
     const existingImages = await SpotImage.findAll({
@@ -155,144 +158,7 @@ router.post(
       },
     });
 
-    if (existingImages) {
-      for (let i = 0; i < existingImages.length; i++) {
-        const img = existingImages[i].dataValues;
-        console.log(img.id)
-        if (img.preview) {
-          await SpotImage.destroy({
-            where: {
-              id: img.id,
-            },
-          });
-        }
-      }
 
-      await SpotImage.create({
-        spotId,
-        url: newImages[0].url,
-        preview: true,
-      });
-
-      if (newImages[1].url && existingImages[1]) {
-        await SpotImage.destroy({
-          where: {
-            id: existingImages[1].id,
-          },
-        });
-
-        await SpotImage.create({
-          spotId,
-          url: newImages[1].url,
-          preview: false,
-        });
-      } else if (newImages[1]) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[1].url,
-          preview: false,
-        });
-      }
-      if (newImages[2] && existingImages[2]) {
-        await SpotImage.destroy({
-          where: {
-            id: existingImages[2].id,
-          },
-        });
-
-        await SpotImage.create({
-          spotId,
-          url: newImages[2].url,
-          preview: false,
-        });
-      } else if (newImages[2]) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[2].url,
-          preview: false,
-        });
-      }
-
-      if (newImages[3].url && existingImages[3]) {
-        await SpotImage.destroy({
-          where: {
-            id: existingImages[3].id,
-          },
-        });
-
-        await SpotImage.create({
-          spotId,
-          url: newImages[3].url,
-          preview: false,
-        });
-      } else if (newImages[3].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[3].url,
-          preview: false,
-        });
-      }
-
-      if (newImages[4].url && existingImages[4]) {
-        await SpotImage.destroy({
-          where: {
-            id: existingImages[4].id,
-          },
-        });
-
-        await SpotImage.create({
-          spotId,
-          url: newImages[4].url,
-          preview: false,
-        });
-      } else if (newImages[4].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[4].url,
-          preview: false,
-        });
-      }
-      return res.json(newImages);
-    } else {
-      await SpotImage.create({
-        spotId,
-        url: newImages[0].url,
-        preview: true,
-      });
-
-      if (newImages[1].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[1].url,
-          preview: false,
-        });
-      }
-
-      if (newImages[2].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[2].url,
-          preview: false,
-        });
-      }
-
-      if (newImages[3].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[3].url,
-          preview: false,
-        });
-      }
-
-      if (newImages[4].url) {
-        await SpotImage.create({
-          spotId,
-          url: newImages[4].url,
-          preview: false,
-        });
-      }
-      return res.json(newImages);
-    }
   }
 );
 

@@ -15,7 +15,7 @@ const AllSpots = () => {
 
   return (
     <>
-      <section>
+      <main className="spots-grid">
         {spotData.map(
           ({ id, name, city, state, price, previewImage, avgRating }) => {
             if (avgRating) {
@@ -26,28 +26,29 @@ const AllSpots = () => {
             }
 
             return (
-              <NavLink
-                to={`/spot/${id}`}
-                key={id}
-                className="spot-list tooltip"
-              >
+              <NavLink to={`/spot/${id}`} key={id} className="spot-card">
                 <span className="tooltiptext">{name}</span>
-                <img src={previewImage} />
-                <div className="spot-info">
-                  <p>
-                    {city}, {state}
-                  </p>
-                  <p>
-                    <IoStar />
-                    {avgRating ? avgRating : "New"}
-                  </p>
-                  <p>{`$${price} / night`}</p>
+                <div className="spot-image">
+                  <img className="image" src={previewImage} />
+                </div>
+                <div className="info-container">
+                  <div className="spot-info-left">
+                    <div>
+                      {city}, {state}{" "}
+                    </div>
+                    <div>{`$${price} / night`}</div>
+                  </div>
+                  <div className="spot-info-right">
+                    <div>
+                      <IoStar />{" "}{avgRating ? avgRating : "New"}
+                    </div>
+                  </div>
                 </div>
               </NavLink>
             );
           }
         )}
-      </section>
+      </main>
     </>
   );
 };
