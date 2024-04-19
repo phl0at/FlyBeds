@@ -92,7 +92,7 @@ module.exports = {
           lat: 36,
           lng: -86,
           name: "Lil t's Crib",
-          description: "Perfect for anyone who find themselves vertically challenged!",
+          description: "Perfect for anyone who finds themselves vertically challenged!",
           price: 77,
         },
         {
