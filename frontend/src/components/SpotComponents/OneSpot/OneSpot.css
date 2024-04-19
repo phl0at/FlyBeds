@@ -23,7 +23,7 @@ h5 {
 .preview-box {
   height: 100%;
   width: 100%;
-  margin-left: 1.5em;
+  margin-left: 3.5em;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -50,7 +50,7 @@ h5 {
   max-width: 250px;
   height: 120px;
   margin-top: 1.5em;
-  margin-left: 76%;
+  margin-left: 80%;
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(2, 50%);
