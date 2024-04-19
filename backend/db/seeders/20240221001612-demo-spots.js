@@ -86,13 +86,13 @@ module.exports = {
         {
           ownerId: 1,
           address: "777 Lucky Ln",
-          city: "Seventh City",
+          city: "Bonita Springs",
           state: "Florida",
           country: "USA",
           lat: 36,
           lng: -86,
-          name: "The Spot",
-          description: "Good luck",
+          name: "Lil t's Crib",
+          description: "Perfect for anyone who find themselves vertically challenged!",
           price: 77,
         },
         {
