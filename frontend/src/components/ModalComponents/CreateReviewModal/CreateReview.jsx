@@ -68,7 +68,7 @@ const CreateReview = ({ spotId }) => {
           type="number"
           value={stars}
           min={0}
-          max={6}
+          max={5}
           onChange={(e) => {
             setStars(Number(e.target.value));
           }}
