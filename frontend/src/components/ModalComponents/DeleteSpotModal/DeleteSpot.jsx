@@ -19,7 +19,7 @@ const DeleteSpot = ({ spotId }) => {
 
   return (
     <>
-      <div className="delete-menu">
+      <div className="delete-spot-menu">
         <h1 className="header">Confirm Delete</h1>
         <h5 className="header">Are you sure you want to remove this spot?</h5>
 

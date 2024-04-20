@@ -1,3 +1,12 @@
 .red {
-    background-color: red;
+  background-color: red;
+}
+
+.delete-review-menu {
+  padding: 2em;
+  height: 35vh;
+  width: 50vh;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 0.5em;
 }

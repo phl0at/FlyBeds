@@ -19,27 +19,26 @@ const DeleteReview = ({ reviewId }) => {
 
   return (
     <>
-      <div>
-        <h1>Confirm Delete</h1>
-        <h5>Are you sure you want to remove this review?</h5>
-        <div>
-          <button
-            onClick={() => {
-              onClick(reviewId);
-            }}
-            className="red shadow"
-          >
-            Yes (Delete Review)
-          </button>
-          <button
-            className="grey shadow"
-            onClick={() => {
-              closeModal();
-            }}
-          >
-            No (Keep Review)
-          </button>
-        </div>
+      <div className="delete-review-menu">
+        <h1 className="header">Confirm Delete</h1>
+        <h5 className="header">Are you sure you want to remove this review?</h5>
+
+        <button
+          onClick={() => {
+            onClick(reviewId);
+          }}
+          className="red shadow"
+        >
+          Yes (Delete Review)
+        </button>
+        <button
+          className="grey shadow"
+          onClick={() => {
+            closeModal();
+          }}
+        >
+          No (Keep Review)
+        </button>
       </div>
     </>
   );
