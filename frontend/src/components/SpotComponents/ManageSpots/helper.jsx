@@ -7,7 +7,7 @@ import "./ManageSpots.css";
 export const UserSpots = ({ spot }) => {
   return (
     <>
-      <div className="spot-card">
+      <div className="manage-spot-card">
         <NavLink to={`/spot/${spot.id}`}>
           <span className="tooltiptext">{spot.name}</span>
           <div className="spot-image">

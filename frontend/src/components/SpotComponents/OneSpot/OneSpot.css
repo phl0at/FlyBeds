@@ -17,7 +17,8 @@ h5 {
   gap: 0.5em;
   border-bottom: solid 1px rgb(55, 54, 52);
   border-top: solid 1px rgb(55, 54, 52);
-  box-shadow: 10px 10px 10px rgba(19, 21, 24, .8), -10px -8px 10px rgba(19, 21, 24, .8);
+  box-shadow: 10px 10px 10px rgba(19, 21, 24, 0.8),
+    -10px -8px 10px rgba(19, 21, 24, 0.8);
 }
 
 .preview-box {
@@ -56,7 +57,7 @@ h5 {
   border-radius: 20px;
   border: solid 1px rgb(53, 157, 253);
   box-shadow: 8px 10px 8px rgb(27, 34, 44), -8px -8px 8px rgb(27, 34, 44);
-  button {
+  :is(button) {
     grid-column: span 2;
     margin-bottom: 8px;
     margin-left: 8px;
@@ -68,7 +69,7 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
-  h4 {
+  :is(h4) {
     font-weight: lighter;
   }
 }
@@ -77,7 +78,7 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
-  h6 {
+  :is(h6) {
     font-weight: lighter;
   }
 }
@@ -91,7 +92,7 @@ h5 {
   margin-left: 10%;
   display: grid;
   grid-template-rows: 45% 65%;
-  h3 {
+  :is(h3) {
     font-size: large;
     font-weight: light;
     padding: 1em;

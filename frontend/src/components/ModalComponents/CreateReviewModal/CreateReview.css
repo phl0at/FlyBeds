@@ -1,3 +1,38 @@
 .grey {
-    background-color: grey;
+  background-color: grey;
+}
+
+.review-menu {
+  padding: 3em;
+  height: 50vh;
+  width: 60vh;
+  display: grid;
+  grid-template-rows: 20% 10% 70%;
+}
+
+.review-form {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  grid-template-rows: 60% 20% 20%;
+  grid-gap: 0.5em;
+}
+
+.review-text {
+  grid-column: span 2;
+}
+
+.stars {
+  margin-left: 12em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.stars-label {
+  margin-top: 1em;
+}
+.review-button {
+  grid-column: span 2;
+}
+
+.review-error {
+    font-size: 12pt;
 }

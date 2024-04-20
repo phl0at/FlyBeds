@@ -1,9 +1,22 @@
+.manage-spots-grid {
+  width: 100%;
+  margin-left: 5%;
+  margin-top: 2%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20%, 20%));
+  gap: 3%;
+  height: 350px;
+}
+
+
 .manage-spot {
   color: rgb(40, 50, 76);
 }
 
-.spot-card {
-  grid-template-rows: 70% 10%;
+.manage-spot-card {
+  display: grid;
+  grid-template-rows: 90% 10%;
+
 }
 
 .spot-image {
@@ -16,7 +29,7 @@
 }
 
 .update {
-    a {
+    :is(a) {
         color: rgb(40, 50, 76);
         font-size: 10pt;
     };

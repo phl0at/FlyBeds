@@ -1,8 +1,42 @@
 .grey {
-    background-color: grey;
+  background-color: grey;
 }
 
 .menu {
-    padding: 10px;
-    
+  padding: 10px;
+  height: 40vh;
+  width: 60vh;
+  display: grid;
+  grid-template-rows: 25% 60% 15%;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+
+}
+
+.login-form {
+  margin-top: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
+  display: grid;
+  grid-gap: 0.5em;
+}
+
+.login-modal {
+    margin-left: 5em;
+    margin-right: 5em;
+    margin-bottom: 1em;
+    margin-top: .5em;
+}
+
+.demo-button {
+    margin-left: 10em;
+    margin-right: 10em;
+    margin-bottom: 1em;
+}
+
+.login-error {
+    margin-left: 3em;
 }

@@ -6,11 +6,11 @@ import { useState, useEffect, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import "./Navigation.css"
+import "./Navigation.css";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const navigateTo = useNavigate()
+  const navigateTo = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -39,7 +39,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
-    navigateTo("/")
+    navigateTo("/");
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -52,25 +52,33 @@ function ProfileButton({ user }) {
       <div className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <p>Hello, {user.firstName}</p>
-            <p>{user.email}</p>
-            <p>
-              <button>
-                <NavLink className="manage-spot" to={`/spot/user/${user.id}`}>Manage Spots</NavLink>
+            <div>
+              <h3>Hello, {user.firstName}</h3>
+              <h5 className="email">{user.email}</h5>
+            </div>
+            <div>
+              <button className="manage-button">
+                <NavLink className="manage-spot" to={`/spot/user/${user.id}`}>
+                  Manage Spots
+                </NavLink>
               </button>
-            </p>
-            <p>
-              <button onClick={logout}>Log Out</button>
-            </p>
+            </div>
+            <div>
+              <button className="logout-button" onClick={logout}>
+                Log Out
+              </button>
+            </div>
           </>
         ) : (
           <>
             <OpenModalMenuItem
+              className="login-button"
               itemText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
             />
             <OpenModalMenuItem
+              className="signup-button"
               itemText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}

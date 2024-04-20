@@ -27,7 +27,7 @@ const ManageSpots = () => {
   return (
     <>
       <h1>Manage Spots</h1>
-      <main className="spots-grid">
+      <main className="manage-spots-grid">
         {spotData.map((spot) => {
           if (spot.avgRating) {
             spot.avgRating = spot.avgRating.toString();

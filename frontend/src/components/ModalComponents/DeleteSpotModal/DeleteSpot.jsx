@@ -19,27 +19,26 @@ const DeleteSpot = ({ spotId }) => {
 
   return (
     <>
-      <div>
-        <h1>Confirm Delete</h1>
-        <h5>Are you sure you want to remove this spot?</h5>
-        <div>
-          <button
-            onClick={() => {
-              onClick(spotId);
-            }}
-            className="red shadow"
-          >
-            Yes (Delete Spot)
-          </button>
-          <button
-            className="grey shadow"
-            onClick={() => {
-              closeModal();
-            }}
-          >
-            No (Keep Spot)
-          </button>
-        </div>
+      <div className="delete-menu">
+        <h1 className="header">Confirm Delete</h1>
+        <h5 className="header">Are you sure you want to remove this spot?</h5>
+
+        <button
+          onClick={() => {
+            onClick(spotId);
+          }}
+          className="red delete-button shadow"
+        >
+          Yes (Delete Spot)
+        </button>
+        <button
+          className="grey keep-button shadow"
+          onClick={() => {
+            closeModal();
+          }}
+        >
+          No (Keep Spot)
+        </button>
       </div>
     </>
   );

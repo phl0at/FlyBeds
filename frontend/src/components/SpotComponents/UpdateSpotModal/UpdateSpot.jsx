@@ -99,7 +99,7 @@ const UpdateSpot = () => {
   return (
     <div className="body">
       <form className="form " onSubmit={onSubmit}>
-        <section className="header">
+        <section className="update-spot-header">
           <h1>Update your Spot</h1>
           <h3>{`Where's your place located?`}</h3>
           <h5>

@@ -81,7 +81,7 @@ const CreateSpot = () => {
   return (
     <div className="body">
       <form className="form" onSubmit={onSubmit}>
-        <section className="header">
+        <section className="create-spot-header">
           <h1>Create a new Spot</h1>
           <h3>{`Where's your place located?`}</h3>
           <h5>

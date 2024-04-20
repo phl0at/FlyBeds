@@ -36,22 +36,24 @@ const CreateReview = ({ spotId }) => {
     if (newReview.createdAt) {
       closeModal();
     } else {
-      const { errors } = await newReview.json();
+      const { errors } = newReview;
       setErrors(errors);
     }
   };
 
   return (
-    <div className="review-form">
-      <h2>Post Your Review</h2>
-      <div color="red" className="errors">
+    <div className="review-menu">
+      <div className="header">
+        <h2>How was your stay?</h2>
+      </div>
+      <div className="review-error errors">
         {Object.values(errors).length && errors.stars
           ? errors.stars
           : errors.review}
       </div>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="Review">How was your stay?</label>
+      <form className="review-form" onSubmit={onSubmit}>
         <textarea
+          className="review-text input"
           name="Review"
           rows="10"
           value={review}
@@ -61,19 +63,22 @@ const CreateReview = ({ spotId }) => {
           }}
         />
         <input
+          className="stars input"
           name="stars"
           type="number"
           value={stars}
           min={0}
-          max={5}
+          max={6}
           onChange={(e) => {
             setStars(Number(e.target.value));
           }}
         />
-        <label htmlFor="stars">Stars</label>
+        <label className="stars-label" htmlFor="stars">
+          Stars
+        </label>
         <button
           disabled={!enabled}
-          className={!enabled ? "grey" : null}
+          className={`review-button ${!enabled ? "grey" : null} shadow`}
           type="submit"
         >
           Submit Your Review
