@@ -1,3 +1,156 @@
 .errors {
-    color: red
+  color: red;
+  font-size: 7pt;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.body {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  max-width: 35vw;
+  height: 250vh;
+  display: grid;
+  grid-template-rows: 12% 15% 15% 10% 10% 25% 2%;
+}
+
+.header {
+  margin-left: 0.5em;
+  h1 {
+    font-size: 25pt;
+  }
+}
+
+.spot-description {
+  display: grid;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px rgb(55, 54, 52);
+}
+
+.spot-name {
+  display: grid;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px rgb(55, 54, 52);
+}
+
+.spot-images {
+  display: grid;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px rgb(55, 54, 52);
+  grid-gap: 1em;
+}
+
+.spot-price {
+  display: grid;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px rgb(55, 54, 52);
+}
+
+.input {
+  border-radius: 10px;
+  box-shadow: -8px 13px 12px rgba(19, 21, 24, .8)
+}
+
+.label {
+  margin-left: 0.5em;
+  margin-top: 0.5em;
+}
+
+.spot-location {
+  font-size: 9pt;
+  display: grid;
+  grid-template-columns: 13% 9% 12% 22% 15% 11% 16%;
+  grid-template-rows: repeat(8, 1fr);
+  grid-gap: 0.2em;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid 1px rgb(55, 54, 52);
+  .errors {
+    margin-top: 1.5em;
+    
+
+  }
+  label{
+    margin-top: 1em;
+    padding-top: 2px;
+    padding-left: 5px;
+  }
+}
+
+.country-label {
+  grid-column-start: 1;
+}
+.country-error {
+  grid-column: span 2;
+}
+.country {
+  grid-column: span 7;
+}
+
+.address-label {
+  grid-column-start: 1;
+  grid-column: span 2;
+}
+
+.address-error {
+  grid-column-start: 2;
+  grid-column: span 2;
+}
+
+.address {
+  grid-column: span 7;
+}
+
+.city-label {
+  grid-column: span 1;
+}
+.city-error {
+  grid-column-start: 2;
+  grid-column: span 2;
+}
+
+.city {
+  grid-column: span 5;
+}
+
+.state-label {
+  grid-column-start: 6;
+}
+
+.state-error {
+  grid-column-start: 7;
+  grid-column: span 1;
+}
+
+.state {
+  grid-column: span 2;
+}
+
+.lat-label {
+  grid-column-start: 1;
+  grid-column: span 1;
+}
+
+.lat-error{
+    grid-column: span 3;
+}
+
+.lat {
+  grid-column: span 4;
+}
+
+.lng-label {
+  grid-column-start: 5;
+}
+.lng-error {
+  grid-column: span 2;
+}
+.lng {
+  grid-column: span 3;
 }

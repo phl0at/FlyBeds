@@ -79,26 +79,32 @@ const CreateSpot = () => {
   };
 
   return (
-    <div className="create-form">
-      <h1>Create a new Spot</h1>
-      <h3>{`Where's your place located?`}</h3>
-      <h5>
-        Guests will only get your exact address once they booked a reservation.
-      </h5>
-      <form onSubmit={onSubmit}>
+    <div className="body">
+      <form className="form" onSubmit={onSubmit}>
+        <section className="header">
+          <h1>Create a new Spot</h1>
+          <h3>{`Where's your place located?`}</h3>
+          <h5>
+            Guests will only get your exact address once they booked a
+            reservation.
+          </h5>
+        </section>
         <div className="spot-location">
           {/*
       //!-------------------------------------------------------------------
       //?---------------------- LOCATION INPUTS ----------------------------
       //!-------------------------------------------------------------------
-      */}
-          <label htmlFor="Country">Country</label>
-          {errors.country && (
-            <div color="red" className="errors">
-              {errors.country}
-            </div>
-          )}
+    */}
+          <label className="country-label label" htmlFor="Country">
+            Country
+          </label>
+
+          <div color="red" className="country-error errors">
+            {errors.country}
+          </div>
+
           <input
+            className="country input"
             type="text"
             value={country}
             name="Country"
@@ -109,14 +115,17 @@ const CreateSpot = () => {
           />
           {/*
           //!-------------------------------------------------------------------
-          */}
-          <label htmlFor="Address">Street Address</label>
-          {errors.address && (
-            <div color="red" className="errors">
-              {errors.address}
-            </div>
-          )}
+        */}
+          <label className="address-label label" htmlFor="Address">
+            Street Address
+          </label>
+
+          <div color="red" className="address-error errors">
+            {errors.address}
+          </div>
+
           <input
+            className="address input"
             type="text"
             value={address}
             name="Address"
@@ -127,14 +136,25 @@ const CreateSpot = () => {
           />
           {/*
           //!-------------------------------------------------------------------
-          */}
-          <label htmlFor="City">City</label>
-          {errors.city && (
-            <div color="red" className="errors">
-              {errors.city}
-            </div>
-          )}
+        */}
+          <label className="city-label label" htmlFor="City">
+            City
+          </label>
+
+          <div color="red" className="city-error errors">
+            {errors.city}
+          </div>
+
+          <label className="state-label label" htmlFor="State">
+            State
+          </label>
+
+          <div color="red" className="state-error errors">
+            {errors.state}
+          </div>
+
           <input
+            className="city input"
             type="text"
             value={city}
             name="City"
@@ -145,14 +165,9 @@ const CreateSpot = () => {
           />
           {/*
           //!-------------------------------------------------------------------
-          */}
-          <label htmlFor="State">State</label>
-          {errors.state && (
-            <div color="red" className="errors">
-              {errors.state}
-            </div>
-          )}
+        */}
           <input
+            className="state input"
             type="text"
             value={state}
             name="State"
@@ -163,14 +178,25 @@ const CreateSpot = () => {
           />
           {/*
           //!-------------------------------------------------------------------
-          */}
-          <label htmlFor="Latitude">Latitude</label>
-          {errors.lat && (
-            <div color="red" className="errors">
-              {errors.lat}
-            </div>
-          )}
+        */}
+          <label className="lat-label label" htmlFor="Latitude">
+            Latitude
+          </label>
+
+          <div className="lat-error errors">
+            {errors.lat}
+          </div>
+
+          <label className="lng-label label" htmlFor="Longitude">
+            Longitude
+          </label>
+
+          <div className="lng-error errors">
+            {errors.lng}
+          </div>
+
           <input
+            className="lat input"
             type="text"
             value={lat}
             name="Latitude"
@@ -181,14 +207,10 @@ const CreateSpot = () => {
           />
           {/*
           //!-------------------------------------------------------------------
-          */}
-          <label htmlFor="Longitude">Longitude</label>
-          {errors.lng && (
-            <div color="red" className="errors">
-              {errors.lng}
-            </div>
-          )}
+        */}
+
           <input
+            className="lng input"
             type="text"
             value={lng}
             name="Longitude"
@@ -202,7 +224,7 @@ const CreateSpot = () => {
         //!-------------------------------------------------------------------
         //?------------------------ DESCRIPTION ------------------------------
         //!-------------------------------------------------------------------
-        */}
+      */}
         <div className="spot-description">
           <label htmlFor="description">Describe your place to guests</label>
           <h5>
@@ -210,6 +232,7 @@ const CreateSpot = () => {
             like fast wifi or parking and what you love about the neighborhood.
           </h5>
           <textarea
+            className="input"
             name="spot-description"
             value={description}
             placeholder="Please write at least 30 characters"
@@ -218,17 +241,15 @@ const CreateSpot = () => {
               setFormData({ ...formData, description: e.target.value })
             }
           />
-          {errors.description && (
-            <div color="red" className="errors">
-              {errors.description}
-            </div>
-          )}
+          <div color="red" className="errors">
+            {errors.description}
+          </div>
         </div>
         {/*
         //!-------------------------------------------------------------------
         //?----------------------- NAME/TITLE --------------------------------
         //!-------------------------------------------------------------------
-        */}
+      */}
         <div className="spot-name">
           <label htmlFor="Name your Spot">Create a title for your spot</label>
           <h5>
@@ -236,6 +257,7 @@ const CreateSpot = () => {
             your place special.`}
           </h5>
           <input
+            className="input"
             type="text"
             value={name}
             name="Name"
@@ -244,17 +266,16 @@ const CreateSpot = () => {
               setFormData({ ...formData, name: e.target.value });
             }}
           />
-          {errors.name && (
-            <div color="red" className="errors">
-              {errors.name}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.name}
+          </div>
         </div>
         {/*
         //!-------------------------------------------------------------------
         //?--------------------------- PRICE ---------------------------------
         //!-------------------------------------------------------------------
-        */}
+      */}
         <div className="spot-price">
           <label htmlFor="Price per night (USD)">
             Set a base price for your spot
@@ -265,6 +286,7 @@ const CreateSpot = () => {
           </h5>
           <div id="$">$</div>
           <input
+            className="input"
             type="text"
             value={price}
             name="Price"
@@ -273,25 +295,25 @@ const CreateSpot = () => {
               setFormData({ ...formData, price: e.target.value });
             }}
           />
-          {errors.price && (
-            <div color="red" className="errors">
-              {errors.price}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.price}
+          </div>
         </div>
 
         {/*
         //!-------------------------------------------------------------------
         //?-------------------------- IMAGES ---------------------------------
         //!-------------------------------------------------------------------
-        */}
+      */}
 
         <div className="spot-images">
-          <label htmlFor="Preview Image URL">
+          <label className="images-label label" htmlFor="Preview Image URL">
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
           <input
+            className="preview input"
             type="text"
             value={previewImage}
             name="Preview Image URL"
@@ -300,17 +322,17 @@ const CreateSpot = () => {
               setFormData({ ...formData, previewImage: e.target.value });
             }}
           />
-          {errors.previewImage && (
-            <div color="red" className="errors">
-              {errors.previewImage}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.previewImage}
+          </div>
 
           {/*
           //!-------------------------------------------------------------------
-          */}
+        */}
 
           <input
+            className="input"
             type="text"
             value={image1}
             name="Image URL"
@@ -319,17 +341,17 @@ const CreateSpot = () => {
               setFormData({ ...formData, image1: e.target.value });
             }}
           />
-          {errors.image1 && (
-            <div color="red" className="errors">
-              {errors.image1}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.image1}
+          </div>
 
           {/*
           //!-------------------------------------------------------------------
-          */}
+        */}
 
           <input
+            className="input"
             type="text"
             value={image2}
             name="Image URL"
@@ -338,16 +360,16 @@ const CreateSpot = () => {
               setFormData({ ...formData, image2: e.target.value });
             }}
           />
-          {errors.image2 && (
-            <div color="red" className="errors">
-              {errors.image2}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.image2}
+          </div>
 
           {/*
           //!-------------------------------------------------------------------
-          */}
+        */}
           <input
+            className="input"
             type="text"
             value={image3}
             name="Image URL"
@@ -356,15 +378,16 @@ const CreateSpot = () => {
               setFormData({ ...formData, image3: e.target.value });
             }}
           />
-          {errors.image3 && (
-            <div color="red" className="errors">
-              {errors.image3}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.image3}
+          </div>
+
           {/*
           //!-------------------------------------------------------------------
-          */}
+        */}
           <input
+            className="input"
             type="text"
             value={image4}
             name="Image URL"
@@ -373,17 +396,16 @@ const CreateSpot = () => {
               setFormData({ ...formData, image4: e.target.value });
             }}
           />
-          {errors.image4 && (
-            <div color="red" className="errors">
-              {errors.image4}
-            </div>
-          )}
+
+          <div color="red" className="errors">
+            {errors.image4}
+          </div>
         </div>
         {/*
         //!-------------------------------------------------------------------
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
-        */}
+      */}
         <button type="submit">Create Spot</button>
       </form>
     </div>

@@ -52,7 +52,7 @@ const UpdateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const update = true
+    const update = true;
 
     if (currUser) {
       const updatedSpot = {
@@ -97,26 +97,30 @@ const UpdateSpot = () => {
   };
 
   return (
-    <div className="update-form">
-      <h1>Update your Spot</h1>
-      <h3>{`Where's your place located?`}</h3>
-      <h5>
-        Guests will only get your exact address once they booked a reservation.
-      </h5>
-      <form onSubmit={onSubmit}>
+    <div className="body">
+      <form className="form " onSubmit={onSubmit}>
+        <section className="header">
+          <h1>Update your Spot</h1>
+          <h3>{`Where's your place located?`}</h3>
+          <h5>
+            Guests will only get your exact address once they booked a
+            reservation.
+          </h5>
+        </section>
         <div className="spot-location">
           {/*
       //!-------------------------------------------------------------------
       //?---------------------- LOCATION INPUTS ----------------------------
       //!-------------------------------------------------------------------
       */}
-          <label htmlFor="Country">Country</label>
-          {errors.country && (
-            <div color="red" className="errors">
-              {errors.country}
-            </div>
-          )}
+          <label className="country-label label" htmlFor="Country">
+            Country
+          </label>
+
+          <div className="country-error errors">{errors.country}</div>
+
           <input
+            className="country input"
             type="text"
             value={country}
             name="Country"
@@ -128,13 +132,14 @@ const UpdateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          <label htmlFor="Address">Street Address</label>
-          {errors.address && (
-            <div color="red" className="errors">
-              {errors.address}
-            </div>
-          )}
+          <label className="address-label label" htmlFor="Address">
+            Street Address
+          </label>
+
+          <div className="address-error errors">{errors.address}</div>
+
           <input
+            className="address input"
             type="text"
             value={address}
             name="Address"
@@ -146,13 +151,20 @@ const UpdateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          <label htmlFor="City">City</label>
-          {errors.city && (
-            <div color="red" className="errors">
-              {errors.city}
-            </div>
-          )}
+          <label className="city-label label" htmlFor="City">
+            City
+          </label>
+
+          <div className="city-error errors">{errors.city}</div>
+
+          <label className="state-label label" htmlFor="State">
+            State
+          </label>
+
+          <div className="state-error errors">{errors.state}</div>
+
           <input
+            className="city input"
             type="text"
             value={city}
             name="City"
@@ -164,13 +176,9 @@ const UpdateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          <label htmlFor="State">State</label>
-          {errors.state && (
-            <div color="red" className="errors">
-              {errors.state}
-            </div>
-          )}
+
           <input
+            className="state input"
             type="text"
             value={state}
             name="State"
@@ -183,12 +191,17 @@ const UpdateSpot = () => {
           //!-------------------------------------------------------------------
           */}
           <label htmlFor="Latitude">Latitude</label>
-          {errors.lat && (
-            <div color="red" className="errors">
-              {errors.lat}
-            </div>
-          )}
+
+          <div className="lat-error errors">{errors.lat}</div>
+
+          <label className="lng-label label" htmlFor="Longitude">
+            Longitude
+          </label>
+
+          <div className="lng-error errors">{errors.lng}</div>
+
           <input
+            className="lat input"
             type="text"
             value={lat}
             name="Latitude"
@@ -200,13 +213,9 @@ const UpdateSpot = () => {
           {/*
           //!-------------------------------------------------------------------
           */}
-          <label htmlFor="Longitude">Longitude</label>
-          {errors.lng && (
-            <div color="red" className="errors">
-              {errors.lng}
-            </div>
-          )}
+
           <input
+            className="lng input"
             type="text"
             value={lng}
             name="Longitude"
@@ -228,6 +237,7 @@ const UpdateSpot = () => {
             like fast wifi or parking and what you love about the neighborhood.
           </h5>
           <textarea
+            className="input"
             name="spot-description"
             value={description}
             placeholder="Please write at least 30 characters"
@@ -236,11 +246,7 @@ const UpdateSpot = () => {
               setFormData({ ...formData, description: e.target.value })
             }
           />
-          {errors.description && (
-            <div color="red" className="errors">
-              {errors.description}
-            </div>
-          )}
+          <div className="errors">{errors.description}</div>
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -254,6 +260,7 @@ const UpdateSpot = () => {
             your place special.`}
           </h5>
           <input
+            className="input"
             type="text"
             value={name}
             name="Name"
@@ -262,11 +269,8 @@ const UpdateSpot = () => {
               setFormData({ ...formData, name: e.target.value });
             }}
           />
-          {errors.name && (
-            <div color="red" className="errors">
-              {errors.name}
-            </div>
-          )}
+
+          <div className="errors">{errors.name}</div>
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -283,6 +287,7 @@ const UpdateSpot = () => {
           </h5>
           <div id="$">$</div>
           <input
+            className="input"
             type="text"
             value={price}
             name="Price"
@@ -291,11 +296,8 @@ const UpdateSpot = () => {
               setFormData({ ...formData, price: e.target.value });
             }}
           />
-          {errors.price && (
-            <div color="red" className="errors">
-              {errors.price}
-            </div>
-          )}
+
+          <div className="errors">{errors.price}</div>
         </div>
         {/*
         //!-------------------------------------------------------------------
@@ -304,11 +306,12 @@ const UpdateSpot = () => {
         */}
 
         <div className="spot-images">
-          <label htmlFor="Preview Image URL">
+          <label className="images-label label" htmlFor="Preview Image URL">
             Liven up your spot with photos
           </label>
           <h5>Submit a link to at least one photo to publish your spot.</h5>
           <input
+            className="preview input"
             type="text"
             value={previewImage}
             name="Preview Image URL"
@@ -317,17 +320,15 @@ const UpdateSpot = () => {
               setFormData({ ...formData, previewImage: e.target.value });
             }}
           />
-          {errors.previewImage && (
-            <div color="red" className="errors">
-              {errors.previewImage}
-            </div>
-          )}
+
+          <div className="errors">{errors.previewImage}</div>
 
           {/*
           //!-------------------------------------------------------------------
           */}
 
           <input
+            className="input"
             type="text"
             value={image1}
             name="Image URL"
@@ -336,17 +337,15 @@ const UpdateSpot = () => {
               setFormData({ ...formData, image1: e.target.value });
             }}
           />
-          {errors.image1 && (
-            <div color="red" className="errors">
-              {errors.image1}
-            </div>
-          )}
+
+          <div className="errors">{errors.image1}</div>
 
           {/*
           //!-------------------------------------------------------------------
           */}
 
           <input
+            className="input"
             type="text"
             value={image2}
             name="Image URL"
@@ -355,17 +354,15 @@ const UpdateSpot = () => {
               setFormData({ ...formData, image2: e.target.value });
             }}
           />
-          {errors.image2 && (
-            <div color="red" className="errors">
-              {errors.image2}
-            </div>
-          )}
+
+          <div className="errors">{errors.image2}</div>
 
           {/*
           //!-------------------------------------------------------------------
           */}
 
           <input
+            className="input"
             type="text"
             value={image3}
             name="Image URL"
@@ -374,17 +371,15 @@ const UpdateSpot = () => {
               setFormData({ ...formData, image3: e.target.value });
             }}
           />
-          {errors.image3 && (
-            <div color="red" className="errors">
-              {errors.image3}
-            </div>
-          )}
+
+          <div className="errors">{errors.image3}</div>
 
           {/*
           //!-------------------------------------------------------------------
           */}
 
           <input
+            className="input"
             type="text"
             value={image4}
             name="Image URL"
@@ -393,18 +388,15 @@ const UpdateSpot = () => {
               setFormData({ ...formData, image4: e.target.value });
             }}
           />
-          {errors.image4 && (
-            <div color="red" className="errors">
-              {errors.image4}
-            </div>
-          )}
+
+          <div className="errors">{errors.image4}</div>
         </div>
         {/*
         //!-------------------------------------------------------------------
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
         */}
-        <button type="submit">Update Your Spot</button>
+        <button className="shadow" type="submit">Update Your Spot</button>
       </form>
     </div>
   );
