@@ -1,3 +1,15 @@
 .grey {
     background-color: grey;
 }
+
+.signup-menu{
+    padding: 3em;
+    height: 50vh;
+    width: 60vh;
+}
+
+.signup-form{
+    height: 100%;
+    display: grid;
+    grid-gap: .5em;
+}
