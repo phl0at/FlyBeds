@@ -27,20 +27,22 @@ const ManageSpots = () => {
   return (
     <>
       <h1>Manage Spots</h1>
-      <section>
-        <main className="spots-grid">
-          {spotData.map((spot) => {
-            if (spot.avgRating) {
-              spot.avgRating = spot.avgRating.toString();
-              if (spot.avgRating.split(".").length < 2) {
-                spot.avgRating += ".0";
-              }
+      <main className="spots-grid">
+        {spotData.map((spot) => {
+          if (spot.avgRating) {
+            spot.avgRating = spot.avgRating.toString();
+            if (spot.avgRating.split(".").length < 2) {
+              spot.avgRating += ".0";
             }
+          }
 
-            return <UserSpots key={spot.id} spot={spot} />;
-          })}
-        </main>
-      </section>
+          return (
+            <>
+              <UserSpots key={spot.id} spot={spot} />
+            </>
+          );
+        })}
+      </main>
     </>
   );
 };

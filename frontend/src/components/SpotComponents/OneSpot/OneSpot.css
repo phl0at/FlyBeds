@@ -1,14 +1,13 @@
 .title {
   font-weight: lighter;
-  margin-left: 0.8em;
+  margin-left: 6%;
 }
 .location {
   font-weight: lighter;
-  margin-left: 1.5em;
+  margin-left: 6%;
 }
 h5 {
   font-weight: lighter;
-
 }
 
 .all-images {
@@ -18,12 +17,13 @@ h5 {
   gap: 0.5em;
   border-bottom: solid 1px rgb(55, 54, 52);
   border-top: solid 1px rgb(55, 54, 52);
+  box-shadow: 10px 10px 10px rgba(19, 21, 24, .8), -10px -8px 10px rgba(19, 21, 24, .8);
 }
 
 .preview-box {
   height: 100%;
   width: 100%;
-  margin-left: 3.5em;
+  margin-left: 10%;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -33,12 +33,11 @@ h5 {
   border-radius: 20px;
   max-width: 640px;
   max-height: 380px;
-  box-shadow: -8px 6px 6px rgb(19, 21, 24);
 }
 
 .other-box {
   height: 300px;
-  margin-right: 3em;
+  margin-right: 10%;
   margin-top: 3em;
   gap: 0.5em;
   display: grid;
@@ -47,16 +46,16 @@ h5 {
 }
 
 .info-box {
-  max-width: 250px;
+  margin-top: 2em;
+  margin-left: 50%;
+  width: 250px;
   height: 120px;
-  margin-top: 1.5em;
-  margin-left: 80%;
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(2, 50%);
   border-radius: 20px;
   border: solid 1px rgb(53, 157, 253);
-  box-shadow: 8px 6px 6px rgb(27, 34, 44);
+  box-shadow: 8px 10px 8px rgb(27, 34, 44), -8px -8px 8px rgb(27, 34, 44);
   button {
     grid-column: span 2;
     margin-bottom: 8px;
@@ -82,23 +81,25 @@ h5 {
     font-weight: lighter;
   }
 }
+.information {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
 
 .description-box {
-  margin: auto;
+  margin-top: auto;
+  margin-left: 10%;
   display: grid;
   grid-template-rows: 45% 65%;
-
-  top: 87%;
-  position: absolute;
   h3 {
     font-size: large;
     font-weight: light;
     padding: 1em;
-    margin-top: 1px;
-    margin-left: 1px;
+    margin-top: auto;
   }
 }
 .description {
-  padding: 2em;
-  margin: auto;
+  padding: 1em;
+  margin-left: 5%;
+  margin-top: 5px;
 }

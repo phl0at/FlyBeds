@@ -59,30 +59,31 @@ const OneSpot = () => {
               ))}
           </div>
         </div>
-        <div className="info-box">
-          <div className="price">
-            <h4>{`$${price} / night`}</h4>
+        <section className="information">
+          <div className="description-box">
+            <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>
+            <h5 className="description">{description}</h5>
           </div>
-          <div className="rating-review">
-            <h6>
-              <IoStar className="blue" />{" "}
-              {notNum ? "New" : avgRating} •{" "}
-              {numReviews === 1
-                ? `${numReviews} Review`
-                : `${numReviews} Reviews`}
-            </h6>
+          <div className="info-box">
+            <div className="price">
+              <h4>{`$${price} / night`}</h4>
+            </div>
+            <div className="rating-review">
+              <h6>
+                <IoStar className="blue" /> {notNum ? "New" : avgRating} •{" "}
+                {numReviews === 1
+                  ? `${numReviews} Review`
+                  : `${numReviews} Reviews`}
+              </h6>
+            </div>
+            <button
+              className="shadow"
+              onClick={() => alert("Feature coming soon!")}
+            >
+              Reserve
+            </button>
           </div>
-          <button
-            className="shadow"
-            onClick={() => alert("Feature coming soon!")}
-          >
-            Reserve
-          </button>
-        </div>
-        <div className="description-box">
-          <h3>{`Hosted by ${Owner.firstName} ${Owner.lastName}`}</h3>
-          <h5 className="description">{description}</h5>
-        </div>
+        </section>
 
         <div className="reviews">
           <SpotReviews

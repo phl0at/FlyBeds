@@ -29,7 +29,7 @@ const AllSpots = () => {
               <NavLink to={`/spot/${id}`} key={id} className="spot-card">
                 <span className="tooltiptext">{name}</span>
                 <div className="spot-image">
-                  <img className="image" src={previewImage} />
+                  <img title={name} src={previewImage} />
                 </div>
                 <div className="info-container">
                   <div className="spot-info-left">
@@ -40,7 +40,7 @@ const AllSpots = () => {
                   </div>
                   <div className="spot-info-right">
                     <div>
-                      <IoStar />{" "}{avgRating ? avgRating : "New"}
+                      <IoStar /> {avgRating ? avgRating : "New"}
                     </div>
                   </div>
                 </div>

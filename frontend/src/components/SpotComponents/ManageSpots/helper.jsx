@@ -2,35 +2,42 @@ import OpenModalMenuItem from "../../Navigation/OpenModalMenuItem";
 import DeleteSpot from "../../ModalComponents/DeleteSpotModal/DeleteSpot";
 import { IoStar } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import "./ManageSpots.css";
 
 export const UserSpots = ({ spot }) => {
   return (
     <>
-      <section>
-        <NavLink to={`/spot/${spot.id}`} className="spot-list tooltip">
+      <div className="spot-card">
+        <NavLink to={`/spot/${spot.id}`}>
           <span className="tooltiptext">{spot.name}</span>
-          <img src={spot.previewImage} />
-          <div className="spot-info">
-            <p>
-              {spot.city}, {spot.state}
-            </p>
-            <p>
-              <IoStar />
-              {spot.avgRating ? spot.avgRating : "New"}
-            </p>
-            <p>{`$${spot.price} / night`}</p>
+          <div className="spot-image">
+            <img title={spot.name} src={spot.previewImage} />
+          </div>
+          <div className="info-container">
+            <div className="spot-info-left">
+              <div>
+                {spot.city}, {spot.state}{" "}
+              </div>
+              <div>{`$${spot.price} / night`}</div>
+            </div>
+            <div className="spot-info-right">
+              <div>
+                <IoStar /> {spot.avgRating ? spot.avgRating : "New"}
+              </div>
+            </div>
           </div>
         </NavLink>
-        <div>
-          <button className="shadow">
+        <div className="modify-buttons">
+          <button className="shadow update">
             <NavLink to={`/spot/${spot.id}/update`}>Update</NavLink>
           </button>
+          <OpenModalMenuItem
+            className="delete"
+            itemText="Delete"
+            modalComponent={<DeleteSpot spotId={spot.id} />}
+          />
         </div>
-        <OpenModalMenuItem
-          itemText="Delete"
-          modalComponent={<DeleteSpot spotId={spot.id} />}
-        />
-      </section>
+      </div>
     </>
   );
 };

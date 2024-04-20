@@ -8,8 +8,6 @@ export const noReviews = (currUser, currSpot) => {
     ) : (
       <h3>{"Be the first to post a review!"}</h3>
     );
-  } else {
-    return <h3>{"Sign in to review this spot!"}</h3>;
   }
 };
 
@@ -23,6 +21,7 @@ export const postReviewButton = (spotId, ownerId, userId, reviews) => {
   return (
 
     <OpenModalMenuItem
+      className="post"
       itemText="Post Your Review"
       modalComponent={<CreateReview spotId={spotId} />}
     />

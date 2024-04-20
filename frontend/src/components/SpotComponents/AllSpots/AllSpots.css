@@ -8,25 +8,31 @@
   grid-column: span 3;
 }
 
-
 .spot-card {
   font-size: smaller;
-  height: 50vh;
+  height: 40vh;
   display: grid;
-  grid-template-rows: 70% 30%;
+  grid-template-rows: 80% 20%;
+}
+
+.spot-image {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
 }
 
 .info-container {
   display: flex;
   justify-content: space-between;
+  padding-top: 2em;
+  padding-left: 3em;
+  padding-right: 3.7em;
 }
 
 .spot-info-left {
-  padding: 5px;
   max-height: 20px;
 }
 .spot-info-right {
-  padding: 5px;
   max-height: 20px;
 }
 
