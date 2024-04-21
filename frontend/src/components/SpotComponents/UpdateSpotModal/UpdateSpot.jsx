@@ -86,6 +86,8 @@ const UpdateSpot = () => {
         );
         if (newSpot.errors) {
           setErrors(newSpot.errors);
+        } else if (!newSpot) {
+          return alert("Error occurred!")
         } else {
           await dispatch(addImagesThunk(newSpot, spotImages));
           navigateTo(`/spot/${newSpot.id}`);
@@ -396,7 +398,9 @@ const UpdateSpot = () => {
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
         */}
-        <button className="shadow" type="submit">Update Your Spot</button>
+        <button className="shadow" type="submit">
+          Update Your Spot
+        </button>
       </form>
     </div>
   );
