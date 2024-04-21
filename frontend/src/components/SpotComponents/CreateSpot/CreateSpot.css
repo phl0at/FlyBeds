@@ -10,8 +10,8 @@
 }
 
 .form {
-  max-width: 35vw;
-  height: 250vh;
+  max-width: 33vw;
+  height: 270vh;
   display: grid;
   grid-template-rows: 12% 15% 15% 10% 10% 25% 2%;
 }
@@ -25,7 +25,6 @@
 
 .spot-description {
   display: grid;
-  margin-bottom: 2em;
   padding-top: 1em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
@@ -33,36 +32,35 @@
 
 .spot-name {
   display: grid;
-  margin-bottom: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
 }
 
 .spot-images {
   display: grid;
-  margin-bottom: 2em;
-  padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
-  grid-gap: 1em;
 }
 
 .spot-price {
   display: grid;
-  margin-bottom: 2em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
 }
 
 .input {
-  background-color: rgb(75, 74, 73);;
+  padding: 0.4em;
+  color: rgb(214, 208, 181);
+  background-color: rgb(75, 74, 73);
   resize: none;
   border-radius: 10px;
-  box-shadow: 0px 15px 10px rgba(19, 21, 24, 1)
+  box-shadow: 0px 15px 10px rgba(19, 21, 24, 1);
 }
 
 .label {
   margin-left: 0.5em;
-  margin-top: 0.5em;
+  margin-top: 0.8em;
 }
 
 .spot-location {
@@ -71,15 +69,12 @@
   grid-template-columns: 13% 9% 12% 22% 15% 11% 16%;
   grid-template-rows: repeat(8, 1fr);
   grid-gap: 0.2em;
-  margin-bottom: 1em;
-  padding-bottom: 3em;
+  padding-bottom: 2em;
   border-bottom: solid 1px rgb(55, 54, 52);
   .errors {
-    margin-top: 1.5em;
-
-
+    margin-top: 1.2em;
   }
-  :is(label){
+  :is(label) {
     margin-top: 1em;
     padding-top: 2px;
     padding-left: 5px;
@@ -140,8 +135,8 @@
   grid-column: span 1;
 }
 
-.lat-error{
-    grid-column: span 3;
+.lat-error {
+  grid-column: span 3;
 }
 
 .lat {
