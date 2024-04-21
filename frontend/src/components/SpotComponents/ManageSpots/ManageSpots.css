@@ -26,8 +26,8 @@
 }
 .manage-spots-grid {
   width: 100%;
-  margin-left: 8%;
-  margin-top: 2%;
+  justify-content: center;
+  margin-top: 3em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

@@ -1,6 +1,6 @@
 .spots-grid {
   width: 100%;
-  margin-left: 7%;
+  justify-content: center;
   margin-top: 2%;
   display: flex;
   flex-direction: row;
