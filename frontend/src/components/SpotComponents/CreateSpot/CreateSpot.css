@@ -1,7 +1,7 @@
 .errors {
   color: red;
-  font-size: 7pt;
-  margin-top: 5px;
+  font-size: 9pt;
+  margin-top: 10px;
   margin-left: 5px;
 }
 .body {
@@ -25,21 +25,22 @@
 
 .spot-description {
   display: grid;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
+  padding-top: 1em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
 }
 
 .spot-name {
   display: grid;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
 }
 
 .spot-images {
   display: grid;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
   grid-gap: 1em;
@@ -47,7 +48,7 @@
 
 .spot-price {
   display: grid;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   padding-bottom: 1em;
   border-bottom: solid 1px rgb(55, 54, 52);
 }
@@ -69,7 +70,7 @@
   grid-template-rows: repeat(8, 1fr);
   grid-gap: 0.2em;
   margin-bottom: 1em;
-  padding-bottom: 1em;
+  padding-bottom: 3em;
   border-bottom: solid 1px rgb(55, 54, 52);
   .errors {
     margin-top: 1.5em;

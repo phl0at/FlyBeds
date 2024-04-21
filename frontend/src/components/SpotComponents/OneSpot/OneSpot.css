@@ -65,8 +65,8 @@ h5 {
 }
 
 .info-box {
+  margin-left: auto;
   margin-top: 2em;
-  margin-left: 50%;
   width: 250px;
   height: 120px;
   display: grid;
@@ -77,9 +77,9 @@ h5 {
   box-shadow: 8px 10px 8px rgb(27, 34, 44), -8px -8px 8px rgb(27, 34, 44);
   :is(button) {
     grid-column: span 2;
-    margin-bottom: 8px;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-bottom: .8em;
+    margin-left:.8em;
+    margin-right: .8em;
     font-size: larger;
   }
 }
