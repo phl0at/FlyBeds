@@ -87,23 +87,18 @@ export const checkFormErrors = (
   if (lng < -180 || lng > 180)
     err.lng = "Longitude muse be within -180 and 180";
 
-  //!----------- IF IN CREATE FORM AND PREVIEW IS REQUIRED -----
-  if (!update) {
-    if (previewImage.url == undefined) {
-      err.previewImage = "Preview Image is required";
-    } else {
-      delete err.previewImage;
-    }
-  } else {
+  if (previewImage.url) {
     const fileType =
       previewImage.url.split(".")[previewImage.url.split(".").length - 1];
-
     if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
       delete err.previewImage;
     } else {
       err.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
     }
+  } else if(!update){
+    err.previewImage = "Preview image is required"
   }
+
   if (image1.url) {
     const fileType = image1.url.split(".")[image1.url.split(".").length - 1];
 
@@ -141,92 +136,6 @@ export const checkFormErrors = (
     }
   }
 
-  return err;
-};
-
-export const checkImageErrors = (spotImages) => {
-  const err = {};
-
-  if (spotImages[0].url) {
-    if (spotImages[0].url.split(".").length) {
-      const fileType = spotImages[0].url.split(".");
-
-      if (
-        fileType[fileType.length - 1] == "png" ||
-        fileType[fileType.length - 1] == "jpg" ||
-        fileType[fileType.length - 1] == "jpeg"
-      ) {
-        delete err.previewImage;
-      } else {
-        err.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    }
-  } else {
-    err.previewImage = "Preview image is required";
-  }
-
-  if (spotImages[1].url) {
-    if (spotImages[1].url.split(".").length) {
-      const fileType = spotImages[1].url.split(".");
-
-      if (
-        fileType[fileType.length - 1] == "png" ||
-        fileType[fileType.length - 1] == "jpg" ||
-        fileType[fileType.length - 1] == "jpeg"
-      ) {
-        delete err.image1;
-      } else {
-        err.image1 = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    }
-  }
-
-  if (spotImages[2].url) {
-    if (spotImages[2].url.split(".").length) {
-      const fileType = spotImages[2].url.split(".");
-
-      if (
-        fileType[fileType.length - 1] == "png" ||
-        fileType[fileType.length - 1] == "jpg" ||
-        fileType[fileType.length - 1] == "jpeg"
-      ) {
-        delete err.image2;
-      } else {
-        err.image2 = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    }
-  }
-
-  if (spotImages[3].url) {
-    if (spotImages[3].url.split(".").length) {
-      const fileType = spotImages[3].url.split(".");
-
-      if (
-        fileType[fileType.length - 1] == "png" ||
-        fileType[fileType.length - 1] == "jpg" ||
-        fileType[fileType.length - 1] == "jpeg"
-      ) {
-        delete err.image3;
-      } else {
-        err.image3 = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    }
-  }
-  if (spotImages[4].url) {
-    if (spotImages[4].url.split(".").length) {
-      const fileType = spotImages[4].url.split(".");
-
-      if (
-        fileType[fileType.length - 1] == "png" ||
-        fileType[fileType.length - 1] == "jpg" ||
-        fileType[fileType.length - 1] == "jpeg"
-      ) {
-        delete err.image4;
-      } else {
-        err.image4 = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    }
-  }
   return err;
 };
 

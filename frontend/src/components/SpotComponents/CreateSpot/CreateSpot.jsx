@@ -58,7 +58,7 @@ const CreateSpot = () => {
         { url: image4, preview: false },
       ];
 
-      const err = checkFormErrors(spotData, spotImages);
+      const err = checkFormErrors(spotData, spotImages, false);
 
       if (Object.values(err).length) {
         setErrors(err);
@@ -66,7 +66,6 @@ const CreateSpot = () => {
         const newSpot = await dispatch(
           createSpotThunk(spotData, spotImages, loggedIn)
         );
-        console.log(newSpot)
         if (newSpot.errors) {
           setErrors(newSpot.errors);
           return;
@@ -185,17 +184,13 @@ const CreateSpot = () => {
             Latitude
           </label>
 
-          <div className="lat-error errors">
-            {errors.lat}
-          </div>
+          <div className="lat-error errors">{errors.lat}</div>
 
           <label className="lng-label label" htmlFor="Longitude">
             Longitude
           </label>
 
-          <div className="lng-error errors">
-            {errors.lng}
-          </div>
+          <div className="lng-error errors">{errors.lng}</div>
 
           <input
             className="lat input"
@@ -408,7 +403,9 @@ const CreateSpot = () => {
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
       */}
-        <button className="shadow" type="submit">Create Spot</button>
+        <button className="shadow" type="submit">
+          Create Spot
+        </button>
       </form>
     </div>
   );

@@ -52,8 +52,6 @@ const UpdateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const update = true;
-
     if (currUser) {
       const updatedSpot = {
         id: spotData.id,
@@ -76,7 +74,7 @@ const UpdateSpot = () => {
         { url: image4, preview: false },
       ];
 
-      const err = checkFormErrors(updatedSpot, spotImages, update);
+      const err = checkFormErrors(updatedSpot, spotImages, true);
 
       if (Object.values(err).length) {
         setErrors(err);
