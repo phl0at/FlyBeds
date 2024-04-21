@@ -18,15 +18,26 @@ const ManageSpots = () => {
 
   if (!spotData.length) {
     return (
-      <button>
-        <NavLink to="/spot/new">Create a New Spot</NavLink>
-      </button>
+      <>
+        <main>
+          <div className="header-container">
+            <h1 className="manage-spot-header">Manage Spots</h1>
+          </div>
+          <div className="empty-spots">
+            <button className="create-spot-button shadow">
+              <NavLink to="/spot/new">Create a New Spot</NavLink>
+            </button>
+          </div>
+        </main>
+      </>
     );
   }
 
   return (
     <>
-      <h1>Manage Spots</h1>
+      <div className="header-container">
+        <h1 className="manage-spot-header">Manage Spots</h1>
+      </div>
       <main className="manage-spots-grid">
         {spotData.map((spot) => {
           if (spot.avgRating) {

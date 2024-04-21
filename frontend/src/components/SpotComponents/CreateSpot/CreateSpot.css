@@ -54,7 +54,7 @@
 
 .input {
   border-radius: 10px;
-  box-shadow: -8px 13px 12px rgba(19, 21, 24, .8)
+  box-shadow: 0px 15px 10px rgba(19, 21, 24, 1)
 }
 
 .label {

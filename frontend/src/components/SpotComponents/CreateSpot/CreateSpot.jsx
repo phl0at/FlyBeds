@@ -406,7 +406,7 @@ const CreateSpot = () => {
         //?----------------------- SUBMIT BUTTON -----------------------------
         //!-------------------------------------------------------------------
       */}
-        <button type="submit">Create Spot</button>
+        <button className="shadow" type="submit">Create Spot</button>
       </form>
     </div>
   );

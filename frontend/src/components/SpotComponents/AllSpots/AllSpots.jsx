@@ -40,7 +40,7 @@ const AllSpots = () => {
                   </div>
                   <div className="spot-info-right">
                     <div>
-                      <IoStar /> {avgRating ? avgRating : "New"}
+                      <IoStar className="blue" /> {avgRating ? avgRating : "New"}
                     </div>
                   </div>
                 </div>

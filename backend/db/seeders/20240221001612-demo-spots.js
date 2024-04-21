@@ -128,8 +128,8 @@ module.exports = {
           lat: 39,
           lng: -89,
           name: "Beep Boop",
-          description: "Undefined",
-          price: 100000,
+          description: "Undefined (not really though)",
+          price: 10101100,
         },
       ],
       { validate: true }

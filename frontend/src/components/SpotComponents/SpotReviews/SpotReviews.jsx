@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import "./SpotReviews.css";
 
 const SpotReviewInfo = ({
+  stars,
   currUser,
   reviewId,
   userId,
@@ -21,11 +22,17 @@ const SpotReviewInfo = ({
       <section className="review">
         <h3 className="first-name">{firstName}</h3>
         <h5 className="date">{date}</h5>
-        <h6 className="text">{review}</h6>
+        <h5 className="num-reviews">
+          {" "}
+          <IoStar className="blue" />
+          {` ${stars}`}
+        </h5>
+        <h4 className="text">{review}</h4>
         <div>
           {currUser && userId === currUser.id && (
             <>
               <OpenModalMenuItem
+                className="delete-review-button"
                 itemText="Delete"
                 modalComponent={<DeleteReview reviewId={reviewId} />}
               />
@@ -61,9 +68,9 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
           : null}
       </div>
 
-      <div className="no-reviews">
-        {numReviews === 0 ? noReviews(currUser, currSpot) : null}
-      </div>
+      {numReviews === 0 ? (
+        <div className="no-reviews">{noReviews(currUser, currSpot)}</div>
+      ) : null}
 
       {sortByCreatedAt?.map((review) => {
         const user = review.User;
@@ -74,6 +81,7 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
 
         return (
           <SpotReviewInfo
+            stars={review.stars}
             reviewId={review.id}
             key={review.id}
             review={review.review}

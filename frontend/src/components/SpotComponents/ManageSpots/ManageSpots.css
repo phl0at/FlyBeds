@@ -1,44 +1,80 @@
+.header-container {
+  border-bottom: solid 1px rgb(55, 54, 52);
+  margin-bottom: 2em;
+  box-shadow: 0px 10px 10px rgba(19, 21, 24, 0.8);
+}
+
+.manage-spot-header {
+  margin-left: 7%;
+}
+
+.create-spot-button {
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  :is(a) {
+    color: rgb(40, 50, 76);
+    font-size: 10pt;
+  }
+  margin-left: 2%;
+  margin-top: 1em;
+}
+.empty-spots {
+  display: flex;
+  margin-left: 5%;
+}
 .manage-spots-grid {
   width: 100%;
-  margin-left: 5%;
+  margin-left: 8%;
   margin-top: 2%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20%, 20%));
-  gap: 3%;
-  height: 350px;
+  grid-gap: 2em;
 }
-
 
 .manage-spot {
   color: rgb(40, 50, 76);
 }
 
 .manage-spot-card {
-  display: grid;
-  grid-template-rows: 90% 10%;
-
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.spot-image {
-  margin-left: 12%;
+.manage-spot-image {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+}
+
+.info-container {
+  border-top: solid 1px rgb(55, 54, 52);
+  box-shadow: inset 0px 5px 2px rgba(19, 21, 24, 0.8);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
 }
 
 .modify-buttons {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: left;
+  margin-left: 1em;
 }
 
 .update {
-    :is(a) {
-        color: rgb(40, 50, 76);
-        font-size: 10pt;
-    };
-    padding-left: 3%;
-    padding-right: 3%;
+  :is(a) {
+    color: rgb(40, 50, 76);
+    font-size: 10pt;
+  }
+  padding: 0.6em;
 }
 
 .delete {
-    padding: .6em;
-    font-size: 11pt;
-
+  margin-left: 1em;
+  padding: 0.6em;
+  font-size: 11pt;
 }

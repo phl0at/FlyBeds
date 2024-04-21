@@ -1,10 +1,17 @@
+.one-spot-page {
+  display: flex;
+  flex-direction: column;
+  max-width: 70vw;
+  margin-left: 15%;
+}
+
 .title {
   font-weight: lighter;
-  margin-left: 6%;
+  margin-left: 2%;
 }
 .location {
   font-weight: lighter;
-  margin-left: 6%;
+  margin-left: 2%;
 }
 h5 {
   font-weight: lighter;
@@ -12,38 +19,44 @@ h5 {
 
 .all-images {
   display: grid;
-  grid-template-columns: 60% 40%;
-  height: 400px;
+  grid-template-columns: 50% 50%;
+  height: 500px;
   gap: 0.5em;
   border-bottom: solid 1px rgb(55, 54, 52);
   border-top: solid 1px rgb(55, 54, 52);
-  box-shadow: 10px 10px 10px rgba(19, 21, 24, 0.8),
-    -10px -8px 10px rgba(19, 21, 24, 0.8);
+  box-shadow: 0em 10px 2px rgba(19, 21, 24, 0.8),
+    0px -10px 8px rgba(19, 21, 24, 0.8);
 }
 
 .preview-box {
   height: 100%;
   width: 100%;
-  margin-left: 10%;
   display: flex;
-  justify-content: left;
+  justify-content: right;
   align-items: center;
 }
 
 .preview-image {
   border-radius: 20px;
-  max-width: 640px;
-  max-height: 380px;
+  max-height: 46vh;
+  max-width: 40vw;
+
 }
 
 .other-box {
-  height: 300px;
-  margin-right: 10%;
-  margin-top: 3em;
-  gap: 0.5em;
+
   display: grid;
-  grid-template-columns: repeat(2, 50%);
-  grid-template-rows: repeat(2, 50%);
+  grid-row-gap: 2.5em;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0.5em;
+}
+
+.other-image {
+  margin: auto;
+  width: 15vw;
 }
 
 .info-box {
@@ -89,18 +102,18 @@ h5 {
 
 .description-box {
   margin-top: auto;
-  margin-left: 10%;
   display: grid;
   grid-template-rows: 45% 65%;
   :is(h3) {
     font-size: large;
     font-weight: light;
-    padding: 1em;
+    padding-top: 1em;
     margin-top: auto;
+    margin-left: 2%;
   }
 }
 .description {
   padding: 1em;
-  margin-left: 5%;
+  margin-left: 10%;
   margin-top: 5px;
 }

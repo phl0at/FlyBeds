@@ -1,11 +1,23 @@
 header {
   margin-top: 5em;
-  /* padding: 1em; */
+
   border-top: solid 1px rgb(55, 54, 52);
   :is(h3) {
     margin-left: 6%;
   }
 }
+
+.no-reviews {
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+.no-review-text {
+  padding: 2em;
+}
+
 .review {
   width: 66%;
   border-radius: 20px;
@@ -13,7 +25,12 @@ header {
   margin-left: 15%;
   margin-bottom: 3em;
   display: grid;
-  grid-template-rows: 20% 20% 60%;
+  grid-template-rows: 20% 20% 8% 55%;
+}
+
+.num-reviews {
+  margin-top: .3em;
+  margin-left: 1.7em;
 }
 .first-name {
   font-weight: lighter;
@@ -21,16 +38,27 @@ header {
   margin-left: 1em;
 }
 .date {
-  margin-top: 0.7em;
-  margin-left: 1.1em;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 1.5em;
 }
 .text {
   font-weight: lighter;
+  margin-top: .3em;
   margin-left: 1.5em;
+  padding: 1em;
 }
 
-.post{
-  padding: .8em;
+.post {
+  padding: 0.8em;
   margin-left: 8%;
   margin-bottom: 2%;
+}
+
+.delete-review-button {
+  margin-top: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
 }
