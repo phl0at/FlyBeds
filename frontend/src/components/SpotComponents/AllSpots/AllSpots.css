@@ -1,16 +1,18 @@
 .spots-grid {
   width: 100%;
-  margin-left: 8%;
+  margin-left: 7%;
   margin-top: 2%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20%, 20%));
-  grid-gap: 2em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: 30%;
+  column-gap: 3em;
+  row-gap: 13em;
 }
 
 .spot-card {
-  height: 40vh;
-  display: grid;
-  grid-template-rows: 80% 20%;
+  height: 30vh;
+  width: 40vh;
 }
 
 .spot-image {
@@ -33,31 +35,4 @@
 }
 .spot-info-right {
   max-height: 20px;
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-/* Tooltip text */
-.tooltiptext {
-  position: absolute;
-  visibility: hidden;
-  width: 100px;
-  height: 20px;
-  background-color: rgb(53, 157, 253);
-  color: rgb(40, 50, 76);
-  text-align: center;
-  padding: 5px;
-  border-radius: 20px;
-  margin-top: 5px;
-  margin-left: 5px;
-  font-weight: bold;
-  box-shadow: 3px 3px 3px rgb(19, 21, 24);
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }

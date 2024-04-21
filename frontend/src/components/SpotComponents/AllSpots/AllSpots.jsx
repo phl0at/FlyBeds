@@ -27,7 +27,6 @@ const AllSpots = () => {
 
             return (
               <NavLink to={`/spot/${id}`} key={id} className="spot-card">
-                <span className="tooltiptext">{name}</span>
                 <div className="spot-image">
                   <img title={name} src={previewImage} />
                 </div>
