@@ -66,8 +66,10 @@ const CreateSpot = () => {
         const newSpot = await dispatch(
           createSpotThunk(spotData, spotImages, loggedIn)
         );
+        console.log(newSpot)
         if (newSpot.errors) {
           setErrors(newSpot.errors);
+          return;
         } else {
           await dispatch(addImagesThunk(newSpot, spotImages));
           navigateTo(`/spot/${newSpot.id}`);
