@@ -3,17 +3,22 @@ import { createReviewThunk } from "../../../store/reviews";
 import { useModal } from "../../../context/Modal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { GiBed } from "react-icons/gi";
+import { IoStar } from "react-icons/io5";
 import "./CreateReview.css";
 
 const CreateReview = ({ spotId }) => {
   const dispatch = useDispatch();
   const currUser = useSelector((state) => state.session.user);
+  const [activeRating, setActiveRating] = useState(0);
   const [review, setReview] = useState("");
   const [stars, setStars] = useState(0);
   const [enabled, setEnabled] = useState(true);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+
+  const onChange = (number) => {
+    setStars(parseInt(number));
+  };
 
   useEffect(() => {
     setReview("");
@@ -62,17 +67,78 @@ const CreateReview = ({ spotId }) => {
             setReview(e.target.value);
           }}
         />
-        <input
-          className="stars input"
-          name="stars"
-          type="number"
-          value={stars}
-          min={0}
-          max={5}
-          onChange={(e) => {
-            setStars(Number(e.target.value));
-          }}
-        />
+        <div className="rating-input">
+          <div
+            onMouseEnter={() => {
+              setActiveRating(1);
+            }}
+            onMouseLeave={() => {
+              setActiveRating(stars);
+            }}
+            onClick={() => {
+              onChange(1);
+            }}
+            className={activeRating >= 1 ? "filled" : "empty"}
+          >
+            <IoStar />
+          </div>
+          <div
+            onMouseEnter={() => {
+              setActiveRating(2);
+            }}
+            onMouseLeave={() => {
+              setActiveRating(stars);
+            }}
+            onClick={() => {
+              onChange(2);
+            }}
+            className={activeRating >= 2 ? "filled" : "empty"}
+          >
+            <IoStar />
+          </div>
+          <div
+            onMouseEnter={() => {
+              setActiveRating(3);
+            }}
+            onMouseLeave={() => {
+              setActiveRating(stars);
+            }}
+            onClick={() => {
+              onChange(3);
+            }}
+            className={activeRating >= 3 ? "filled" : "empty"}
+          >
+            <IoStar />
+          </div>
+          <div
+            onMouseEnter={() => {
+              setActiveRating(4);
+            }}
+            onMouseLeave={() => {
+              setActiveRating(stars);
+            }}
+            onClick={() => {
+              onChange(4);
+            }}
+            className={activeRating >= 4 ? "filled" : "empty"}
+          >
+            <IoStar />
+          </div>
+          <div
+            onMouseEnter={() => {
+              setActiveRating(5);
+            }}
+            onMouseLeave={() => {
+              setActiveRating(stars);
+            }}
+            onClick={() => {
+              onChange(5);
+            }}
+            className={activeRating >= 5 ? "filled" : "empty"}
+          >
+            <IoStar />
+          </div>
+        </div>
         <label className="stars-label" htmlFor="stars">
           Stars
         </label>
@@ -83,23 +149,6 @@ const CreateReview = ({ spotId }) => {
         >
           Submit Your Review
         </button>
-        {/* <div className="rating-input">
-          <div className="filled">
-            <GiBed />
-          </div>
-          <div className="filled">
-            <GiBed />
-          </div>
-          <div className="filled">
-            <GiBed />
-          </div>
-          <div className="filled">
-            <GiBed />
-          </div>
-          <div className="filled">
-            <GiBed />
-          </div>
-        </div> */}
       </form>
     </div>
   );
