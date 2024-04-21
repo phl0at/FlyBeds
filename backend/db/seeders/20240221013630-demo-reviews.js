@@ -9,13 +9,6 @@ module.exports = {
     await Review.bulkCreate(
       [
         {
-          userId: 1,
-          spotId: 2,
-          review:
-            "Worst service on the planet. And she kept going on about some weird cult with red hats",
-          stars: 5,
-        },
-        {
           userId: 2,
           spotId: 3,
           review: "ABSOLUTELY DIVINE! PRAISE THE SCARLET CRUSADE!",
@@ -71,57 +64,33 @@ module.exports = {
           stars: 5,
         },
         {
-          userId: 2,
-          spotId: 3,
-          review: "Yeehaw, we out here againn",
-          stars: 1,
-        },
-        {
           userId: 1,
           spotId: 10,
-          review: "User 1 Spot 10",
+          review: "Demo-origato. Mr Roboto.",
           stars: 1,
         },
         {
           userId: 2,
           spotId: 9,
-          review: "User 2 Spot 9",
+          review: "Looks like the Sims house I burned down with the family still inside.",
           stars: 1,
         },
         {
           userId: 3,
           spotId: 8,
-          review: "User 3 Spot 8",
+          review: "Couldn't land my helicopter on the roof. Complete waste of time.",
           stars: 1,
         },
         {
           userId: 4,
           spotId: 7,
-          review: "User 4 Spot 7",
-          stars: 1,
-        },
-        {
-          userId: 5,
-          spotId: 6,
-          review: "User 5 Spot 6",
-          stars: 1,
-        },
-        {
-          userId: 4,
-          spotId: 5,
-          review: "User 4 Spot 5",
-          stars: 1,
-        },
-        {
-          userId: 3,
-          spotId: 4,
-          review: "User 3 Spot 4",
+          review: "Follow the white rabbit.",
           stars: 1,
         },
         {
           userId: 2,
           spotId: 5,
-          review: "User 2 Spot 3",
+          review: "Too much white everywhere.",
           stars: 1,
         },
         {

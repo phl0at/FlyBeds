@@ -88,26 +88,6 @@ module.exports = {
           reviewId: 20,
           url: "URL 20",
         },
-        {
-          reviewId: 21,
-          url: "URL 21",
-        },
-        {
-          reviewId: 22,
-          url: "URL 22",
-        },
-        {
-          reviewId: 23,
-          url: "URL 23",
-        },
-        {
-          reviewId: 24,
-          url: "URL 24",
-        },
-        {
-          reviewId: 25,
-          url: "URL 25",
-        },
       ],
       { validate: true }
     );

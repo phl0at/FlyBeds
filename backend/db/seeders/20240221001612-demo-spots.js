@@ -45,8 +45,8 @@ module.exports = {
           country: "USA",
           lat: 32,
           lng: -82,
-          name: "Mus mauris vitae ultricies leo integer malesuada nunc vel risus. Sit amet consectetur adipiscing elit duis tristique. Ultricies leo integer malesuada nunc vel. Lorem sed risus ultricies tristique nulla aliquet enim tortor.",
-          description: "Demo-litious in every way",
+          name: "Demonstration Station",
+          description: "Mus mauris vitae ultricies leo integer malesuada nunc vel risus. Sit amet consectetur adipiscing elit duis tristique. Ultricies leo integer malesuada nunc vel. Lorem sed risus ultricies tristique nulla aliquet enim tortor.",
           price: 200,
         },
         {
