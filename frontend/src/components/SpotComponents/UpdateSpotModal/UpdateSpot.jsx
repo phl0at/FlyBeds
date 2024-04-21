@@ -86,8 +86,13 @@ const UpdateSpot = () => {
           setErrors(newSpot.errors);
           return;
         } else {
-          await dispatch(addImagesThunk(newSpot, spotImages));
-          navigateTo(`/spot/${newSpot.id}`);
+          const newImages = await dispatch(addImagesThunk(newSpot, spotImages));
+          if (newImages.errors) {
+            setErrors({ ...errors, ...newImages.errors });
+            return;
+          } else {
+            navigateTo(`/spot/${newSpot.id}`);
+          }
         }
       }
     } else {
