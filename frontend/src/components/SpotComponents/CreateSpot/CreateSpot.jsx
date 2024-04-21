@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import "./CreateSpot.css";
 
 const CreateSpot = () => {
-  const loggedIn = useSelector((state) => state.session.user);
+  const currUser = useSelector((state) => state.session.user);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
@@ -37,7 +37,7 @@ const CreateSpot = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    if (loggedIn) {
+    if (currUser) {
       const spotData = {
         country,
         address,
@@ -64,14 +64,19 @@ const CreateSpot = () => {
         setErrors(err);
       } else {
         const newSpot = await dispatch(
-          createSpotThunk(spotData, spotImages, loggedIn)
+          createSpotThunk(spotData, spotImages, currUser)
         );
         if (newSpot.errors) {
           setErrors(newSpot.errors);
           return;
         } else {
-          await dispatch(addImagesThunk(newSpot, spotImages));
-          navigateTo(`/spot/${newSpot.id}`);
+          const newImages = await dispatch(addImagesThunk(newSpot, spotImages));
+          if (newImages.errors) {
+            setErrors({ ...errors, ...newImages.errors });
+            return;
+          } else {
+            navigateTo(`/spot/${newSpot.id}`);
+          }
         }
       }
     } else {

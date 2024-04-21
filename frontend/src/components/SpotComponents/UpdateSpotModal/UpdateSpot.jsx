@@ -51,7 +51,7 @@ const UpdateSpot = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
+    setErrors({});
     if (currUser) {
       const updatedSpot = {
         id: spotData.id,
@@ -63,7 +63,7 @@ const UpdateSpot = () => {
         state,
         description,
         name,
-        price,
+        price: Number(price),
       };
 
       const spotImages = [
@@ -84,8 +84,7 @@ const UpdateSpot = () => {
         );
         if (newSpot.errors) {
           setErrors(newSpot.errors);
-        } else if (!newSpot) {
-          return alert("Error occurred!")
+          return;
         } else {
           await dispatch(addImagesThunk(newSpot, spotImages));
           navigateTo(`/spot/${newSpot.id}`);
