@@ -1,7 +1,7 @@
 import * as sessionActions from "../../../store/session";
 import { useModal } from "../../../context/Modal";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -12,9 +12,12 @@ function LoginFormModal() {
   const { closeModal } = useModal();
   const disabled = credential.length < 4 || password.length < 6;
 
+  useEffect(() => {
+    setErrors({});
+  }, []);
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
 
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
