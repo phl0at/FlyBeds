@@ -18,9 +18,8 @@ h5 {
 }
 
 .all-images {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  height: 500px;
+  display: flex;
+  align-items: center;
   gap: 0.5em;
   padding-left: 5em;
   padding-right: 5em;
@@ -34,8 +33,6 @@ h5 {
 }
 
 .preview-box {
-  height: 100%;
-  width: 100%;
   display: flex;
   justify-content: right;
   align-items: center;
@@ -43,8 +40,6 @@ h5 {
 
 .preview-image {
   border-radius: 20px;
-  max-height: 50vh;
-  max-width: 40vw;
   box-shadow: none;
 }
 
@@ -56,12 +51,12 @@ h5 {
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 0.5em;
+  max-width: 47%;
 }
 
 .other-image {
   box-shadow: none;
   margin: auto;
-  width: 15vw;
 }
 
 .info-box {
