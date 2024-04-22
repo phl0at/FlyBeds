@@ -4,7 +4,6 @@
   padding: 2em;
   border-bottom: solid 1px rgb(53, 157, 253);
   box-shadow: inset 0px -10px 5px rgb(27, 34, 44);
-
 }
 .active {
   display: flex;
@@ -17,6 +16,12 @@
   border-radius: 20px;
   width: 100px;
   height: 40px;
+}
+
+.home-logo:hover {
+  color: rgb(247, 240, 219);
+  transition: all 0.3s ease-in-out;
+  outline: thick solid rgb(40, 50, 76);
 }
 
 .create-spot {

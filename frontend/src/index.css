@@ -17,21 +17,12 @@ a {
 }
 
 button {
-  border-bottom: solid 1px rgb(53, 157, 253);
-  border-left: solid 1px rgb(53, 157, 253);
-  border-top: none;
-  border-right: none;
-  background-color: rgb(29, 29, 31);
+  border: none;
+  background-color: rgb(53, 157, 253);
   border-radius: 20px;
-  color: rgb(53, 157, 253);
+  color: rgb(29, 29, 31);
   font-weight: bold;
   cursor: pointer;
-}
-
-button:hover,
-button:focus {
-  box-shadow: inset 5px -3px 7px rgb(38, 92, 143);
-  color: rgb(88, 172, 250);
 }
 
 ul {
@@ -50,6 +41,12 @@ img {
 }
 
 img:hover {
+  color: rgb(247, 240, 219);
+  transition: all 0.3s ease-in-out;
+}
+button:hover {
+  color: rgb(247, 240, 219);
+  transition: all 0.3s ease-in-out;
   outline: thick solid rgb(40, 50, 76);
 }
 

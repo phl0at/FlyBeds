@@ -71,9 +71,35 @@
 
 .update {
   padding: 0.5em;
+  border-bottom: solid 1px rgb(53, 157, 253);
+  border-left: solid 1px rgb(53, 157, 253);
+  border-top: none;
+  border-right: none;
+  background-color: rgb(29, 29, 31);
+  border-radius: 20px;
+  color: rgb(53, 157, 253);
+}
+
+.update:hover {
+  transition: all .2s ease-in-out;
+  box-shadow: inset 2px -1px 2px rgb(38, 92, 143);
+  color: rgb(247, 240, 219);
 }
 
 .delete {
   margin-left: 1em;
   padding: 0.5em;
+  border-bottom: solid 1px rgb(53, 157, 253);
+  border-left: solid 1px rgb(53, 157, 253);
+  border-top: none;
+  border-right: none;
+  background-color: rgb(29, 29, 31);
+  border-radius: 20px;
+  color: rgb(53, 157, 253);
+}
+
+.delete:hover {
+  transition: all .2s ease-in-out;
+  box-shadow: inset 2px -1px 2px rgb(38, 92, 143);
+  color: rgb(240, 72, 72);
 }

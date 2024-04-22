@@ -31,7 +31,7 @@ header {
 }
 
 .num-reviews {
-  margin-top: .3em;
+  margin-top: 0.3em;
   margin-left: 1.7em;
 }
 .first-name {
@@ -45,9 +45,8 @@ header {
   margin-left: 1.5em;
 }
 .text {
-
   font-weight: lighter;
-  margin-top: .3em;
+  margin-top: 0.3em;
   margin-left: 1.5em;
   padding: 1em;
 }
@@ -59,13 +58,20 @@ header {
 }
 
 .delete-review-button {
-  margin-top: .5em;
+  margin-top: 0.5em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   padding-left: 1.2em;
   padding-right: 1.2em;
+  border-bottom: solid 1px rgb(53, 157, 253);
+  border-left: solid 1px rgb(53, 157, 253);
+  border-top: none;
+  border-right: none;
+  background-color: rgb(29, 29, 31);
+  border-radius: 20px;
+  color: rgb(53, 157, 253);
 }
 .delete-review-button:hover {
-  box-shadow: inset 5px -3px 7px rgb(38, 92, 143);
+  box-shadow: inset 2px -1px 2px rgb(38, 92, 143);
   color: rgb(240, 72, 72);
 }
