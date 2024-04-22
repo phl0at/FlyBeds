@@ -70,10 +70,9 @@ const OneSpot = () => {
             </div>
             <div className="rating-review">
               <h6>
-                <IoStar className="blue" /> {notNum ? "New" : avgRating} •{" "}
-                {numReviews === 1
-                  ? `${numReviews} Review`
-                  : `${numReviews} Reviews`}
+                <IoStar className="blue" /> {notNum ? "New" : avgRating}
+                {numReviews > 1 && ` • ${numReviews} Reviews`}
+                {numReviews === 1 && ` • ${numReviews} Review`}
               </h6>
             </div>
             <button

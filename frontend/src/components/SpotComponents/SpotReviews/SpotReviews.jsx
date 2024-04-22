@@ -58,8 +58,9 @@ const SpotReviews = ({ reviewData, spotId, avgRating, numReviews, notNum }) => {
     <>
       <header>
         <h3>
-          <IoStar className="blue" /> {notNum ? "New" : avgRating} •{" "}
-          {numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
+          <IoStar className="blue" /> {notNum ? "New" : avgRating}
+          {numReviews > 1 && ` • ${numReviews} Reviews`}
+          {numReviews === 1 && ` • ${numReviews} Review`}
         </h3>
       </header>
       <div className="post-review">

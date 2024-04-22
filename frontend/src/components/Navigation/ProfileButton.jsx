@@ -57,11 +57,16 @@ function ProfileButton({ user }) {
               <h5 className="email">{user.email}</h5>
             </div>
             <div>
-              <button className="manage-button">
-                <NavLink className="manage-spot" to={`/spot/user/${user.id}`}>
+              <NavLink className="manage-spot" to={`/spot/user/${user.id}`}>
+                <button
+                  onClick={() => {
+                    navigateTo(`/spot/user/${user.id}`);
+                  }}
+                  className="manage-button"
+                >
                   Manage Spots
-                </NavLink>
-              </button>
+                </button>
+              </NavLink>
             </div>
             <div>
               <button className="logout-button" onClick={logout}>

@@ -286,9 +286,8 @@ const CreateSpot = () => {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </h5>
-          <div id="$">$</div>
           <input
-            className="input"
+            className="price-input input"
             type="text"
             value={price}
             name="Price"

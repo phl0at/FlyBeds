@@ -65,3 +65,7 @@ header {
   padding-left: 1.2em;
   padding-right: 1.2em;
 }
+.delete-review-button:hover {
+  box-shadow: inset 5px -3px 7px rgb(38, 92, 143);
+  color: rgb(240, 72, 72);
+}

@@ -1,11 +1,12 @@
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import homeLogo from "../../../../images/Home_Logo.png";
 import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  const navigateTo = useNavigate();
   return (
     <>
       <main className="nav-bar">
@@ -15,11 +16,16 @@ function Navigation({ isLoaded }) {
 
         <div className="button-container">
           {sessionUser && (
-            <button className="create-button">
-              <NavLink className="create-spot" to="/spot/new">
+            <NavLink className="create-spot" to="/spot/new">
+              <button
+                onClick={() => {
+                  navigateTo("/spot/new");
+                }}
+                className="create-button"
+              >
                 Create a Spot
-              </NavLink>
-            </button>
+              </button>
+            </NavLink>
           )}
         </div>
         <div className="profile-button">

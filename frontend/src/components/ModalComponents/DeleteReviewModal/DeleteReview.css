@@ -1,5 +1,12 @@
 .red {
-  background-color: red;
+  background-color: rgb(240, 72, 72);
+  border: none;
+  color: black;
+}
+.red:hover,
+.red:focus {
+  box-shadow: none;
+  color: white;
 }
 
 .delete-review-menu {

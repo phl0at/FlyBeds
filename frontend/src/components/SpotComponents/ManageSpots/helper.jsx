@@ -28,9 +28,9 @@ export const UserSpots = ({ spot }) => {
           </div>
         </NavLink>
         <div className="modify-buttons">
-          <button className="shadow update">
-            <NavLink to={`/spot/${spot.id}/update`}>Update</NavLink>
-          </button>
+          <NavLink to={`/spot/${spot.id}/update`}>
+            <button className="shadow update">Update</button>
+          </NavLink>
           <OpenModalMenuItem
             className="delete"
             itemText="Delete"

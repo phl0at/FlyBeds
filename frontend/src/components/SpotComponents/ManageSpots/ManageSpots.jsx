@@ -24,9 +24,11 @@ const ManageSpots = () => {
             <h1 className="manage-spot-header">Manage Spots</h1>
           </div>
           <div className="empty-spots">
-            <button className="create-spot-button shadow">
-              <NavLink to="/spot/new">Create a New Spot</NavLink>
-            </button>
+            <NavLink to="/spot/new">
+              <button className="create-spot-button shadow">
+                Create a New Spot
+              </button>
+            </NavLink>
           </div>
         </main>
       </>
