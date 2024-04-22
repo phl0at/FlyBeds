@@ -78,12 +78,14 @@ const UpdateSpot = () => {
 
       if (Object.values(err).length) {
         setErrors(err);
+        window.scrollTo(0, 0);
       } else {
         const newSpot = await dispatch(
           updateSpotThunk(updatedSpot, spotImages, currUser)
         );
         if (newSpot.errors) {
           setErrors(newSpot.errors);
+          window.scrollTo(0, 0);
           return;
         } else {
           const newImages = await dispatch(addImagesThunk(newSpot, spotImages));

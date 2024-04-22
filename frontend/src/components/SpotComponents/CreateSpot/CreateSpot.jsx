@@ -62,18 +62,18 @@ const CreateSpot = () => {
 
       if (Object.values(err).length) {
         setErrors(err);
+        window.scrollTo(0, 0);
       } else {
         const newSpot = await dispatch(
           createSpotThunk(spotData, spotImages, currUser)
         );
         if (newSpot.errors) {
           setErrors(newSpot.errors);
-          return;
+          window.scrollTo(0, 0);
         } else {
           const newImages = await dispatch(addImagesThunk(newSpot, spotImages));
           if (newImages.errors) {
             setErrors({ ...errors, ...newImages.errors });
-            return;
           } else {
             navigateTo(`/spot/${newSpot.id}`);
           }
