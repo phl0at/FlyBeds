@@ -5,7 +5,7 @@
 }
 
 .manage-spot-header {
-  margin-left: 7%;
+  margin-left: 2%;
 }
 
 .create-spot-button {
@@ -26,14 +26,14 @@
 }
 .manage-spots-grid {
   width: 100%;
-  justify-content: center;
-  margin-top: 3em;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  flex-basis: 30%;
+  margin-top: 5%;
+  margin-bottom: 15%;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(4, 1fr);
   column-gap: 3em;
   row-gap: 13em;
+
 }
 
 .manage-spot {
