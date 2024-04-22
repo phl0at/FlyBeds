@@ -18,12 +18,12 @@ h5 {
 }
 
 .all-images {
-  margin: 0;
+  height: 55vh;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-gap: 1em;
-  padding-left: 3em;
-  padding-right: 3em;
+  grid-gap: 0.5em;
+  padding-left: 4%;
+  padding-right: 5%;
   padding-top: 5em;
   padding-bottom: 5em;
   border-radius: 20px;
@@ -34,15 +34,19 @@ h5 {
 }
 
 .preview-image {
+  aspect-ratio: 16/9;
+  height: 100%;
+  width: 100%;
   border-radius: 20px;
   box-shadow: none;
-  aspect-ratio: 16/9;
 }
 
 .other-box {
+  height: 95%;
+  width: 100%;
   aspect-ratio: 16/9;
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 0.5em;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(2, 50%);
   margin-top: auto;
