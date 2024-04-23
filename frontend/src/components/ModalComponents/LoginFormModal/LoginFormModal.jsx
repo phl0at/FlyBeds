@@ -25,8 +25,8 @@ function LoginFormModal() {
         const data = await res.json();
         if (data && data.errors) {
           setErrors(data.errors);
-        } else if (data && data.message){
-          setErrors(data.message)
+        } else {
+          setErrors(data);
         }
       });
   };
@@ -38,9 +38,10 @@ function LoginFormModal() {
           <h1>Log In</h1>
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
-          {errors.credential && (
-            <div className="login-error errors">{errors.credential}</div>
-          )}
+          <div className="login-error errors">
+            {errors.credential || errors.message}
+          </div>
+
           <input
             className="credential input"
             type="text"
