@@ -15,7 +15,7 @@ function LoginFormModal() {
   useEffect(() => {
     setErrors({});
   }, []);
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -36,8 +36,9 @@ function LoginFormModal() {
           <h1>Log In</h1>
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
-          <div className="login-error errors">{errors.credential}</div>
-
+          {errors.credential && (
+            <div className="login-error errors">{errors.credential}</div>
+          )}
           <input
             className="credential input"
             type="text"

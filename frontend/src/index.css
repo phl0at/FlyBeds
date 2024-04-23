@@ -41,8 +41,7 @@ img {
 }
 
 img:hover {
-  color: rgb(247, 240, 219);
-  transition: all 0.3s ease-in-out;
+
 }
 button:hover {
   color: rgb(247, 240, 219);
